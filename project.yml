@@ -1,0 +1,36 @@
+name: Pasteboard
+options:
+  bundleIdPrefix: com.sinaanahd
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    CODE_SIGN_STYLE: Automatic
+targets:
+  Pasteboard:
+    type: application
+    platform: macOS
+    sources: [Pasteboard]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sinaanahd.Pasteboard
+        PRODUCT_NAME: Pasteboard
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 Sina Nahd"
+        CODE_SIGNING_ALLOWED: NO
+    scheme:
+      testTargets: [PasteboardTests]
+  PasteboardTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [PasteboardTests]
+    dependencies:
+      - target: Pasteboard
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sinaanahd.PasteboardTests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGNING_ALLOWED: NO

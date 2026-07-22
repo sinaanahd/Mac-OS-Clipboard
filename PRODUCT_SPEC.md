@@ -1,0 +1,63 @@
+# Product specification
+
+## Product vision
+
+Pasteboard is a fast, native, local-only macOS utility that makes recent clipboard items and region screenshots easy to find and reuse without sending data off-device.
+
+## User workflows
+
+Users copy content normally, invoke a configurable global shortcut, search or navigate recent items, and select an item to restore it to the pasteboard and optionally paste it into the previously active application. Users can invoke a second shortcut to capture a screen region and retain the result locally.
+
+## Clipboard history
+
+Record supported text, image, and file clipboard entries; order newest first; avoid consecutive duplicates; preserve useful metadata; enforce configurable type and total limits; support deletion and clearing. Never capture known-sensitive or excluded content where macOS exposes an appropriate signal.
+
+## Screenshot capture
+
+Provide a region-selection workflow, store captures locally, display thumbnails, copy or reuse captures, use predictable unique filenames, and explain Screen Recording permission when required.
+
+## Search and navigation
+
+Provide incremental text search, keyboard navigation, selection, dismissal, deletion, and clear empty states. Search should cover safe textual metadata without OCR in the initial release.
+
+## Persistence
+
+Persist metadata in a local database under Application Support. Store image payloads as files outside the metadata database. Recover safely from missing files and interrupted writes. Apply limits and expiration during cleanup.
+
+## Privacy
+
+No accounts, cloud sync, telemetry, advertising, or network transmission. Never log complete clipboard content. Provide clear-history and expiration controls. Keep runtime data out of the repository and backups where practical.
+
+## Permissions
+
+Clipboard observation should use public pasteboard APIs. Automatic paste may require Accessibility permission; region capture may require Screen Recording permission. Explain and request each permission only when its feature is used, and degrade gracefully when denied.
+
+## Settings
+
+Allow editing history and screenshot shortcuts, history and image limits, expiration, launch behavior, automatic paste behavior, excluded applications, and cleanup actions. Validate shortcut conflicts.
+
+## Performance
+
+Remain responsive with 200 history entries, avoid loading full-size images into list rows, perform I/O off the main actor, and keep polling and idle resource use low.
+
+## Accessibility
+
+Support VoiceOver labels, keyboard-only workflows, focus visibility, Dynamic Type where applicable, reduced motion, increased contrast, and light/dark appearances.
+
+## Acceptance criteria
+
+- Native macOS app builds and tests from the command line on Apple Silicon.
+- Text, image, and file entries can be captured, searched, restored, deleted, and retained across launches.
+- Consecutive duplicates are suppressed and configured limits are enforced.
+- The floating panel and its primary actions are keyboard accessible.
+- Automatic paste and region screenshots explain permissions and fail safely.
+- Clearing history removes metadata and owned payload files.
+- No clipboard content or screenshots leave the device.
+
+## Future features
+
+Pinned items, richer previews, optional OCR, user-defined transformations, multiple collections, import/export, and carefully designed encrypted sync are future considerations only.
+
+## Explicit non-goals
+
+No Electron/web UI, accounts, cloud sync, collaboration, cross-platform support, password-manager replacement, clipboard content analytics, remote APIs, or bypassing macOS security controls.
