@@ -9,3 +9,5 @@ Keep changes small, idiomatic, accessible, concurrency-safe, and buildable. Pref
 All clipboard data stays on-device. Never log complete clipboard contents. Never commit clipboard databases, captured images, history, credentials, tokens, passwords, signing certificates, provisioning profiles, or personal signing material. Use system credential storage and local ignored configuration. Do not weaken privacy or permission checks for convenience.
 
 Use conventional commits on `main` during bootstrap. Inspect diffs, run `git diff --cached --check`, build, and test before every commit. Never force-push or rewrite shared history without explicit authorization.
+
+Versioning starts at `1.0.0`. For every publishable change after that baseline, update `MARKETING_VERSION` in `project.yml` before committing. Increment the patch component for ordinary changes and fixes (`1.0.X`). Increment the minor component and reset patch to zero for substantial feature releases (`1.X.0`). Keep the displayed version, generated project, bundle metadata, documentation, and changelog consistent with that value. Do not change the major version without explicit user direction.

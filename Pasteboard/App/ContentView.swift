@@ -14,7 +14,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: VisualConfiguration.searchFieldSpacing) {
-            HStack(spacing: VisualConfiguration.headerSpacing) {
+            HStack(alignment: .top, spacing: VisualConfiguration.headerSpacing) {
                 Image(nsImage: NSApplication.shared.applicationIconImage)
                     .resizable()
                     .scaledToFit()
@@ -28,8 +28,12 @@ struct ContentView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                Spacer()
+                Text("Version \(AppConfiguration.marketingVersion)")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Pasteboard version \(AppConfiguration.marketingVersion)")
             }
-            .accessibilityElement(children: .combine)
 
             TextField("Search clipboard history", text: $query)
                 .textFieldStyle(.roundedBorder)

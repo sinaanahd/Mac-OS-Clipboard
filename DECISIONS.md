@@ -49,3 +49,15 @@ Alternatives considered: visual-only pins that do not affect cleanup, a separate
 Reason: a pin should provide a predictable retention guarantee while remaining local, simple, and reversible.
 
 Consequences: pinned entries and owned image payloads may increase storage beyond configured automatic limits. Users retain control through unpin, delete, and confirmed Clear History actions.
+
+## 2026-07-22 — Semantic versioning from a 1.0.0 baseline
+
+Decision: establish 1.0.0 as the initial marketing version, store it in the reproducible XcodeGen configuration, and display the compiled bundle value in the history panel.
+
+Context: published builds need an identifiable version and a predictable rule for future releases.
+
+Alternatives considered: hard-code a UI-only version, use build numbers alone, or increment versions without a documented policy.
+
+Reason: bundle-backed semantic versioning keeps Finder, About, build metadata, and the in-app label consistent.
+
+Consequences: every ordinary publishable change after 1.0.0 increments the patch component; substantial feature releases increment the minor component and reset patch to zero. Major-version changes require explicit user direction.

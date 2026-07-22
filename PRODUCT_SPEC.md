@@ -12,6 +12,8 @@ The supplied PasteBoard clipboard-and-history artwork is the approved applicatio
 
 Users copy content normally, invoke a configurable global shortcut, search or navigate recent items, and select an item to restore it to the pasteboard and optionally paste it into the previously active application. Users can invoke a second shortcut to capture a screen region and retain the result locally.
 
+The history panel displays the bundle marketing version at the top-right. The first publishable baseline is version 1.0.0. Subsequent ordinary publishable changes increment the patch number, while substantial feature releases increment the minor number and reset patch to zero.
+
 ## Clipboard history
 
 Record supported text, image, and file clipboard entries; order pinned entries first and remaining entries newest first; avoid consecutive duplicates; preserve useful metadata; enforce configurable type and total limits; support pinning, unpinning, deletion, and clearing. Pinned entries persist across launches and are exempt from automatic limits and expiration until explicitly unpinned, deleted, or cleared. Never capture known-sensitive or excluded content where macOS exposes an appropriate signal.

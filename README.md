@@ -2,6 +2,8 @@
 
 Pasteboard is a native, lightweight, local-only macOS clipboard history and screenshot utility built with SwiftUI and AppKit.
 
+Current baseline version: **1.0.0**. After this baseline, ordinary publishable changes increment `1.0.X`; substantial feature releases increment `1.X.0` and reset the patch number.
+
 The supplied PasteBoard clipboard-and-history artwork is the approved application icon and is preserved at `Design/Source/PasteBoard-AppIcon.png`. It must not be replaced or reinterpreted without an explicit user request. The menu bar intentionally uses a separate monochrome template asset.
 
 ## Requirements

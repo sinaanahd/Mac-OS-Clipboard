@@ -19,4 +19,5 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Add a branded history header and keep newly captured entries visible
   - [x] Tighten panel header spacing and replace continuous relative-time updates
   - [x] Add persistent pinning for individual history entries
-- [ ] Packaging and distribution — Not started
+- [ ] Packaging and distribution — In progress
+  - [x] Establish version 1.0.0 and display the bundle version in the history panel

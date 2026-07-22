@@ -42,6 +42,11 @@ enum ExpirationPolicy: Equatable, Sendable {
 enum AppConfiguration {
     static let productName = "Pasteboard"
     static let bundleIdentifier = "com.sinaanahd.Pasteboard"
+    static let developmentVersionFallback = "1.0.0"
+    static var marketingVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+            ?? developmentVersionFallback
+    }
     static let defaultHistoryShortcut = KeyboardShortcut(key: "v", modifiers: [.command, .shift])
     static let defaultScreenshotShortcut = KeyboardShortcut(key: "5", modifiers: [.control, .command, .shift])
     static let defaultHistoryLimit = 200

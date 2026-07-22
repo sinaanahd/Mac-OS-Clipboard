@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Established version 1.0.0 and added the bundle version to the history-panel header.
 - Added persistent pin and unpin controls; pinned entries stay above regular history and are protected from automatic limits and expiration.
 - Reduced empty space above the history header and changed relative ages to refresh only on panel opens and new captures.
 - Added a compact Pasteboard logo and name above history search.
