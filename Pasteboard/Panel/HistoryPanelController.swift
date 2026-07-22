@@ -84,7 +84,6 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         guard panel.isVisible else { return }
         presentationGeneration += 1
         let generation = presentationGeneration
-        panel.resignKey()
         NSAnimationContext.runAnimationGroup { context in
             context.duration = VisualConfiguration.panelDismissDuration
             context.timingFunction = CAMediaTimingFunction(name: .easeOut)
@@ -92,6 +91,8 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         } completionHandler: { [weak self] in
             Task { @MainActor in
                 guard let self, self.presentationGeneration == generation else { return }
+                // orderOut performs the key-window transition. Calling resignKey
+                // here would re-enter windowDidResignKey when Settings becomes key.
                 self.panel.orderOut(nil)
                 self.panel.alphaValue = 1
             }

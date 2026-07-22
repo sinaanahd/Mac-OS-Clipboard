@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fixed a re-entrant panel key-window transition when Settings and clipboard history were open together; released as version 1.2.1 build 6.
 - Began Pasteboard 1.2.0 with persistent typed preferences and native General, Features, Shortcuts, Privacy & Storage, and About settings panes.
 - Added native global-shortcut recording, validation, removal/reset, and live registration with conflict feedback.
 - Applied monitoring, limits, expiration, panel position, screenshot behavior, automatic paste, and launch-at-login preferences at runtime.

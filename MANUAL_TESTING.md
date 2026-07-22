@@ -28,9 +28,10 @@
 10. Relaunch Pasteboard and verify pinned entries remain pinned and ordered newest-first within the pinned section.
 11. Unpin an entry and verify it returns to chronological position among regular history.
 12. Exceed history and image limits and run expiration cleanup; verify pinned entries remain until explicitly deleted or cleared.
-13. Verify `Version 1.2.0` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
+13. Verify `Version 1.2.1` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
 14. Enter a search query, click the native clear button inside the field, and verify the complete history immediately returns.
 15. Clear history or search for a missing value and verify the empty state stays directly below search instead of centering the entire panel content.
+16. Keep Settings open, show clipboard history, then focus Settings; verify the panel dismisses cleanly without a re-entrant `resignKey` error.
 
 ## Pasteboard 1.2 settings and release checklist
 
