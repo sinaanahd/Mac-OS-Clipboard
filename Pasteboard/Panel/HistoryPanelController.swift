@@ -11,11 +11,14 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
     private let panel: HistoryPanel
     private let automaticPaste: AutomaticPasteService
     private let presentation: HistoryPanelPresentation
+    private let settings: AppSettings
     private var previousApplication: NSRunningApplication?
 
     init(store: ClipboardHistoryStore,
+         settings: AppSettings,
          automaticPaste: AutomaticPasteService = AutomaticPasteService()) {
         self.automaticPaste = automaticPaste
+        self.settings = settings
         presentation = HistoryPanelPresentation()
         panel = HistoryPanel(
             contentRect: NSRect(origin: .zero, size: AppConfiguration.panelSize),
@@ -54,7 +57,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         if currentApplication?.bundleIdentifier != Bundle.main.bundleIdentifier {
             previousApplication = currentApplication
         }
-        positionNearPointer()
+        positionPanel()
         NSApplication.shared.activate(ignoringOtherApps: true)
         panel.orderFrontRegardless()
         panel.makeKey()
@@ -70,7 +73,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
 
     private func completeSelection() {
         hide()
-        guard AppConfiguration.defaultAutomaticPasteEnabled else { return }
+        guard settings.automaticPasteEnabled else { return }
         guard automaticPaste.hasPermission else {
             explainAccessibilityPermission()
             return
@@ -103,5 +106,39 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         let y = min(max(pointer.y - panel.frame.height, visibleFrame.minY),
                     visibleFrame.maxY - panel.frame.height)
         panel.setFrameOrigin(NSPoint(x: x, y: y))
+    }
+
+    func windowDidMove(_ notification: Notification) {
+        guard settings.panelPosition == .rememberLastPosition else { return }
+        settings.lastPanelOrigin = PersistedPanelOrigin(panel.frame.origin)
+    }
+
+    private func positionPanel() {
+        switch settings.panelPosition {
+        case .nearPointer:
+            positionNearPointer()
+        case .activeScreenCenter:
+            guard let frame = activeVisibleFrame() else { return }
+            panel.setFrameOrigin(constrainedOrigin(
+                NSPoint(x: frame.midX - panel.frame.width / 2,
+                        y: frame.midY - panel.frame.height / 2), in: frame
+            ))
+        case .rememberLastPosition:
+            guard let frame = activeVisibleFrame() else { return }
+            let origin = settings.lastPanelOrigin?.point
+                ?? NSPoint(x: frame.midX - panel.frame.width / 2,
+                           y: frame.midY - panel.frame.height / 2)
+            panel.setFrameOrigin(constrainedOrigin(origin, in: frame))
+        }
+    }
+
+    private func activeVisibleFrame() -> NSRect? {
+        let pointer = NSEvent.mouseLocation
+        return (NSScreen.screens.first { NSMouseInRect(pointer, $0.frame, false) } ?? NSScreen.main)?.visibleFrame
+    }
+
+    private func constrainedOrigin(_ origin: NSPoint, in frame: NSRect) -> NSPoint {
+        NSPoint(x: min(max(origin.x, frame.minX), frame.maxX - panel.frame.width),
+                y: min(max(origin.y, frame.minY), frame.maxY - panel.frame.height))
     }
 }

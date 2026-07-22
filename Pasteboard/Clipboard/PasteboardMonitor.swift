@@ -5,13 +5,17 @@ import Foundation
 final class PasteboardMonitor {
     private let pasteboard: NSPasteboard
     private let store: ClipboardHistoryStore
+    private let settings: AppSettings
     private var timer: Timer?
     private var lastChangeCount: Int
 
-    init(pasteboard: NSPasteboard = .general, store: ClipboardHistoryStore) {
+    init(pasteboard: NSPasteboard = .general, store: ClipboardHistoryStore, settings: AppSettings) {
         self.pasteboard = pasteboard
         self.store = store
+        self.settings = settings
         lastChangeCount = pasteboard.changeCount
+        if let identifier = NSWorkspace.shared.frontmostApplication?.bundleIdentifier,
+           settings.excludedBundleIdentifiers.contains(identifier) { return }
     }
 
     func start() {

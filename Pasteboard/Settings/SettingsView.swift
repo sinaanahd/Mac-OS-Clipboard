@@ -4,14 +4,15 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var settings: AppSettings
     @ObservedObject var shortcutCoordinator: ShortcutCoordinator
+    @ObservedObject var runtime: AppDelegate
     @AppStorage(AppSettings.selectedPaneDefaultsKey) private var selectedPane = SettingsPane.general.rawValue
 
     var body: some View {
         TabView(selection: $selectedPane) {
-            GeneralSettingsPane(settings: settings)
+            GeneralSettingsPane(settings: settings, runtime: runtime)
                 .tabItem { Label("General", systemImage: "gear") }
                 .tag(SettingsPane.general.rawValue)
-            FeaturesSettingsPane(settings: settings)
+            FeaturesSettingsPane(settings: settings, runtime: runtime)
                 .tabItem { Label("Features", systemImage: "switch.2") }
                 .tag(SettingsPane.features.rawValue)
             ShortcutsSettingsPane(settings: settings, coordinator: shortcutCoordinator)
@@ -35,6 +36,7 @@ struct SettingsView: View {
 
 private struct GeneralSettingsPane: View {
     @ObservedObject var settings: AppSettings
+    @ObservedObject var runtime: AppDelegate
 
     var body: some View {
         Form {
@@ -42,6 +44,9 @@ private struct GeneralSettingsPane: View {
                 Toggle("Launch Pasteboard at login", isOn: $settings.launchAtLoginEnabled)
                 Text("Login-item registration is applied through macOS and may require approval.")
                     .font(.caption).foregroundStyle(.secondary)
+                if let error = runtime.launchAtLoginError {
+                    Text(error).font(.caption).foregroundStyle(.orange)
+                }
             }
             Section("Clipboard") {
                 Toggle("Automatically paste selected history items", isOn: $settings.automaticPasteEnabled)
@@ -64,18 +69,45 @@ private struct GeneralSettingsPane: View {
 
 private struct FeaturesSettingsPane: View {
     @ObservedObject var settings: AppSettings
+    @ObservedObject var runtime: AppDelegate
+    @State private var historyDraft = ""
+    @State private var imageDraft = ""
 
     var body: some View {
         Form {
             Section("History") {
-                Stepper("Maximum unpinned items: \(settings.historyLimit)",
-                        value: $settings.historyLimit,
-                        in: AppSettings.Limits.history)
+                Picker("Maximum unpinned items", selection: Binding(
+                    get: { settings.historyLimit },
+                    set: { runtime.requestHistoryLimit($0) }
+                )) {
+                    ForEach([50, 100, 200, 500, 1_000], id: \.self) { Text("\($0)").tag($0) }
+                    if ![50, 100, 200, 500, 1_000].contains(settings.historyLimit) {
+                        Text("Custom (\(settings.historyLimit))").tag(settings.historyLimit)
+                    }
+                }
+                HStack {
+                    TextField("Custom limit", text: $historyDraft)
+                        .onSubmit { applyHistoryDraft() }
+                    Button("Apply") { applyHistoryDraft() }
+                }
                 Text("Pinned items do not count against this limit.")
                     .font(.caption).foregroundStyle(.secondary)
-                Stepper("Maximum unpinned images: \(settings.imageLimit)",
-                        value: $settings.imageLimit,
-                        in: AppSettings.Limits.image)
+                if settings.historyLimit > AppSettings.Limits.historyWarning { performanceWarning }
+                Picker("Maximum unpinned images and screenshots", selection: Binding(
+                    get: { settings.imageLimit },
+                    set: { runtime.requestImageLimit($0) }
+                )) {
+                    ForEach([20, 50, 100, 250, 500], id: \.self) { Text("\($0)").tag($0) }
+                    if ![20, 50, 100, 250, 500].contains(settings.imageLimit) {
+                        Text("Custom (\(settings.imageLimit))").tag(settings.imageLimit)
+                    }
+                }
+                HStack {
+                    TextField("Custom image limit", text: $imageDraft)
+                        .onSubmit { applyImageDraft() }
+                    Button("Apply") { applyImageDraft() }
+                }
+                if settings.imageLimit > AppSettings.Limits.imageWarning { performanceWarning }
                 Picker("Automatically remove old unpinned entries", selection: $settings.expiration) {
                     ForEach(ExpirationOption.allCases) { option in
                         Text(option.title).tag(option)
@@ -92,6 +124,27 @@ private struct FeaturesSettingsPane: View {
         }
         .formStyle(.grouped)
         .padding()
+        .onAppear {
+            historyDraft = String(settings.historyLimit)
+            imageDraft = String(settings.imageLimit)
+        }
+    }
+
+    private var performanceWarning: some View {
+        Text("Large histories may increase memory, storage, search, and panel loading time. Performance above the recommended range is not guaranteed.")
+            .font(.caption).foregroundStyle(.orange)
+    }
+
+    private func applyHistoryDraft() {
+        guard let value = Int(historyDraft) else { historyDraft = String(settings.historyLimit); return }
+        runtime.requestHistoryLimit(value)
+        historyDraft = String(settings.historyLimit)
+    }
+
+    private func applyImageDraft() {
+        guard let value = Int(imageDraft) else { imageDraft = String(settings.imageLimit); return }
+        runtime.requestImageLimit(value)
+        imageDraft = String(settings.imageLimit)
     }
 }
 

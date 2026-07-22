@@ -4,6 +4,7 @@
 
 - Began Pasteboard 1.2.0 with persistent typed preferences and native General, Features, Shortcuts, Privacy & Storage, and About settings panes.
 - Added native global-shortcut recording, validation, removal/reset, and live registration with conflict feedback.
+- Applied monitoring, limits, expiration, panel position, screenshot behavior, automatic paste, and launch-at-login preferences at runtime.
 - Kept empty and no-result history states anchored below search instead of vertically centering the panel.
 - Copied successful app-initiated screenshots to the macOS pasteboard for immediate Command-V in version 1.1.2.
 - Added the native in-field clear button to history search for version 1.1.1.

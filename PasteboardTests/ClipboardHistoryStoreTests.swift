@@ -4,8 +4,12 @@ import XCTest
 
 private final class MemoryPersistence: ClipboardHistoryPersisting, @unchecked Sendable {
     var entries: [ClipboardEntry] = []
+    var saveCount = 0
     func load() throws -> [ClipboardEntry] { entries }
-    func save(_ entries: [ClipboardEntry]) throws { self.entries = entries }
+    func save(_ entries: [ClipboardEntry]) throws {
+        saveCount += 1
+        self.entries = entries
+    }
 }
 
 private final class MemoryImageStore: ImagePayloadStoring, @unchecked Sendable {
@@ -157,5 +161,44 @@ final class ClipboardHistoryStoreTests: XCTestCase {
 
         XCTAssertEqual(decoded, entry)
         XCTAssertTrue(decoded.isPinned)
+    }
+
+    func testRuntimeLimitUpdatePrunesOnceAndPreservesPins() throws {
+        let persistence = MemoryPersistence()
+        let images = MemoryImageStore()
+        let store = ClipboardHistoryStore(limit: 10, imageLimit: 10,
+                                          persistence: persistence, imageStore: images)
+        store.capture(imagePNGData: Data([1]), preferredFilename: "old.png",
+                      at: Date(timeIntervalSince1970: 100))
+        store.capture(text: "middle", at: Date(timeIntervalSince1970: 200))
+        store.capture(text: "new", at: Date(timeIntervalSince1970: 300))
+        let oldID = try XCTUnwrap(store.entries.first { $0.imageFilename == "old.png" }?.id)
+        store.togglePin(id: oldID)
+        persistence.saveCount = 0
+
+        XCTAssertEqual(store.removalCount(historyLimit: 1, imageLimit: 5), 1)
+        XCTAssertEqual(store.updateLimits(historyLimit: 1, imageLimit: 5), 1)
+
+        XCTAssertEqual(store.entries.count, 2)
+        XCTAssertTrue(store.entries[0].isPinned)
+        XCTAssertEqual(store.entries[1].text, "new")
+        XCTAssertNotNil(images.values["old.png"])
+        XCTAssertEqual(persistence.saveCount, 1)
+    }
+
+    func testClearUnpinnedPreservesPinnedPayload() throws {
+        let images = MemoryImageStore()
+        let store = ClipboardHistoryStore(limit: 10, imageLimit: 10,
+                                          persistence: MemoryPersistence(), imageStore: images)
+        store.capture(imagePNGData: Data([1]), preferredFilename: "pin.png")
+        let imageID = try XCTUnwrap(store.entries.first?.id)
+        store.togglePin(id: imageID)
+        store.capture(imagePNGData: Data([2]), preferredFilename: "remove.png")
+
+        store.clearUnpinned()
+
+        XCTAssertEqual(store.entries.map(\.imageFilename), ["pin.png"])
+        XCTAssertNotNil(images.values["pin.png"])
+        XCTAssertNil(images.values["remove.png"])
     }
 }

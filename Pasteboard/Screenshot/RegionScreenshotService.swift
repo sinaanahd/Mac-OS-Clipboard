@@ -5,10 +5,12 @@ import Foundation
 @MainActor
 final class RegionScreenshotService {
     private let store: ClipboardHistoryStore
+    private let settings: AppSettings
     private var activeProcess: Process?
 
-    init(store: ClipboardHistoryStore) {
+    init(store: ClipboardHistoryStore, settings: AppSettings) {
         self.store = store
+        self.settings = settings
     }
 
     func captureRegion() {
@@ -58,8 +60,15 @@ final class RegionScreenshotService {
             activeProcess = nil
         }
         guard let data else { return }
-        store.capture(imagePNGData: data, preferredFilename: filename)
-        PasteboardImageWriter.writePNG(data)
+        switch settings.screenshotBehavior {
+        case .historyAndClipboard:
+            store.capture(imagePNGData: data, preferredFilename: filename)
+            PasteboardImageWriter.writePNG(data)
+        case .historyOnly:
+            store.capture(imagePNGData: data, preferredFilename: filename)
+        case .clipboardOnly:
+            PasteboardImageWriter.writePNG(data)
+        }
     }
 
     private func explainAndRequestPermission() {

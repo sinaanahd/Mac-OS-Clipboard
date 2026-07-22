@@ -4,8 +4,8 @@ import Foundation
 @MainActor
 final class ClipboardHistoryStore: ObservableObject {
     @Published private(set) var entries: [ClipboardEntry]
-    private let limit: Int
-    private let imageLimit: Int
+    private(set) var limit: Int
+    private(set) var imageLimit: Int
     private let persistence: any ClipboardHistoryPersisting
     private let imageStore: any ImagePayloadStoring
 
@@ -102,6 +102,30 @@ final class ClipboardHistoryStore: ObservableObject {
         removeOrphanedImagePayloads()
     }
 
+    func clearUnpinned() {
+        let removed = entries.filter { !$0.isPinned }
+        guard !removed.isEmpty else { return }
+        removePayloads(for: removed)
+        entries.removeAll { !$0.isPinned }
+        persist()
+    }
+
+    func removalCount(historyLimit: Int, imageLimit: Int) -> Int {
+        Self.prunedEntries(entries, historyLimit: historyLimit, imageLimit: imageLimit).removed.count
+    }
+
+    @discardableResult
+    func updateLimits(historyLimit: Int, imageLimit: Int) -> Int {
+        let result = Self.prunedEntries(entries, historyLimit: historyLimit, imageLimit: imageLimit)
+        limit = max(1, historyLimit)
+        self.imageLimit = max(1, imageLimit)
+        guard !result.removed.isEmpty else { return 0 }
+        removePayloads(for: result.removed)
+        entries = result.kept
+        persist()
+        return result.removed.count
+    }
+
     func cleanup(expirationPolicy: ExpirationPolicy, now: Date = .now) {
         guard case let .after(interval) = expirationPolicy, interval > 0 else { return }
         let cutoff = now.addingTimeInterval(-interval)
@@ -114,23 +138,32 @@ final class ClipboardHistoryStore: ObservableObject {
 
     private func pruneAndPersist() {
         sortEntries()
-        var removed: [ClipboardEntry] = []
-        let imageIndexes = entries.indices.filter {
-            entries[$0].kind == .image && !entries[$0].isPinned
-        }
-        if imageIndexes.count > imageLimit {
-            for index in imageIndexes.dropFirst(imageLimit).reversed() {
-                removed.append(entries.remove(at: index))
-            }
-        }
-        let unpinnedIndexes = entries.indices.filter { !entries[$0].isPinned }
-        if unpinnedIndexes.count > limit {
-            for index in unpinnedIndexes.dropFirst(limit).reversed() {
-                removed.append(entries.remove(at: index))
-            }
-        }
-        removePayloads(for: removed)
+        let result = Self.prunedEntries(entries, historyLimit: limit, imageLimit: imageLimit)
+        entries = result.kept
+        removePayloads(for: result.removed)
         persist()
+    }
+
+    private static func prunedEntries(_ source: [ClipboardEntry],
+                                      historyLimit: Int,
+                                      imageLimit: Int) -> (kept: [ClipboardEntry], removed: [ClipboardEntry]) {
+        var kept = source
+        var removed: [ClipboardEntry] = []
+        let safeImageLimit = max(1, imageLimit)
+        let imageIndexes = kept.indices.filter { kept[$0].kind == .image && !kept[$0].isPinned }
+        if imageIndexes.count > safeImageLimit {
+            for index in imageIndexes.dropFirst(safeImageLimit).reversed() {
+                removed.append(kept.remove(at: index))
+            }
+        }
+        let safeHistoryLimit = max(1, historyLimit)
+        let unpinnedIndexes = kept.indices.filter { !kept[$0].isPinned }
+        if unpinnedIndexes.count > safeHistoryLimit {
+            for index in unpinnedIndexes.dropFirst(safeHistoryLimit).reversed() {
+                removed.append(kept.remove(at: index))
+            }
+        }
+        return (kept, removed)
     }
 
     private func removePayloads(for entries: [ClipboardEntry]) {

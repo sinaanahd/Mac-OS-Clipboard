@@ -34,7 +34,7 @@ States: Not started, In progress, Blocked, Completed.
   - [ ] Add an optional Developer ID and notarization workflow
 - [x] Settings architecture — Completed
 - [x] Shortcut personalization — Completed
-- [ ] History and storage personalization — Not started
+- [ ] History and storage personalization — In progress
 - [ ] macOS 26 visual refinement — Not started
 - [ ] Accessible animations — Not started
 - [ ] Release stability corrections — Not started
