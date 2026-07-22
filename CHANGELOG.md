@@ -6,3 +6,4 @@
 - Added centralized product and visual configuration.
 - Added project, privacy, architecture, testing, and contribution documentation.
 - Added local text clipboard monitoring, bounded history, duplicate suppression, search, deletion, restoration, and persistence.
+- Added a menu-bar entry and floating history panel toggled with the native global history shortcut.

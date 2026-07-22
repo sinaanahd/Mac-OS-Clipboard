@@ -1,4 +1,5 @@
 import AppKit
+import Carbon.HIToolbox
 import Foundation
 
 struct KeyboardShortcut: Equatable, Sendable {
@@ -13,6 +14,23 @@ struct KeyboardShortcut: Equatable, Sendable {
             modifiers.contains(.command) ? "⌘" : ""
         ].joined()
         return symbols + key.uppercased()
+    }
+
+    var carbonKeyCode: UInt32? {
+        switch key.lowercased() {
+        case "v": UInt32(kVK_ANSI_V)
+        case "5": UInt32(kVK_ANSI_5)
+        default: nil
+        }
+    }
+
+    var carbonModifiers: UInt32 {
+        var result: UInt32 = 0
+        if modifiers.contains(.command) { result |= UInt32(cmdKey) }
+        if modifiers.contains(.option) { result |= UInt32(optionKey) }
+        if modifiers.contains(.control) { result |= UInt32(controlKey) }
+        if modifiers.contains(.shift) { result |= UInt32(shiftKey) }
+        return result
     }
 }
 

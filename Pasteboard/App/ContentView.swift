@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var store: ClipboardHistoryStore
+    var onRestore: () -> Void = {}
     @State private var query = ""
 
     private var filteredEntries: [ClipboardEntry] {
@@ -27,6 +28,7 @@ struct ContentView: View {
                     ForEach(filteredEntries) { entry in
                         Button {
                             store.restore(entry)
+                            onRestore()
                         } label: {
                             VStack(alignment: .leading, spacing: VisualConfiguration.rowSpacing) {
                                 Text(entry.preview).lineLimit(2)

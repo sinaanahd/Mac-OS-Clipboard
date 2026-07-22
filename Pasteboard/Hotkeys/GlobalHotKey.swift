@@ -1,0 +1,45 @@
+import Carbon.HIToolbox
+import Foundation
+
+enum GlobalHotKeyError: Error {
+    case unsupportedKey
+    case registrationFailed(OSStatus)
+    case handlerInstallationFailed(OSStatus)
+}
+
+final class GlobalHotKey: @unchecked Sendable {
+    private var hotKeyRef: EventHotKeyRef?
+    private var eventHandlerRef: EventHandlerRef?
+    private let action: @MainActor @Sendable () -> Void
+
+    init(shortcut: KeyboardShortcut, action: @escaping @MainActor @Sendable () -> Void) throws {
+        guard let keyCode = shortcut.carbonKeyCode else { throw GlobalHotKeyError.unsupportedKey }
+        self.action = action
+
+        var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard),
+                                      eventKind: UInt32(kEventHotKeyPressed))
+        let handlerStatus = InstallEventHandler(GetApplicationEventTarget(), { _, _, userData in
+            guard let userData else { return noErr }
+            let hotKey = Unmanaged<GlobalHotKey>.fromOpaque(userData).takeUnretainedValue()
+            Task { @MainActor in hotKey.action() }
+            return noErr
+        }, 1, &eventType, Unmanaged.passUnretained(self).toOpaque(), &eventHandlerRef)
+        guard handlerStatus == noErr else {
+            throw GlobalHotKeyError.handlerInstallationFailed(handlerStatus)
+        }
+
+        let identifier = EventHotKeyID(signature: OSType(0x50535442), id: 1)
+        let registrationStatus = RegisterEventHotKey(keyCode, shortcut.carbonModifiers,
+                                                     identifier, GetApplicationEventTarget(),
+                                                     0, &hotKeyRef)
+        guard registrationStatus == noErr else {
+            if let eventHandlerRef { RemoveEventHandler(eventHandlerRef) }
+            throw GlobalHotKeyError.registrationFailed(registrationStatus)
+        }
+    }
+
+    deinit {
+        if let hotKeyRef { UnregisterEventHotKey(hotKeyRef) }
+        if let eventHandlerRef { RemoveEventHandler(eventHandlerRef) }
+    }
+}

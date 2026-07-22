@@ -11,5 +11,7 @@ final class AppConfigurationTests: XCTestCase {
 
     func testShortcutDisplayName() {
         XCTAssertEqual(AppConfiguration.defaultHistoryShortcut.displayName, "⇧⌘V")
+        XCTAssertNotNil(AppConfiguration.defaultHistoryShortcut.carbonKeyCode)
+        XCTAssertNotEqual(AppConfiguration.defaultHistoryShortcut.carbonModifiers, 0)
     }
 }
