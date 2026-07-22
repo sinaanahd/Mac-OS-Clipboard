@@ -13,6 +13,7 @@
 		525D6A0791A11EE26342FDC7 /* PasteboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C8767E235CD24B14CE468F /* PasteboardMonitor.swift */; };
 		534846C3A023FF97C719CECB /* ImagePayloadStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9CE724A8F3490051BA597 /* ImagePayloadStore.swift */; };
 		7C79677691C530A341F3B32A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F5627639B12B5B6C3C3F4 /* SettingsView.swift */; };
+		866DF739CCDBE94AD5885910 /* GlobalHotKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADEF6C2E1E5D5FA53174BC2 /* GlobalHotKeyTests.swift */; };
 		8CA2A94D80B01B176C2E096B /* RegionScreenshotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841CFEC7E746D8883B7BC5AA /* RegionScreenshotService.swift */; };
 		8FF0E361C6EA5D4139BA42A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319C06AA1818EAC09CE6E9F3 /* ContentView.swift */; };
 		9695F3BD3EB0C1FC45A8D794 /* AutomaticPasteServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC1B19B4DA65BF7A9BE30D4 /* AutomaticPasteServiceTests.swift */; };
@@ -56,6 +57,7 @@
 		CF0DFF09588FD1B246EF36A4 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		D88661797C72D7E1F5ED2CF9 /* PasteboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PasteboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D96D350AE89623D58D14C000 /* Pasteboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pasteboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADEF6C2E1E5D5FA53174BC2 /* GlobalHotKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKeyTests.swift; sourceTree = "<group>"; };
 		DC08E896ED23531526487A75 /* ScreenshotFilenameGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotFilenameGeneratorTests.swift; sourceTree = "<group>"; };
 		E0ED3770E8A3C518FB116BF6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1362244C75E701E5C4B68F4 /* AppConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigurationTests.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				E1362244C75E701E5C4B68F4 /* AppConfigurationTests.swift */,
 				FBC1B19B4DA65BF7A9BE30D4 /* AutomaticPasteServiceTests.swift */,
 				9DCDBCD4F68E49A9C17E1DD7 /* ClipboardHistoryStoreTests.swift */,
+				DADEF6C2E1E5D5FA53174BC2 /* GlobalHotKeyTests.swift */,
 				DC08E896ED23531526487A75 /* ScreenshotFilenameGeneratorTests.swift */,
 			);
 			path = PasteboardTests;
@@ -303,6 +306,7 @@
 				F8DF3DDB5B0A0933D8C2AD8E /* AppConfigurationTests.swift in Sources */,
 				9695F3BD3EB0C1FC45A8D794 /* AutomaticPasteServiceTests.swift in Sources */,
 				E1438A03F8FA4FA2A0D0A3F3 /* ClipboardHistoryStoreTests.swift in Sources */,
+				866DF739CCDBE94AD5885910 /* GlobalHotKeyTests.swift in Sources */,
 				AAB0B462574172BCF24778CD /* ScreenshotFilenameGeneratorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

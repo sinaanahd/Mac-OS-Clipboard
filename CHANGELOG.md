@@ -13,3 +13,4 @@
 - Added native interactive region screenshots with a global shortcut, permission explanation, local import, and temporary-file cleanup.
 - Fixed global hotkey routing so the history shortcut cannot trigger region capture.
 - Fixed history panel ordering so the global shortcut brings it above other apps and full-screen windows.
+- Fixed Carbon event propagation so each global shortcut reaches its matching handler.

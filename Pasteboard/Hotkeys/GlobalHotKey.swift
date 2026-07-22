@@ -34,7 +34,12 @@ final class GlobalHotKey: @unchecked Sendable {
                 nil,
                 &eventIdentifier
             )
-            guard status == noErr, eventIdentifier.id == hotKey.identifier else { return noErr }
+            let disposition = GlobalHotKey.eventDisposition(
+                readStatus: status,
+                eventIdentifier: eventIdentifier.id,
+                registeredIdentifier: hotKey.identifier
+            )
+            guard disposition == noErr else { return disposition }
             Task { @MainActor in hotKey.action() }
             return noErr
         }, 1, &eventType, Unmanaged.passUnretained(self).toOpaque(), &eventHandlerRef)
@@ -50,6 +55,15 @@ final class GlobalHotKey: @unchecked Sendable {
             if let eventHandlerRef { RemoveEventHandler(eventHandlerRef) }
             throw GlobalHotKeyError.registrationFailed(registrationStatus)
         }
+    }
+
+    static func eventDisposition(readStatus: OSStatus,
+                                 eventIdentifier: UInt32,
+                                 registeredIdentifier: UInt32) -> OSStatus {
+        guard readStatus == noErr, eventIdentifier == registeredIdentifier else {
+            return OSStatus(eventNotHandledErr)
+        }
+        return noErr
     }
 
     deinit {
