@@ -21,4 +21,12 @@
 3. Verify the search field accepts keyboard input and the panel dismisses after restoring an entry or losing focus.
 4. Verify the menu-bar clipboard item can show the panel and quit the app.
 
-Accessibility-driven paste and Screen Recording flows are not yet implemented or manually testable.
+## Automatic paste
+
+1. Without Accessibility permission, select an entry and verify it is copied but not pasted.
+2. Verify Pasteboard explains why access is needed before macOS displays its permission prompt.
+3. Grant access in Privacy & Security > Accessibility, reopen the panel from a text editor, and select an entry.
+4. Verify the editor reactivates and receives exactly one paste operation.
+5. Deny or revoke access and verify manual paste continues to work without repeated unsolicited prompts.
+
+Screen Recording flows are not yet implemented or manually testable.

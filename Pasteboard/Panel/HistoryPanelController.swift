@@ -9,8 +9,12 @@ private final class HistoryPanel: NSPanel {
 @MainActor
 final class HistoryPanelController: NSObject, NSWindowDelegate {
     private let panel: HistoryPanel
+    private let automaticPaste: AutomaticPasteService
+    private var previousApplication: NSRunningApplication?
 
-    init(store: ClipboardHistoryStore) {
+    init(store: ClipboardHistoryStore,
+         automaticPaste: AutomaticPasteService = AutomaticPasteService()) {
+        self.automaticPaste = automaticPaste
         panel = HistoryPanel(
             contentRect: NSRect(origin: .zero, size: AppConfiguration.panelSize),
             styleMask: [.titled, .nonactivatingPanel, .fullSizeContentView],
@@ -30,7 +34,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         panel.backgroundColor = .windowBackgroundColor
         panel.delegate = self
         panel.contentViewController = NSHostingController(
-            rootView: ContentView(store: store) { [weak panel] in panel?.orderOut(nil) }
+            rootView: ContentView(store: store) { [weak self] in self?.completeSelection() }
                 .frame(width: AppConfiguration.panelSize.width,
                        height: AppConfiguration.panelSize.height)
         )
@@ -41,6 +45,10 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
     }
 
     func show() {
+        let currentApplication = NSWorkspace.shared.frontmostApplication
+        if currentApplication?.bundleIdentifier != Bundle.main.bundleIdentifier {
+            previousApplication = currentApplication
+        }
         positionNearPointer()
         NSApplication.shared.activate(ignoringOtherApps: true)
         panel.makeKeyAndOrderFront(nil)
@@ -52,6 +60,32 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
 
     func windowDidResignKey(_ notification: Notification) {
         hide()
+    }
+
+    private func completeSelection() {
+        hide()
+        guard AppConfiguration.defaultAutomaticPasteEnabled else { return }
+        guard automaticPaste.hasPermission else {
+            explainAccessibilityPermission()
+            return
+        }
+        guard let previousApplication else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + AppConfiguration.automaticPasteDelay) {
+            _ = self.automaticPaste.paste {
+                previousApplication.activate(options: [.activateIgnoringOtherApps])
+            }
+        }
+    }
+
+    private func explainAccessibilityPermission() {
+        let alert = NSAlert()
+        alert.messageText = "Allow Pasteboard to paste automatically?"
+        alert.informativeText = "Pasteboard needs Accessibility access to send Command-V to the app you were using. Your clipboard data stays on this Mac. The selected item is already copied and can be pasted manually."
+        alert.addButton(withTitle: "Open System Settings")
+        alert.addButton(withTitle: "Not Now")
+        if alert.runModal() == .alertFirstButtonReturn {
+            automaticPaste.requestPermission()
+        }
     }
 
     private func positionNearPointer() {

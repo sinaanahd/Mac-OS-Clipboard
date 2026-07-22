@@ -47,6 +47,8 @@ enum AppConfiguration {
     static let defaultHistoryLimit = 200
     static let defaultImageLimit = 50
     static let clipboardPollingInterval: TimeInterval = 0.5
+    static let defaultAutomaticPasteEnabled = true
+    static let automaticPasteDelay: TimeInterval = 0.12
     static let applicationSupportDirectoryName = "Pasteboard"
     static let databaseFilename = "clipboard-history.sqlite"
     static let interimTextHistoryFilename = "clipboard-history.json"

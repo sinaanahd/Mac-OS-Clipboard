@@ -16,4 +16,4 @@ xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -configuration Debug
 xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -destination "platform=macOS" test
 ```
 
-The app monitors plain-text clipboard changes locally, keeps a bounded persistent history, and presents searchable entries in a floating panel. Use ⇧⌘V or the menu-bar clipboard icon to show it. Selecting an entry restores it to the system pasteboard. Automatic paste, images, files, and screenshots remain roadmap work.
+The app monitors plain-text clipboard changes locally, keeps a bounded persistent history, and presents searchable entries in a floating panel. Use ⇧⌘V or the menu-bar clipboard icon to show it. Selecting an entry restores it to the system pasteboard and, with user-granted Accessibility access, pastes it into the previously active app. Images, files, and screenshots remain roadmap work.
