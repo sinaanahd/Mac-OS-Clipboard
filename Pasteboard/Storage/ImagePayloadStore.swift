@@ -5,6 +5,7 @@ protocol ImagePayloadStoring: Sendable {
     func save(_ data: Data, filename: String) throws
     func data(filename: String) throws -> Data
     func remove(filename: String) throws
+    func filenames() throws -> [String]
     func url(filename: String) -> URL
 }
 
@@ -24,6 +25,16 @@ struct ImagePayloadStore: ImagePayloadStoring {
         let fileURL = url(filename: filename)
         guard FileManager.default.fileExists(atPath: fileURL.path) else { return }
         try FileManager.default.removeItem(at: fileURL)
+    }
+
+    func filenames() throws -> [String] {
+        guard FileManager.default.fileExists(atPath: directoryURL.path) else { return [] }
+        return try FileManager.default.contentsOfDirectory(
+            at: directoryURL,
+            includingPropertiesForKeys: [.isRegularFileKey],
+            options: [.skipsHiddenFiles]
+        ).filter { (try? $0.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true }
+            .map(\.lastPathComponent)
     }
 
     func url(filename: String) -> URL { directoryURL.appendingPathComponent(filename) }

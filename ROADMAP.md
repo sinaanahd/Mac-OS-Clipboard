@@ -9,6 +9,6 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Image and screenshot history — Completed
 - [x] File history — Completed
 - [x] Region screenshot capture — Completed
-- [ ] Privacy and cleanup — Not started
+- [x] Privacy and cleanup — Completed
 - [ ] Polish and testing — Not started
 - [ ] Packaging and distribution — Not started

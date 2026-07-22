@@ -17,7 +17,13 @@ final class ClipboardHistoryStore: ObservableObject {
         self.imageLimit = max(1, imageLimit)
         self.persistence = persistence
         self.imageStore = imageStore
-        entries = (try? persistence.load()).map { Array($0.prefix(max(1, limit))) } ?? []
+        do {
+            entries = Array(try persistence.load().prefix(max(1, limit)))
+            cleanup(expirationPolicy: AppConfiguration.defaultExpirationPolicy)
+            removeOrphanedImagePayloads()
+        } catch {
+            entries = []
+        }
     }
 
     @discardableResult
@@ -84,6 +90,17 @@ final class ClipboardHistoryStore: ObservableObject {
         removePayloads(for: entries)
         entries.removeAll()
         persist()
+        removeOrphanedImagePayloads()
+    }
+
+    func cleanup(expirationPolicy: ExpirationPolicy, now: Date = .now) {
+        guard case let .after(interval) = expirationPolicy, interval > 0 else { return }
+        let cutoff = now.addingTimeInterval(-interval)
+        let expired = entries.filter { $0.createdAt < cutoff }
+        guard !expired.isEmpty else { return }
+        removePayloads(for: expired)
+        entries.removeAll { $0.createdAt < cutoff }
+        persist()
     }
 
     private func pruneAndPersist() {
@@ -104,6 +121,14 @@ final class ClipboardHistoryStore: ObservableObject {
 
     private func removePayloads(for entries: [ClipboardEntry]) {
         for filename in entries.compactMap(\.imageFilename) {
+            try? imageStore.remove(filename: filename)
+        }
+    }
+
+    private func removeOrphanedImagePayloads() {
+        let referencedFilenames = Set(entries.compactMap(\.imageFilename))
+        guard let storedFilenames = try? imageStore.filenames() else { return }
+        for filename in storedFilenames where !referencedFilenames.contains(filename) {
             try? imageStore.remove(filename: filename)
         }
     }

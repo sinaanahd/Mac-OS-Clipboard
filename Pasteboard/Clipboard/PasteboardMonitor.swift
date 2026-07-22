@@ -30,6 +30,7 @@ final class PasteboardMonitor {
     private func poll() {
         guard pasteboard.changeCount != lastChangeCount else { return }
         lastChangeCount = pasteboard.changeCount
+        guard PasteboardPrivacyFilter.shouldCapture(types: pasteboard.types ?? []) else { return }
         let fileURLs = readFileURLs()
         if !fileURLs.isEmpty {
             store.capture(fileURLs: fileURLs)

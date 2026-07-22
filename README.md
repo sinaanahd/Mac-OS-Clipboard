@@ -16,4 +16,4 @@ xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -configuration Debug
 xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -destination "platform=macOS" test
 ```
 
-The app monitors text, image, and Finder file selections locally, keeps bounded persistent history, and presents searchable entries with native previews in a floating panel. Use ⇧⌘V to show history and ⌃⇧⌘5 to select a screen region. Selecting an entry restores it to the pasteboard and, with user-granted Accessibility access, pastes it into the previously active app.
+The app monitors text, image, and Finder file selections locally, keeps bounded persistent history, and presents searchable entries with native previews in a floating panel. It skips pasteboard items marked concealed, transient, or auto-generated. Use ⇧⌘V to show history and ⌃⇧⌘5 to select a screen region. Selecting an entry restores it to the pasteboard and, with user-granted Accessibility access, pastes it into the previously active app. The menu-bar Clear History action removes local metadata and Pasteboard-owned image copies after confirmation without deleting referenced user files.

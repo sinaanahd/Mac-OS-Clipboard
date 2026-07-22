@@ -14,3 +14,5 @@
 - Fixed global hotkey routing so the history shortcut cannot trigger region capture.
 - Fixed history panel ordering so the global shortcut brings it above other apps and full-screen windows.
 - Fixed Carbon event propagation so each global shortcut reaches its matching handler.
+- Added filtering for concealed, transient, and auto-generated pasteboard content.
+- Added confirmed history clearing, expiration cleanup support, and removal of orphaned Pasteboard-owned image files.

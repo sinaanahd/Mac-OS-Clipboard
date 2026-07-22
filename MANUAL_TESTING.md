@@ -51,3 +51,12 @@
 2. Verify file entries show native icons and searchable filenames rather than image-preview clipboard data.
 3. Restore a file entry and paste it into another Finder folder or an application accepting files.
 4. Move or delete an original file and verify Pasteboard remains stable and does not delete or recreate user files.
+
+## Privacy and cleanup
+
+1. Copy from an application that marks password-manager content as concealed and verify the item does not appear in history.
+2. Publish test pasteboard content marked transient or auto-generated and verify it is skipped while ordinary text remains capturable.
+3. Choose Clear History from the menu bar, cancel once, and verify entries remain.
+4. Confirm Clear History and verify entries and Pasteboard-owned images are removed after relaunch.
+5. Verify original Finder files referenced by cleared file entries still exist unchanged.
+6. Place an unreferenced test image in Application Support/Pasteboard/Images, relaunch, and verify only the orphan is removed.

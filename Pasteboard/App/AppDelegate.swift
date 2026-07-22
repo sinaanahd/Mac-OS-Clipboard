@@ -2,6 +2,7 @@ import AppKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var historyStore: ClipboardHistoryStore?
     private var monitor: PasteboardMonitor?
     private var panelController: HistoryPanelController?
     private var historyHotKey: GlobalHotKey?
@@ -14,6 +15,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let panelController = HistoryPanelController(store: store)
 
         self.monitor = monitor
+        historyStore = store
         self.panelController = panelController
         let screenshotService = RegionScreenshotService(store: store)
         self.screenshotService = screenshotService
@@ -40,5 +42,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func captureRegion() {
         screenshotService?.captureRegion()
+    }
+
+    func confirmClearHistory() {
+        guard let historyStore, !historyStore.entries.isEmpty else { return }
+        let alert = NSAlert()
+        alert.messageText = "Clear Clipboard History?"
+        alert.informativeText = "This removes saved clipboard entries and Pasteboard-owned image copies. Original files referenced by the history will not be deleted."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Clear History")
+        alert.addButton(withTitle: "Cancel")
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        historyStore.clear()
     }
 }

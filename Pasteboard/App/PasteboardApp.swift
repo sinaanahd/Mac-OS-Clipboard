@@ -12,6 +12,8 @@ struct PasteboardApp: App {
                 .keyboardShortcut("5", modifiers: [.control, .command, .shift])
             SettingsLink()
             Divider()
+            Button("Clear History…") { appDelegate.confirmClearHistory() }
+            Divider()
             Button("Quit Pasteboard") { NSApplication.shared.terminate(nil) }
         }
 
