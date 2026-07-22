@@ -10,6 +10,6 @@ Accessibility access is used only after the user selects automatic paste and sol
 
 File history stores local file paths as references. Pasteboard does not copy, upload, modify, or delete the referenced user files; removing a history entry removes only Pasteboard metadata.
 
-Screen Recording access is requested only after the user invokes region capture and accepts Pasteboard's explanation. The native macOS selector determines the captured region. Pasteboard waits only for its temporary PNG to become stable, imports it locally, removes the temporary file, and never transmits the image.
+Screen Recording access is requested only after the user invokes region capture and accepts Pasteboard's explanation. The native macOS selector determines the captured region. Pasteboard waits only for its temporary PNG to become stable, imports it locally, places a successful capture on the standard macOS pasteboard for the user's immediate Command-V, removes the temporary file, and never transmits the image.
 
 Clear History requires confirmation. It removes history metadata and image copies owned by Pasteboard, then removes unreferenced files from Pasteboard's image-storage directory. It never deletes original files referenced by file-history entries. The configured expiration policy applies the same owned-data cleanup to expired entries.

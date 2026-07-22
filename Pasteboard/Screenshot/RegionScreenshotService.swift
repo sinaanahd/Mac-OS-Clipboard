@@ -59,6 +59,7 @@ final class RegionScreenshotService {
         }
         guard let data else { return }
         store.capture(imagePNGData: data, preferredFilename: filename)
+        PasteboardImageWriter.writePNG(data)
     }
 
     private func explainAndRequestPermission() {

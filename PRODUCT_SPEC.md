@@ -20,11 +20,11 @@ Record supported text, image, and file clipboard entries; order pinned entries f
 
 ## Screenshot capture
 
-Invoke the built-in macOS interactive region-selection workflow, wait for its output PNG to finish saving before import, store captures locally, display thumbnails, copy or reuse captures, use predictable unique filenames, and explain Screen Recording permission when required. Cancellation and delayed or missing output must fail safely without leaving temporary files.
+Invoke the built-in macOS interactive region-selection workflow, wait for its output PNG to finish saving before import, store captures locally, and place successful captures on the macOS pasteboard for immediate Command-V. Display thumbnails, copy or reuse captures, use predictable unique filenames, and explain Screen Recording permission when required. Cancellation and delayed or missing output must fail safely without changing the pasteboard or leaving temporary files.
 
 ## Search and navigation
 
-Provide a compact branded header with minimal top inset above the search field, incremental text search with a native in-field clear button, keyboard navigation, selection, dismissal, deletion, and clear empty states. The newest matching entry must remain visible when history updates, even when the list was previously scrolled. Relative entry ages are snapshots recalculated when history opens or a new item arrives, not continuously refreshed. Search should cover safe textual metadata without OCR in the initial release.
+Provide a compact branded header with minimal top inset above the search field, incremental text search with a native in-field clear button, keyboard navigation, selection, dismissal, deletion, and clear empty states anchored directly below search rather than centered in the panel. The newest matching entry must remain visible when history updates, even when the list was previously scrolled. Relative entry ages are snapshots recalculated when history opens or a new item arrives, not continuously refreshed. Search should cover safe textual metadata without OCR in the initial release.
 
 ## Persistence
 

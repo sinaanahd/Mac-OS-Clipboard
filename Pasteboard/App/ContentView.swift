@@ -38,12 +38,19 @@ struct ContentView: View {
             HistorySearchField(text: $query, prompt: "Search clipboard history")
                 .accessibilityLabel("Search clipboard history")
             if filteredEntries.isEmpty {
-                ContentUnavailableView(
-                    query.isEmpty ? "Clipboard history is empty" : "No matching items",
-                    systemImage: "clipboard",
-                    description: Text(query.isEmpty ? "Copied text will appear here." : "Try another search.")
-                )
-                .padding(VisualConfiguration.emptyStatePadding)
+                VStack(spacing: VisualConfiguration.rowSpacing) {
+                    Image(systemName: "clipboard")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+                    Text(query.isEmpty ? "Clipboard history is empty" : "No matching items")
+                        .font(.headline)
+                    Text(query.isEmpty ? "Copied items will appear here." : "Try another search.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, VisualConfiguration.emptyStateTopPadding)
+                .accessibilityElement(children: .combine)
                 .accessibilityIdentifier("clipboard-empty-state")
             } else {
                 ScrollViewReader { proxy in
@@ -92,6 +99,7 @@ struct ContentView: View {
         .padding(.horizontal)
         .padding(.bottom)
         .padding(.top, VisualConfiguration.panelTopPadding)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .ignoresSafeArea(.container, edges: .top)
         .onChange(of: store.entries.first?.id) { _, _ in
             presentation.refresh()

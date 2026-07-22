@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Kept empty and no-result history states anchored below search instead of vertically centering the panel.
+- Copied successful app-initiated screenshots to the macOS pasteboard for immediate Command-V in version 1.1.2.
 - Added the native in-field clear button to history search for version 1.1.1.
 - Changed history to Option-V and region capture to Option-Shift-4 for version 1.1.0.
 - Hardened built-in macOS region capture by waiting for a stable PNG before importing it.

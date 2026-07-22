@@ -28,8 +28,9 @@
 10. Relaunch Pasteboard and verify pinned entries remain pinned and ordered newest-first within the pinned section.
 11. Unpin an entry and verify it returns to chronological position among regular history.
 12. Exceed history and image limits and run expiration cleanup; verify pinned entries remain until explicitly deleted or cleared.
-13. Verify `Version 1.1.1` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
+13. Verify `Version 1.1.2` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
 14. Enter a search query, click the native clear button inside the field, and verify the complete history immediately returns.
+15. Clear history or search for a missing value and verify the empty state stays directly below search instead of centering the entire panel content.
 
 ## Automatic paste
 
@@ -48,6 +49,7 @@
 5. Restore the captured entry and paste it into Preview or Notes.
 6. Complete a slow region selection and verify Pasteboard waits for the PNG to finish saving before adding exactly one image entry.
 7. Cancel the built-in selector and verify no history entry or temporary file remains.
+8. Complete a capture, switch to an image-capable application, press Command-V, and verify the captured image pastes immediately.
 
 ## Image history
 

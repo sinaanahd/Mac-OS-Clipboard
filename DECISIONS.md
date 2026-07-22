@@ -73,3 +73,15 @@ Alternatives considered: retain Command-Shift-V, imitate the selector with a cus
 Reason: Option-V is compact and memorable, while a distinct Option-Shift-4 shortcut avoids overriding Apple's system shortcut. Reusing the native selector preserves expected macOS behavior, and bounded stability polling handles delayed saves without blocking the main thread.
 
 Consequences: Option-V and Option-Shift-4 are globally consumed while Pasteboard runs. Capture waits up to five seconds after successful selector completion, rejects non-PNG output, cleans up its temporary file, and permits only one active capture at a time. This substantial interaction change advances the app to version 1.1.0.
+
+## 2026-07-23 — Publish app screenshots to the general pasteboard
+
+Decision: after a successful app-initiated region capture is validated and imported, publish its PNG representation to the general macOS pasteboard.
+
+Context: users expect to press Command-V immediately after taking a screenshot, matching common native and Windows snipping workflows.
+
+Alternatives considered: retain history-only capture, require reopening history and selecting the image, or synthesize an automatic paste event.
+
+Reason: placing the PNG on the pasteboard enables explicit user-controlled Command-V without requiring Accessibility permission or injecting input. Existing content hashing suppresses the monitor's duplicate observation.
+
+Consequences: a successful capture replaces the current general pasteboard contents; cancelled, invalid, and failed captures leave it unchanged. The image remains local and is exposed only through the standard macOS pasteboard.
