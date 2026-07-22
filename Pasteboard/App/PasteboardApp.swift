@@ -17,6 +17,7 @@ struct PasteboardApp: App {
                 .keyboardShortcut("4", modifiers: [.option, .shift])
             Button("About Pasteboard") { NSApplication.shared.orderFrontStandardAboutPanel(nil) }
             SettingsLink()
+                .keyboardShortcut(",", modifiers: [.command])
             Divider()
             Button("Clear History…") { appDelegate.confirmClearHistory() }
             Divider()
@@ -24,7 +25,7 @@ struct PasteboardApp: App {
         }
 
         Settings {
-            SettingsView()
+            SettingsView(settings: appDelegate.settings)
         }
     }
 }

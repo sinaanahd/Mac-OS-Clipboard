@@ -2,9 +2,16 @@ import AppKit
 import Carbon.HIToolbox
 import Foundation
 
-struct KeyboardShortcut: Equatable, Sendable {
+struct KeyboardShortcut: Codable, Equatable, Sendable {
     let key: String
-    let modifiers: NSEvent.ModifierFlags
+    private let modifierRawValue: UInt
+
+    init(key: String, modifiers: NSEvent.ModifierFlags) {
+        self.key = key
+        modifierRawValue = modifiers.intersection(.deviceIndependentFlagsMask).rawValue
+    }
+
+    var modifiers: NSEvent.ModifierFlags { NSEvent.ModifierFlags(rawValue: modifierRawValue) }
 
     var displayName: String {
         let symbols = [
@@ -32,6 +39,10 @@ struct KeyboardShortcut: Equatable, Sendable {
         if modifiers.contains(.shift) { result |= UInt32(shiftKey) }
         return result
     }
+
+    var isStructurallyValid: Bool {
+        carbonKeyCode != nil && !modifiers.intersection([.command, .option, .control, .shift]).isEmpty
+    }
 }
 
 enum ExpirationPolicy: Equatable, Sendable {
@@ -42,10 +53,17 @@ enum ExpirationPolicy: Equatable, Sendable {
 enum AppConfiguration {
     static let productName = "Pasteboard"
     static let bundleIdentifier = "com.sinaanahd.Pasteboard"
-    static let developmentVersionFallback = "1.1.2"
+    static let developmentVersionFallback = "1.2.0"
     static var marketingVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
             ?? developmentVersionFallback
+    }
+    static var buildNumber: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "5"
+    }
+    static var applicationSupportURL: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(applicationSupportDirectoryName, isDirectory: true)
     }
     static let defaultHistoryShortcut = KeyboardShortcut(key: "v", modifiers: [.option])
     static let defaultScreenshotShortcut = KeyboardShortcut(key: "4", modifiers: [.option, .shift])

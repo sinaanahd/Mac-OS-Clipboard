@@ -32,8 +32,8 @@ States: Not started, In progress, Blocked, Completed.
   - [ ] Generate and verify the DMG SHA-256 checksum
   - [ ] Document trusted local installation and Gatekeeper limitations
   - [ ] Add an optional Developer ID and notarization workflow
-- [ ] Settings architecture — In progress
-- [ ] Shortcut personalization — Not started
+- [x] Settings architecture — Completed
+- [ ] Shortcut personalization — In progress
 - [ ] History and storage personalization — Not started
 - [ ] macOS 26 visual refinement — Not started
 - [ ] Accessible animations — Not started

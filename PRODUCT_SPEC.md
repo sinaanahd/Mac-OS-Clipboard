@@ -12,7 +12,7 @@ The supplied PasteBoard clipboard-and-history artwork is the approved applicatio
 
 Users copy content normally, press Option-V as a macOS analogue to the Windows+V habit, search or navigate recent items, and select an item to restore it to the pasteboard and optionally paste it into the previously active application. Users press Option-Shift-4 to invoke macOS's built-in interactive region selector and retain the result locally.
 
-The history panel displays the bundle marketing version at the top-right. The first publishable baseline is version 1.0.0; the shortcut and native screenshot workflow ships as version 1.1.0. Subsequent ordinary publishable changes increment the patch number, while substantial feature releases increment the minor number and reset patch to zero.
+The history panel displays the bundle marketing version at the top-right. The first publishable baseline is version 1.0.0; the customizable personal release is version 1.2.0. Subsequent ordinary publishable changes increment the patch number, while substantial feature releases increment the minor number and reset patch to zero.
 
 ## Clipboard history
 
@@ -40,7 +40,7 @@ Clipboard observation should use public pasteboard APIs. Automatic paste may req
 
 ## Settings
 
-Allow editing history and screenshot shortcuts, history and image limits, expiration, launch behavior, automatic paste behavior, excluded applications, and cleanup actions. Validate shortcut conflicts.
+Provide native General, Features, Shortcuts, Privacy & Storage, and About panes backed by typed local preferences. Allow editing history and screenshot shortcuts, history and image limits, expiration, launch behavior, automatic paste behavior, monitoring, panel placement, screenshot completion, excluded applications, and cleanup actions. Validate stored values and shortcut conflicts, support individual and complete resets, and preserve existing history and pins during upgrades.
 
 ## Performance
 

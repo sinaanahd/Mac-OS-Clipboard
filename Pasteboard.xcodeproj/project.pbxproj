@@ -10,6 +10,7 @@
 		05AA1C35769EBA7555FB25F4 /* PasteboardImageWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47EB4C33C69B7CA3BFC54EE /* PasteboardImageWriter.swift */; };
 		17949B5ED4DA2FC41791B57F /* GlobalHotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C91CA4BE9B8D5EA94E587 /* GlobalHotKey.swift */; };
 		261418B9CFBA2EB0197F623B /* ScreenshotFilenameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F621AA4760FF2F5D4AB8F /* ScreenshotFilenameGenerator.swift */; };
+		36B11A1D14B2215161CBFC7F /* AppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8E9DDA7331E610ACB9ECB0 /* AppSettingsTests.swift */; };
 		506ABEED26121E3A943C14C8 /* PasteboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09747F649F378ED710DF8D8 /* PasteboardApp.swift */; };
 		525D6A0791A11EE26342FDC7 /* PasteboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C8767E235CD24B14CE468F /* PasteboardMonitor.swift */; };
 		534846C3A023FF97C719CECB /* ImagePayloadStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9CE724A8F3490051BA597 /* ImagePayloadStore.swift */; };
@@ -36,6 +37,7 @@
 		D69A446FF85CF7EA4C1E9164 /* HistoryPanelPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE34581E723859793B05FB1 /* HistoryPanelPresentation.swift */; };
 		E1438A03F8FA4FA2A0D0A3F3 /* ClipboardHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCDBCD4F68E49A9C17E1DD7 /* ClipboardHistoryStoreTests.swift */; };
 		E8D58CA584EE60F18015E8C6 /* ClipboardHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D57E547D16589D5149AED5 /* ClipboardHistoryStore.swift */; };
+		F72C49C28D5EB1F35C6B19EA /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5077E78B6D10D172D4B9B8 /* AppSettings.swift */; };
 		F8DF3DDB5B0A0933D8C2AD8E /* AppConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1362244C75E701E5C4B68F4 /* AppConfigurationTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		075C91CA4BE9B8D5EA94E587 /* GlobalHotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKey.swift; sourceTree = "<group>"; };
+		1B8E9DDA7331E610ACB9ECB0 /* AppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsTests.swift; sourceTree = "<group>"; };
 		1CE34581E723859793B05FB1 /* HistoryPanelPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelPresentation.swift; sourceTree = "<group>"; };
 		2042D486055F55D3DCF2A92E /* AutomaticPasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticPasteService.swift; sourceTree = "<group>"; };
 		23D57E547D16589D5149AED5 /* ClipboardHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryStore.swift; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 		B1B409D0D66CD22EC6F8AA26 /* ClipboardHistoryPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryPersistence.swift; sourceTree = "<group>"; };
 		BC0D1886E81A748D3CBCD1D8 /* PasteboardPrivacyFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardPrivacyFilter.swift; sourceTree = "<group>"; };
 		CF0DFF09588FD1B246EF36A4 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		CF5077E78B6D10D172D4B9B8 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		D47EB4C33C69B7CA3BFC54EE /* PasteboardImageWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardImageWriter.swift; sourceTree = "<group>"; };
 		D88661797C72D7E1F5ED2CF9 /* PasteboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PasteboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D96D350AE89623D58D14C000 /* Pasteboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pasteboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				E1362244C75E701E5C4B68F4 /* AppConfigurationTests.swift */,
+				1B8E9DDA7331E610ACB9ECB0 /* AppSettingsTests.swift */,
 				FBC1B19B4DA65BF7A9BE30D4 /* AutomaticPasteServiceTests.swift */,
 				9DCDBCD4F68E49A9C17E1DD7 /* ClipboardHistoryStoreTests.swift */,
 				DADEF6C2E1E5D5FA53174BC2 /* GlobalHotKeyTests.swift */,
@@ -193,6 +198,7 @@
 		95212FAFF00A8F4C0EF2CF3E /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				CF5077E78B6D10D172D4B9B8 /* AppSettings.swift */,
 				E92F5627639B12B5B6C3C3F4 /* SettingsView.swift */,
 			);
 			path = Settings;
@@ -337,6 +343,7 @@
 			files = (
 				AA2184D55EFCFB1BF219BE46 /* AppConfiguration.swift in Sources */,
 				B05A44304505EAB699B8EDC1 /* AppDelegate.swift in Sources */,
+				F72C49C28D5EB1F35C6B19EA /* AppSettings.swift in Sources */,
 				C502243F947DC5DCB02E1F62 /* AutomaticPasteService.swift in Sources */,
 				D4714C0E63E623AF31EF8D5E /* ClipboardEntry.swift in Sources */,
 				C9DE7310A30F83AFCAACD25D /* ClipboardHistoryPersistence.swift in Sources */,
@@ -363,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8DF3DDB5B0A0933D8C2AD8E /* AppConfigurationTests.swift in Sources */,
+				36B11A1D14B2215161CBFC7F /* AppSettingsTests.swift in Sources */,
 				9695F3BD3EB0C1FC45A8D794 /* AutomaticPasteServiceTests.swift in Sources */,
 				E1438A03F8FA4FA2A0D0A3F3 /* ClipboardHistoryStoreTests.swift in Sources */,
 				866DF739CCDBE94AD5885910 /* GlobalHotKeyTests.swift in Sources */,
@@ -391,7 +399,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleShortVersionString = "$(MARKETING_VERSION)";
 				INFOPLIST_KEY_CFBundleVersion = "$(CURRENT_PROJECT_VERSION)";
@@ -401,7 +409,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sinaanahd.Pasteboard;
 				PRODUCT_NAME = Pasteboard;
 				SDKROOT = macosx;
@@ -414,7 +422,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleShortVersionString = "$(MARKETING_VERSION)";
 				INFOPLIST_KEY_CFBundleVersion = "$(CURRENT_PROJECT_VERSION)";
@@ -424,7 +432,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sinaanahd.Pasteboard;
 				PRODUCT_NAME = Pasteboard;
 				SDKROOT = macosx;

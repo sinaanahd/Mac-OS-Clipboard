@@ -85,3 +85,15 @@ Alternatives considered: retain history-only capture, require reopening history 
 Reason: placing the PNG on the pasteboard enables explicit user-controlled Command-V without requiring Accessibility permission or injecting input. Existing content hashing suppresses the monitor's duplicate observation.
 
 Consequences: a successful capture replaces the current general pasteboard contents; cancelled, invalid, and failed captures leave it unchanged. The image remains local and is exposed only through the standard macOS pasteboard.
+
+## 2026-07-23 — UserDefaults for typed preferences
+
+Decision: persist non-sensitive application preferences through a centralized typed `AppSettings` model backed by `UserDefaults`.
+
+Context: Pasteboard 1.2 requires runtime-personalizable shortcuts, limits, behavior, panel placement, and exclusions while preserving the existing JSON clipboard-history file and image payloads.
+
+Alternatives considered: storing preferences inside clipboard-history metadata, adding a database solely for preferences, or scattering `@AppStorage` properties across views.
+
+Reason: `UserDefaults` is the native lightweight preference store, while a single observable model provides validation, dependency injection, resets, and upgrade-safe defaults.
+
+Consequences: only configuration values and bundle identifiers enter `UserDefaults`; clipboard contents, history metadata, screenshots, and image payloads remain in Application Support.

@@ -2,6 +2,7 @@ import AppKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    let settings = AppSettings()
     private var historyStore: ClipboardHistoryStore?
     private var monitor: PasteboardMonitor?
     private var panelController: HistoryPanelController?
@@ -10,7 +11,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var screenshotService: RegionScreenshotService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let store = ClipboardHistoryStore()
+        let store = ClipboardHistoryStore(limit: settings.historyLimit, imageLimit: settings.imageLimit)
         let monitor = PasteboardMonitor(store: store)
         let panelController = HistoryPanelController(store: store)
 
@@ -19,13 +20,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.panelController = panelController
         let screenshotService = RegionScreenshotService(store: store)
         self.screenshotService = screenshotService
-        monitor.start()
+        if settings.monitoringEnabled { monitor.start() }
 
-        historyHotKey = try? GlobalHotKey(shortcut: AppConfiguration.defaultHistoryShortcut) {
+        historyHotKey = try? GlobalHotKey(shortcut: settings.historyShortcut) {
             panelController.toggle()
         }
         screenshotHotKey = try? GlobalHotKey(
-            shortcut: AppConfiguration.defaultScreenshotShortcut,
+            shortcut: settings.screenshotShortcut,
             identifier: 2
         ) {
             screenshotService.captureRegion()

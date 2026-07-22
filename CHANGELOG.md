@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Began Pasteboard 1.2.0 with persistent typed preferences and native General, Features, Shortcuts, Privacy & Storage, and About settings panes.
 - Kept empty and no-result history states anchored below search instead of vertically centering the panel.
 - Copied successful app-initiated screenshots to the macOS pasteboard for immediate Command-V in version 1.1.2.
 - Added the native in-field clear button to history search for version 1.1.1.
