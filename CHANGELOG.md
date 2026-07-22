@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added persistent pin and unpin controls; pinned entries stay above regular history and are protected from automatic limits and expiration.
 - Reduced empty space above the history header and changed relative ages to refresh only on panel opens and new captures.
 - Added a compact Pasteboard logo and name above history search.
 - Fixed newly captured entries appearing above the visible list when history was scrolled.

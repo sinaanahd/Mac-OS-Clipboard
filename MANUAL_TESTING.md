@@ -24,6 +24,10 @@
 6. Scroll down, copy a new matching item, and verify the list returns to the new first row without placing it behind search.
 7. Verify only a minimal inset remains above the Pasteboard icon and name.
 8. Leave the panel open and verify relative ages remain unchanged; close and reopen it and verify they recalculate.
+9. Pin text, image, and file entries and verify they move above unpinned history without restoring their content.
+10. Relaunch Pasteboard and verify pinned entries remain pinned and ordered newest-first within the pinned section.
+11. Unpin an entry and verify it returns to chronological position among regular history.
+12. Exceed history and image limits and run expiration cleanup; verify pinned entries remain until explicitly deleted or cleared.
 
 ## Automatic paste
 

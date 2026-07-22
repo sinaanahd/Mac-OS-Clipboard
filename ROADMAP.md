@@ -18,4 +18,5 @@ States: Not started, In progress, Blocked, Completed.
 - [ ] Polish and testing — In progress
   - [x] Add a branded history header and keep newly captured entries visible
   - [x] Tighten panel header spacing and replace continuous relative-time updates
+  - [x] Add persistent pinning for individual history entries
 - [ ] Packaging and distribution — Not started

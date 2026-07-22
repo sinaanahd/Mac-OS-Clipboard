@@ -17,6 +17,15 @@ private final class MemoryImageStore: ImagePayloadStoring, @unchecked Sendable {
     func url(filename: String) -> URL { URL(fileURLWithPath: "/tmp/\(filename)") }
 }
 
+private struct LegacyClipboardEntry: Encodable {
+    let id: UUID
+    let text: String?
+    let imageFilename: String?
+    let filePaths: [String]?
+    let contentHash: String?
+    let createdAt: Date
+}
+
 @MainActor
 final class ClipboardHistoryStoreTests: XCTestCase {
     func testCaptureSuppressesConsecutiveDuplicatesAndEnforcesLimit() {
@@ -90,5 +99,63 @@ final class ClipboardHistoryStoreTests: XCTestCase {
 
         XCTAssertNotNil(images.values["kept.png"])
         XCTAssertNil(images.values["orphan.png"])
+    }
+
+    func testPinSortsFirstPersistsAndKeepsNewCapturesBelowPins() throws {
+        let persistence = MemoryPersistence()
+        let store = ClipboardHistoryStore(persistence: persistence, imageStore: MemoryImageStore())
+        XCTAssertTrue(store.capture(text: "older", at: Date(timeIntervalSince1970: 100)))
+        XCTAssertTrue(store.capture(text: "newer", at: Date(timeIntervalSince1970: 200)))
+        let olderID = try XCTUnwrap(store.entries.first { $0.text == "older" }?.id)
+
+        store.togglePin(id: olderID)
+        XCTAssertTrue(store.capture(text: "newest", at: Date(timeIntervalSince1970: 300)))
+
+        XCTAssertEqual(store.entries.map(\.text), ["older", "newest", "newer"])
+        XCTAssertTrue(store.entries[0].isPinned)
+        XCTAssertEqual(persistence.entries, store.entries)
+
+        store.togglePin(id: olderID)
+        XCTAssertEqual(store.entries.map(\.text), ["newest", "newer", "older"])
+        XCTAssertFalse(store.entries[2].isPinned)
+    }
+
+    func testPinnedEntriesAreProtectedFromLimitAndExpiration() throws {
+        let store = ClipboardHistoryStore(limit: 1, persistence: MemoryPersistence(),
+                                          imageStore: MemoryImageStore())
+        let now = Date(timeIntervalSince1970: 1_000)
+        XCTAssertTrue(store.capture(text: "keep", at: now.addingTimeInterval(-500)))
+        let pinnedID = try XCTUnwrap(store.entries.first?.id)
+        store.togglePin(id: pinnedID)
+        XCTAssertTrue(store.capture(text: "discard", at: now.addingTimeInterval(-200)))
+        XCTAssertTrue(store.capture(text: "recent", at: now.addingTimeInterval(-10)))
+
+        store.cleanup(expirationPolicy: .after(100), now: now)
+
+        XCTAssertEqual(store.entries.map(\.text), ["keep", "recent"])
+        XCTAssertTrue(store.entries[0].isPinned)
+    }
+
+    func testLegacyEntryWithoutPinFieldDecodesAsUnpinned() throws {
+        let legacyEntry = LegacyClipboardEntry(
+            id: UUID(), text: "legacy", imageFilename: nil, filePaths: nil,
+            contentHash: nil, createdAt: Date(timeIntervalSince1970: 100)
+        )
+
+        let data = try JSONEncoder().encode(legacyEntry)
+        let decoded = try JSONDecoder().decode(ClipboardEntry.self, from: data)
+
+        XCTAssertFalse(decoded.isPinned)
+        XCTAssertEqual(decoded.text, "legacy")
+    }
+
+    func testPinnedEntryRoundTripsThroughJSON() throws {
+        let entry = ClipboardEntry(text: "pinned", isPinned: true)
+
+        let data = try JSONEncoder().encode(entry)
+        let decoded = try JSONDecoder().decode(ClipboardEntry.self, from: data)
+
+        XCTAssertEqual(decoded, entry)
+        XCTAssertTrue(decoded.isPinned)
     }
 }

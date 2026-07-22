@@ -45,37 +45,30 @@ struct ContentView: View {
                 ScrollViewReader { proxy in
                     List {
                         ForEach(filteredEntries) { entry in
-                            Button {
-                                store.restore(entry)
-                                onRestore()
-                            } label: {
-                                HStack(spacing: VisualConfiguration.rowSpacing) {
-                                    if let url = store.imageURL(for: entry), let image = NSImage(contentsOf: url) {
-                                        Image(nsImage: image)
-                                            .resizable().scaledToFill()
-                                            .frame(width: VisualConfiguration.thumbnailSize.width,
-                                                   height: VisualConfiguration.thumbnailSize.height)
-                                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                                    } else if let fileURL = store.fileURL(for: entry) {
-                                        Image(nsImage: NSWorkspace.shared.icon(forFile: fileURL.path))
-                                            .resizable().scaledToFit()
-                                            .frame(width: VisualConfiguration.thumbnailSize.width,
-                                                   height: VisualConfiguration.thumbnailSize.height)
-                                    }
-                                    VStack(alignment: .leading, spacing: VisualConfiguration.rowSpacing) {
-                                        Text(entry.preview).lineLimit(2)
-                                        Text(HistoryRelativeTimeFormatter.string(
-                                            from: entry.createdAt,
-                                            relativeTo: presentation.referenceDate
-                                        ))
-                                            .font(.caption).foregroundStyle(.secondary)
-                                    }
+                            HStack(spacing: VisualConfiguration.rowSpacing) {
+                                Button {
+                                    store.restore(entry)
+                                    onRestore()
+                                } label: {
+                                    entryLabel(entry)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("Restore \(entry.preview) to the clipboard")
+
+                                Button {
+                                    store.togglePin(id: entry.id)
+                                } label: {
+                                    Image(systemName: entry.isPinned ? "pin.fill" : "pin")
+                                        .foregroundStyle(entry.isPinned ? Color.accentColor : Color.secondary)
+                                        .frame(width: VisualConfiguration.rowActionSize,
+                                               height: VisualConfiguration.rowActionSize)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.borderless)
+                                .help(entry.isPinned ? "Unpin item" : "Pin item")
+                                .accessibilityLabel(entry.isPinned ? "Unpin item" : "Pin item")
                             }
                             .id(entry.id)
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("Restore \(entry.preview) to the clipboard")
                         }
                         .onDelete { offsets in
                             let ids = offsets.map { filteredEntries[$0].id }
@@ -99,5 +92,33 @@ struct ContentView: View {
         .onChange(of: store.entries.first?.id) { _, _ in
             presentation.refresh()
         }
+    }
+
+    @ViewBuilder
+    private func entryLabel(_ entry: ClipboardEntry) -> some View {
+        HStack(spacing: VisualConfiguration.rowSpacing) {
+            if let url = store.imageURL(for: entry), let image = NSImage(contentsOf: url) {
+                Image(nsImage: image)
+                    .resizable().scaledToFill()
+                    .frame(width: VisualConfiguration.thumbnailSize.width,
+                           height: VisualConfiguration.thumbnailSize.height)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+            } else if let fileURL = store.fileURL(for: entry) {
+                Image(nsImage: NSWorkspace.shared.icon(forFile: fileURL.path))
+                    .resizable().scaledToFit()
+                    .frame(width: VisualConfiguration.thumbnailSize.width,
+                           height: VisualConfiguration.thumbnailSize.height)
+            }
+            VStack(alignment: .leading, spacing: VisualConfiguration.rowSpacing) {
+                Text(entry.preview).lineLimit(2)
+                Text(HistoryRelativeTimeFormatter.string(
+                    from: entry.createdAt,
+                    relativeTo: presentation.referenceDate
+                ))
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
     }
 }

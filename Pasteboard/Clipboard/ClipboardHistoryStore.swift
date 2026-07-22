@@ -18,7 +18,9 @@ final class ClipboardHistoryStore: ObservableObject {
         self.persistence = persistence
         self.imageStore = imageStore
         do {
-            entries = Array(try persistence.load().prefix(max(1, limit)))
+            entries = try persistence.load()
+            sortEntries()
+            pruneAndPersist()
             cleanup(expirationPolicy: AppConfiguration.defaultExpirationPolicy)
             removeOrphanedImagePayloads()
         } catch {
@@ -28,7 +30,7 @@ final class ClipboardHistoryStore: ObservableObject {
 
     @discardableResult
     func capture(text: String, at date: Date = .now) -> Bool {
-        guard !text.isEmpty, entries.first?.text != text else { return false }
+        guard !text.isEmpty, mostRecentEntry?.text != text else { return false }
         entries.insert(ClipboardEntry(text: text, createdAt: date), at: 0)
         pruneAndPersist()
         return true
@@ -38,7 +40,7 @@ final class ClipboardHistoryStore: ObservableObject {
     func capture(imagePNGData: Data, preferredFilename: String? = nil, at date: Date = .now) -> Bool {
         guard !imagePNGData.isEmpty else { return false }
         let hash = ImageContentHash.make(for: imagePNGData)
-        guard entries.first?.contentHash != hash else { return false }
+        guard mostRecentEntry?.contentHash != hash else { return false }
         let id = UUID()
         let filename = preferredFilename ?? (id.uuidString + ".png")
         guard (try? imageStore.save(imagePNGData, filename: filename)) != nil else { return false }
@@ -52,7 +54,7 @@ final class ClipboardHistoryStore: ObservableObject {
         let normalized = fileURLs.filter(\.isFileURL).map { $0.standardizedFileURL }
         guard !normalized.isEmpty else { return false }
         let hash = ImageContentHash.make(for: Data(normalized.map(\.path).joined(separator: "\u{0}").utf8))
-        guard entries.first?.contentHash != hash else { return false }
+        guard mostRecentEntry?.contentHash != hash else { return false }
         entries.insert(ClipboardEntry(fileURLs: normalized, contentHash: hash, createdAt: date), at: 0)
         pruneAndPersist()
         return true
@@ -80,6 +82,13 @@ final class ClipboardHistoryStore: ObservableObject {
         return imageStore.url(filename: filename)
     }
 
+    func togglePin(id: ClipboardEntry.ID) {
+        guard let index = entries.firstIndex(where: { $0.id == id }) else { return }
+        entries[index].isPinned.toggle()
+        sortEntries()
+        persist()
+    }
+
     func delete(at offsets: IndexSet) {
         removePayloads(for: offsets.map { entries[$0] })
         entries.remove(atOffsets: offsets)
@@ -96,24 +105,29 @@ final class ClipboardHistoryStore: ObservableObject {
     func cleanup(expirationPolicy: ExpirationPolicy, now: Date = .now) {
         guard case let .after(interval) = expirationPolicy, interval > 0 else { return }
         let cutoff = now.addingTimeInterval(-interval)
-        let expired = entries.filter { $0.createdAt < cutoff }
+        let expired = entries.filter { !$0.isPinned && $0.createdAt < cutoff }
         guard !expired.isEmpty else { return }
         removePayloads(for: expired)
-        entries.removeAll { $0.createdAt < cutoff }
+        entries.removeAll { !$0.isPinned && $0.createdAt < cutoff }
         persist()
     }
 
     private func pruneAndPersist() {
+        sortEntries()
         var removed: [ClipboardEntry] = []
-        let imageIndexes = entries.indices.filter { entries[$0].kind == .image }
+        let imageIndexes = entries.indices.filter {
+            entries[$0].kind == .image && !entries[$0].isPinned
+        }
         if imageIndexes.count > imageLimit {
             for index in imageIndexes.dropFirst(imageLimit).reversed() {
                 removed.append(entries.remove(at: index))
             }
         }
-        if entries.count > limit {
-            removed.append(contentsOf: entries.suffix(from: limit))
-            entries = Array(entries.prefix(limit))
+        let unpinnedIndexes = entries.indices.filter { !entries[$0].isPinned }
+        if unpinnedIndexes.count > limit {
+            for index in unpinnedIndexes.dropFirst(limit).reversed() {
+                removed.append(entries.remove(at: index))
+            }
         }
         removePayloads(for: removed)
         persist()
@@ -122,6 +136,17 @@ final class ClipboardHistoryStore: ObservableObject {
     private func removePayloads(for entries: [ClipboardEntry]) {
         for filename in entries.compactMap(\.imageFilename) {
             try? imageStore.remove(filename: filename)
+        }
+    }
+
+    private var mostRecentEntry: ClipboardEntry? {
+        entries.max { $0.createdAt < $1.createdAt }
+    }
+
+    private func sortEntries() {
+        entries.sort {
+            if $0.isPinned != $1.isPinned { return $0.isPinned }
+            return $0.createdAt > $1.createdAt
         }
     }
 

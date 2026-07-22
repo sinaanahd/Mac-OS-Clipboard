@@ -14,7 +14,7 @@ Users copy content normally, invoke a configurable global shortcut, search or na
 
 ## Clipboard history
 
-Record supported text, image, and file clipboard entries; order newest first; avoid consecutive duplicates; preserve useful metadata; enforce configurable type and total limits; support deletion and clearing. Never capture known-sensitive or excluded content where macOS exposes an appropriate signal.
+Record supported text, image, and file clipboard entries; order pinned entries first and remaining entries newest first; avoid consecutive duplicates; preserve useful metadata; enforce configurable type and total limits; support pinning, unpinning, deletion, and clearing. Pinned entries persist across launches and are exempt from automatic limits and expiration until explicitly unpinned, deleted, or cleared. Never capture known-sensitive or excluded content where macOS exposes an appropriate signal.
 
 ## Screenshot capture
 
@@ -53,6 +53,7 @@ Support VoiceOver labels, keyboard-only workflows, focus visibility, Dynamic Typ
 - Native macOS app builds and tests from the command line on Apple Silicon.
 - Text, image, and file entries can be captured, searched, restored, deleted, and retained across launches.
 - Consecutive duplicates are suppressed and configured limits are enforced.
+- Every history entry can be pinned or unpinned, and pinned entries remain above regular history.
 - The floating panel and its primary actions are keyboard accessible.
 - Automatic paste and region screenshots explain permissions and fail safely.
 - Clearing history removes metadata and owned payload files.
@@ -60,7 +61,7 @@ Support VoiceOver labels, keyboard-only workflows, focus visibility, Dynamic Typ
 
 ## Future features
 
-Pinned items, richer previews, optional OCR, user-defined transformations, multiple collections, import/export, and carefully designed encrypted sync are future considerations only.
+Richer previews, optional OCR, user-defined transformations, multiple collections, import/export, and carefully designed encrypted sync are future considerations only.
 
 ## Explicit non-goals
 

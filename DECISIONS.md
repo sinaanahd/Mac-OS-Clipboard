@@ -37,3 +37,15 @@ Alternatives considered: use the full icon everywhere, redraw the approved artwo
 Reason: this preserves the approved visual identity exactly while giving macOS a legible template image that adapts automatically to light and dark appearances.
 
 Consequences: the original and generated variants are committed product resources. Replacing the application icon requires explicit user direction. The temporary menu-bar fallback can be replaced only by a separately approved monochrome derivative.
+
+## 2026-07-22 — Persistent pins bypass automatic cleanup
+
+Decision: store pin state with each clipboard entry, sort pinned entries above regular history, and exempt them from automatic history limits and expiration.
+
+Context: users need an explicit way to keep important entries available even as transient history rotates.
+
+Alternatives considered: visual-only pins that do not affect cleanup, a separate favorites database, or allowing configured limits to delete pinned entries.
+
+Reason: a pin should provide a predictable retention guarantee while remaining local, simple, and reversible.
+
+Consequences: pinned entries and owned image payloads may increase storage beyond configured automatic limits. Users retain control through unpin, delete, and confirmed Clear History actions.

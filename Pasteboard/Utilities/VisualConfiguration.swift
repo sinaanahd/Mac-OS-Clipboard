@@ -7,6 +7,7 @@ enum VisualConfiguration {
     static let headerSpacing: CGFloat = 10
     static let panelTopPadding: CGFloat = 6
     static let rowSpacing: CGFloat = 8
+    static let rowActionSize: CGFloat = 28
     static let thumbnailSize = CGSize(width: 56, height: 56)
     static let searchFieldSpacing: CGFloat = 12
     static let emptyStatePadding: CGFloat = 32
