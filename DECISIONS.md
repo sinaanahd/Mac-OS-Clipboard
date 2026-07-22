@@ -25,3 +25,15 @@ The text-only milestone uses an atomic JSON file as a temporary, dependency-free
 
 ## 2026-07-22 — Carbon hotkeys
 Decision: use the system Carbon hotkey registration API behind a narrow adapter. Context: reliable global shortcuts without event taps. Alternatives: NSEvent monitors or a third-party package. Consequence: small legacy C API boundary, no runtime dependency.
+
+## 2026-07-22 — Approved application icon and template menu-bar asset
+
+Decision: retain the supplied PasteBoard logo as the immutable application-icon source and compile its standard macOS variants through an asset catalog. Use a separately rendered monochrome `doc.on.clipboard` SF Symbol as the temporary template menu-bar image.
+
+Context: the full-color approved artwork is designed for the app bundle, Dock, Finder, application switcher, About panel, and settings, but is too detailed and contains a colored background unsuitable for the menu bar.
+
+Alternatives considered: use the full icon everywhere, redraw the approved artwork, or continue using a SwiftUI system-image label without a committed menu-bar asset.
+
+Reason: this preserves the approved visual identity exactly while giving macOS a legible template image that adapts automatically to light and dark appearances.
+
+Consequences: the original and generated variants are committed product resources. Replacing the application icon requires explicit user direction. The temporary menu-bar fallback can be replaced only by a separately approved monochrome derivative.

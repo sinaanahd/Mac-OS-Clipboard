@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added the approved PasteBoard application icon, standard macOS asset variants, About and Settings presentation, and a monochrome template menu-bar fallback.
+
 - Added the native macOS application and unit-test foundation.
 - Added centralized product and visual configuration.
 - Added project, privacy, architecture, testing, and contribution documentation.

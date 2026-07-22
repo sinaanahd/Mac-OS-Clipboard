@@ -60,3 +60,12 @@
 4. Confirm Clear History and verify entries and Pasteboard-owned images are removed after relaunch.
 5. Verify original Finder files referenced by cleared file entries still exist unchanged.
 6. Place an unreferenced test image in Application Support/Pasteboard/Images, relaunch, and verify only the orphan is removed.
+
+## Application and menu-bar icons
+
+1. Build the Debug application and verify the asset catalog reports no warnings or missing icon slots.
+2. Locate the built app in Finder and verify it displays the approved PasteBoard icon.
+3. Launch the app and verify the approved icon appears in the Dock and application switcher when the app is configured to appear there.
+4. Open About Pasteboard and Settings and verify the approved icon appears without cropping, stretching, or added masking.
+5. Verify the menu-bar icon is a readable monochrome clipboard/history silhouette rather than the colored application-icon square.
+6. Check the menu-bar icon in both light and dark appearances and verify template rendering adapts its color.

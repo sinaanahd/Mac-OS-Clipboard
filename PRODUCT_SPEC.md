@@ -4,6 +4,10 @@
 
 Pasteboard is a fast, native, local-only macOS utility that makes recent clipboard items and region screenshots easy to find and reuse without sending data off-device.
 
+## Visual identity
+
+The supplied PasteBoard clipboard-and-history artwork is the approved application icon. Preserve it without redesign, recoloring, cropping, or replacement unless the user explicitly requests a visual-identity change. The menu bar uses a separate monochrome template image so it remains legible in light and dark appearances.
+
 ## User workflows
 
 Users copy content normally, invoke a configurable global shortcut, search or navigate recent items, and select an item to restore it to the pasteboard and optionally paste it into the previously active application. Users can invoke a second shortcut to capture a screen region and retain the result locally.

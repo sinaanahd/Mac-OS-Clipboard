@@ -3,6 +3,11 @@
 States: Not started, In progress, Blocked, Completed.
 
 - [x] Project foundation — Completed
+  - [x] Import the approved PasteBoard application icon
+  - [x] Generate the required macOS icon variants
+  - [x] Configure the asset catalog to use AppIcon
+  - [x] Create a separate monochrome menu-bar template icon
+  - [x] Verify the icon in Finder, the Dock, application switching, and build output
 - [x] Text clipboard history — Completed
 - [x] Floating history panel — Completed
 - [x] Automatic paste — Completed
