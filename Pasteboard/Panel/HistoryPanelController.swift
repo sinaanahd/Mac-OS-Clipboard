@@ -12,6 +12,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
     private let automaticPaste: AutomaticPasteService
     private let presentation: HistoryPanelPresentation
     private let settings: AppSettings
+    private let thumbnailService = ThumbnailService()
     private var previousApplication: NSRunningApplication?
 
     init(store: ClipboardHistoryStore,
@@ -39,7 +40,8 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         panel.backgroundColor = .windowBackgroundColor
         panel.delegate = self
         panel.contentViewController = NSHostingController(
-            rootView: ContentView(store: store, presentation: presentation) { [weak self] in
+            rootView: ContentView(store: store, presentation: presentation,
+                                  thumbnailService: thumbnailService) { [weak self] in
                 self?.completeSelection()
             }
                 .frame(width: AppConfiguration.panelSize.width,
@@ -79,9 +81,12 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
             return
         }
         guard let previousApplication else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + AppConfiguration.automaticPasteDelay) {
-            _ = self.automaticPaste.paste {
-                previousApplication.activate(options: [.activateIgnoringOtherApps])
+        Task { @MainActor in
+            _ = await automaticPaste.paste {
+                previousApplication.activate()
+            } isTargetFrontmost: {
+                NSWorkspace.shared.frontmostApplication?.processIdentifier
+                    == previousApplication.processIdentifier
             }
         }
     }

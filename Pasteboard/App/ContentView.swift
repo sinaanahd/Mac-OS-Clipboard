@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var store: ClipboardHistoryStore
     @ObservedObject var presentation: HistoryPanelPresentation
+    let thumbnailService: ThumbnailService
     var onRestore: () -> Void = {}
     @State private var query = ""
 
@@ -109,12 +110,8 @@ struct ContentView: View {
     @ViewBuilder
     private func entryLabel(_ entry: ClipboardEntry) -> some View {
         HStack(spacing: VisualConfiguration.rowSpacing) {
-            if let url = store.imageURL(for: entry), let image = NSImage(contentsOf: url) {
-                Image(nsImage: image)
-                    .resizable().scaledToFill()
-                    .frame(width: VisualConfiguration.thumbnailSize.width,
-                           height: VisualConfiguration.thumbnailSize.height)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
+            if let url = store.imageURL(for: entry) {
+                HistoryImageThumbnail(url: url, service: thumbnailService)
             } else if let fileURL = store.fileURL(for: entry) {
                 Image(nsImage: NSWorkspace.shared.icon(forFile: fileURL.path))
                     .resizable().scaledToFit()
@@ -132,6 +129,34 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+    }
+}
+
+private struct HistoryImageThumbnail: View {
+    let url: URL
+    let service: ThumbnailService
+    @State private var image: NSImage?
+
+    var body: some View {
+        Group {
+            if let image {
+                Image(nsImage: image).resizable().scaledToFill()
+            } else {
+                Image(systemName: "photo")
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Loading image thumbnail")
+            }
+        }
+        .frame(width: VisualConfiguration.thumbnailSize.width,
+               height: VisualConfiguration.thumbnailSize.height)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .task(id: url) {
+            image = await service.thumbnail(
+                for: url,
+                maxPixelSize: Int(max(VisualConfiguration.thumbnailSize.width,
+                                      VisualConfiguration.thumbnailSize.height) * 2)
+            )
+        }
     }
 }
 

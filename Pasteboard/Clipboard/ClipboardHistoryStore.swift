@@ -110,6 +110,10 @@ final class ClipboardHistoryStore: ObservableObject {
         persist()
     }
 
+    func flushPersistence() {
+        persistence.flush()
+    }
+
     func removalCount(historyLimit: Int, imageLimit: Int) -> Int {
         Self.prunedEntries(entries, historyLimit: historyLimit, imageLimit: imageLimit).removed.count
     }

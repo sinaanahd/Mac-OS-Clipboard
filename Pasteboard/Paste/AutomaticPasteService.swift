@@ -53,10 +53,21 @@ struct AutomaticPasteService: Sendable {
         permission.requestAccess()
     }
 
-    func paste(activateTarget: () -> Bool) -> AutomaticPasteResult {
+    @MainActor
+    func paste(activateTarget: () -> Bool,
+               isTargetFrontmost: () -> Bool,
+               wait: @escaping @Sendable (Duration) async -> Void = { duration in
+                   try? await Task.sleep(for: duration)
+               }) async -> AutomaticPasteResult {
         guard permission.isTrusted else { return .permissionRequired }
         guard activateTarget() else { return .activationFailed }
-        eventPoster.postCommandV()
-        return .pasted
+        for _ in 0..<5 {
+            if isTargetFrontmost() {
+                eventPoster.postCommandV()
+                return .pasted
+            }
+            await wait(.milliseconds(40))
+        }
+        return .activationFailed
     }
 }

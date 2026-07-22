@@ -39,6 +39,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     func applicationWillTerminate(_ notification: Notification) {
         monitor?.stop()
         expirationTimer?.invalidate()
+        historyStore?.flushPersistence()
     }
 
     func showHistory() {
