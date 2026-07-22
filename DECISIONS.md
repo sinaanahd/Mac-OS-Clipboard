@@ -61,3 +61,15 @@ Alternatives considered: hard-code a UI-only version, use build numbers alone, o
 Reason: bundle-backed semantic versioning keeps Finder, About, build metadata, and the in-app label consistent.
 
 Consequences: every ordinary publishable change after 1.0.0 increments the patch component; substantial feature releases increment the minor component and reset patch to zero. Major-version changes require explicit user direction.
+
+## 2026-07-23 — Option-V and native delayed screenshot import
+
+Decision: use Option-V for clipboard history and Option-Shift-4 for region capture. Continue delegating selection to macOS's built-in `screencapture -i` process, but wait asynchronously for a stable PNG before import.
+
+Context: the primary interaction should substitute for the familiar Windows+V habit on a Mac, and native screenshot output may not be safely readable at the first filesystem observation.
+
+Alternatives considered: retain Command-Shift-V, imitate the selector with a custom overlay, intercept Apple's Command-Shift-4 shortcut, or read the output file only once.
+
+Reason: Option-V is compact and memorable, while a distinct Option-Shift-4 shortcut avoids overriding Apple's system shortcut. Reusing the native selector preserves expected macOS behavior, and bounded stability polling handles delayed saves without blocking the main thread.
+
+Consequences: Option-V and Option-Shift-4 are globally consumed while Pasteboard runs. Capture waits up to five seconds after successful selector completion, rejects non-PNG output, cleans up its temporary file, and permits only one active capture at a time. This substantial interaction change advances the app to version 1.1.0.

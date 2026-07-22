@@ -12,9 +12,9 @@ struct PasteboardApp: App {
     var body: some Scene {
         MenuBarExtra(AppConfiguration.productName, image: "MenuBarIcon") {
             Button("Show History") { appDelegate.showHistory() }
-                .keyboardShortcut("v", modifiers: [.command, .shift])
+                .keyboardShortcut("v", modifiers: [.option])
             Button("Capture Region") { appDelegate.captureRegion() }
-                .keyboardShortcut("5", modifiers: [.control, .command, .shift])
+                .keyboardShortcut("4", modifiers: [.option, .shift])
             Button("About Pasteboard") { NSApplication.shared.orderFrontStandardAboutPanel(nil) }
             SettingsLink()
             Divider()

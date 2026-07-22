@@ -38,13 +38,26 @@ final class RegionScreenshotService {
     }
 
     private func finish(process: Process, temporaryURL: URL, filename: String) {
+        guard process.terminationStatus == 0 else {
+            completeImport(data: nil, temporaryURL: temporaryURL, filename: filename)
+            return
+        }
+        Task { [weak self] in
+            let data = await ScreenshotFileLoader.loadStablePNG(
+                from: temporaryURL,
+                timeout: AppConfiguration.screenshotImportTimeout,
+                pollInterval: AppConfiguration.screenshotImportPollInterval
+            )
+            self?.completeImport(data: data, temporaryURL: temporaryURL, filename: filename)
+        }
+    }
+
+    private func completeImport(data: Data?, temporaryURL: URL, filename: String) {
         defer {
             try? FileManager.default.removeItem(at: temporaryURL)
             activeProcess = nil
         }
-        guard process.terminationStatus == 0,
-              let data = try? Data(contentsOf: temporaryURL),
-              !data.isEmpty else { return }
+        guard let data else { return }
         store.capture(imagePNGData: data, preferredFilename: filename)
     }
 

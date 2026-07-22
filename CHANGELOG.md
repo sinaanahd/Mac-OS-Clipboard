@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Changed history to Option-V and region capture to Option-Shift-4 for version 1.1.0.
+- Hardened built-in macOS region capture by waiting for a stable PNG before importing it.
 - Established version 1.0.0 and added the bundle version to the history-panel header.
 - Added persistent pin and unpin controls; pinned entries stay above regular history and are protected from automatic limits and expiration.
 - Reduced empty space above the history header and changed relative ages to refresh only on panel opens and new captures.

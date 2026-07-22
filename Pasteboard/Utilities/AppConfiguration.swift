@@ -19,7 +19,7 @@ struct KeyboardShortcut: Equatable, Sendable {
     var carbonKeyCode: UInt32? {
         switch key.lowercased() {
         case "v": UInt32(kVK_ANSI_V)
-        case "5": UInt32(kVK_ANSI_5)
+        case "4": UInt32(kVK_ANSI_4)
         default: nil
         }
     }
@@ -42,13 +42,13 @@ enum ExpirationPolicy: Equatable, Sendable {
 enum AppConfiguration {
     static let productName = "Pasteboard"
     static let bundleIdentifier = "com.sinaanahd.Pasteboard"
-    static let developmentVersionFallback = "1.0.0"
+    static let developmentVersionFallback = "1.1.0"
     static var marketingVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
             ?? developmentVersionFallback
     }
-    static let defaultHistoryShortcut = KeyboardShortcut(key: "v", modifiers: [.command, .shift])
-    static let defaultScreenshotShortcut = KeyboardShortcut(key: "5", modifiers: [.control, .command, .shift])
+    static let defaultHistoryShortcut = KeyboardShortcut(key: "v", modifiers: [.option])
+    static let defaultScreenshotShortcut = KeyboardShortcut(key: "4", modifiers: [.option, .shift])
     static let defaultHistoryLimit = 200
     static let defaultImageLimit = 50
     static let clipboardPollingInterval: TimeInterval = 0.5
@@ -60,6 +60,8 @@ enum AppConfiguration {
     static let imagePayloadDirectoryName = "Images"
     static let screenshotFilenamePrefix = "Pasteboard"
     static let screenshotFilenameDateFormat = "yyyyMMdd-HHmmss"
+    static let screenshotImportTimeout: Duration = .seconds(5)
+    static let screenshotImportPollInterval: Duration = .milliseconds(100)
     static let defaultExpirationPolicy: ExpirationPolicy = .never
     static let panelSize = NSSize(width: 420, height: 560)
 }

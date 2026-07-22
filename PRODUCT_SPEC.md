@@ -10,9 +10,9 @@ The supplied PasteBoard clipboard-and-history artwork is the approved applicatio
 
 ## User workflows
 
-Users copy content normally, invoke a configurable global shortcut, search or navigate recent items, and select an item to restore it to the pasteboard and optionally paste it into the previously active application. Users can invoke a second shortcut to capture a screen region and retain the result locally.
+Users copy content normally, press Option-V as a macOS analogue to the Windows+V habit, search or navigate recent items, and select an item to restore it to the pasteboard and optionally paste it into the previously active application. Users press Option-Shift-4 to invoke macOS's built-in interactive region selector and retain the result locally.
 
-The history panel displays the bundle marketing version at the top-right. The first publishable baseline is version 1.0.0. Subsequent ordinary publishable changes increment the patch number, while substantial feature releases increment the minor number and reset patch to zero.
+The history panel displays the bundle marketing version at the top-right. The first publishable baseline is version 1.0.0; the shortcut and native screenshot workflow ships as version 1.1.0. Subsequent ordinary publishable changes increment the patch number, while substantial feature releases increment the minor number and reset patch to zero.
 
 ## Clipboard history
 
@@ -20,7 +20,7 @@ Record supported text, image, and file clipboard entries; order pinned entries f
 
 ## Screenshot capture
 
-Provide a region-selection workflow, store captures locally, display thumbnails, copy or reuse captures, use predictable unique filenames, and explain Screen Recording permission when required.
+Invoke the built-in macOS interactive region-selection workflow, wait for its output PNG to finish saving before import, store captures locally, display thumbnails, copy or reuse captures, use predictable unique filenames, and explain Screen Recording permission when required. Cancellation and delayed or missing output must fail safely without leaving temporary files.
 
 ## Search and navigation
 

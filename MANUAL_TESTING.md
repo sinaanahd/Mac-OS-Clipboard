@@ -16,7 +16,7 @@
 
 ## Floating panel
 
-1. Press Shift-Command-V from another application and verify the panel appears near the pointer.
+1. Press Option-V from another application and verify the panel appears near the pointer.
 2. Press the shortcut again and verify the panel hides.
 3. Verify the search field accepts keyboard input and the panel dismisses after restoring an entry or losing focus.
 4. Verify the menu-bar clipboard item can show the panel and quit the app.
@@ -28,7 +28,7 @@
 10. Relaunch Pasteboard and verify pinned entries remain pinned and ordered newest-first within the pinned section.
 11. Unpin an entry and verify it returns to chronological position among regular history.
 12. Exceed history and image limits and run expiration cleanup; verify pinned entries remain until explicitly deleted or cleared.
-13. Verify `Version 1.0.0` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
+13. Verify `Version 1.1.0` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
 
 ## Automatic paste
 
@@ -40,11 +40,13 @@
 
 ## Region screenshots
 
-1. Without Screen Recording access, press Control-Shift-Command-5 and verify Pasteboard explains why access is needed before macOS prompts.
+1. Without Screen Recording access, press Option-Shift-4 and verify Pasteboard explains why access is needed before macOS prompts.
 2. Grant access, invoke the shortcut again, drag a region, and verify one image entry appears.
 3. Press Escape during selection and verify no history entry or temporary file remains.
 4. Capture on each connected display and verify correct pixels and native scaling.
 5. Restore the captured entry and paste it into Preview or Notes.
+6. Complete a slow region selection and verify Pasteboard waits for the PNG to finish saving before adding exactly one image entry.
+7. Cancel the built-in selector and verify no history entry or temporary file remains.
 
 ## Image history
 
