@@ -15,5 +15,6 @@ States: Not started, In progress, Blocked, Completed.
 - [x] File history — Completed
 - [x] Region screenshot capture — Completed
 - [x] Privacy and cleanup — Completed
-- [ ] Polish and testing — Not started
+- [ ] Polish and testing — In progress
+  - [x] Add a branded history header and keep newly captured entries visible
 - [ ] Packaging and distribution — Not started

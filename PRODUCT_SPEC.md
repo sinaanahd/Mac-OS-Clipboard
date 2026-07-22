@@ -22,7 +22,7 @@ Provide a region-selection workflow, store captures locally, display thumbnails,
 
 ## Search and navigation
 
-Provide incremental text search, keyboard navigation, selection, dismissal, deletion, and clear empty states. Search should cover safe textual metadata without OCR in the initial release.
+Provide a compact branded header above the search field, incremental text search, keyboard navigation, selection, dismissal, deletion, and clear empty states. The newest matching entry must remain visible when history updates, even when the list was previously scrolled. Search should cover safe textual metadata without OCR in the initial release.
 
 ## Persistence
 

@@ -20,6 +20,8 @@
 2. Press the shortcut again and verify the panel hides.
 3. Verify the search field accepts keyboard input and the panel dismisses after restoring an entry or losing focus.
 4. Verify the menu-bar clipboard item can show the panel and quit the app.
+5. Verify the Pasteboard icon, product name, and Clipboard History label remain fixed above search while the list scrolls.
+6. Scroll down, copy a new matching item, and verify the list returns to the new first row without placing it behind search.
 
 ## Automatic paste
 

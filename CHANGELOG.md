@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a compact Pasteboard logo and name above history search.
+- Fixed newly captured entries appearing above the visible list when history was scrolled.
 - Added the approved PasteBoard application icon, standard macOS asset variants, About and Settings presentation, and a monochrome template menu-bar fallback.
 
 - Added the native macOS application and unit-test foundation.
