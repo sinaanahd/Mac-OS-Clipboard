@@ -1,4 +1,5 @@
 import AppKit
+import QuartzCore
 import SwiftUI
 
 private final class HistoryPanel: NSPanel {
@@ -14,6 +15,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
     private let settings: AppSettings
     private let thumbnailService = ThumbnailService()
     private var previousApplication: NSRunningApplication?
+    private var presentationGeneration = 0
 
     init(store: ClipboardHistoryStore,
          settings: AppSettings,
@@ -60,13 +62,40 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
             previousApplication = currentApplication
         }
         positionPanel()
+        let targetOrigin = panel.frame.origin
+        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        presentationGeneration += 1
+        panel.alphaValue = 0
+        if !reduceMotion {
+            panel.setFrameOrigin(NSPoint(x: targetOrigin.x, y: targetOrigin.y - 4))
+        }
         NSApplication.shared.activate(ignoringOtherApps: true)
         panel.orderFrontRegardless()
         panel.makeKey()
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = VisualConfiguration.quickAnimationDuration
+            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            panel.animator().alphaValue = 1
+            if !reduceMotion { panel.animator().setFrameOrigin(targetOrigin) }
+        }
     }
 
     func hide() {
-        panel.orderOut(nil)
+        guard panel.isVisible else { return }
+        presentationGeneration += 1
+        let generation = presentationGeneration
+        panel.resignKey()
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = VisualConfiguration.panelDismissDuration
+            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            panel.animator().alphaValue = 0
+        } completionHandler: { [weak self] in
+            Task { @MainActor in
+                guard let self, self.presentationGeneration == generation else { return }
+                self.panel.orderOut(nil)
+                self.panel.alphaValue = 1
+            }
+        }
     }
 
     func windowDidResignKey(_ notification: Notification) {

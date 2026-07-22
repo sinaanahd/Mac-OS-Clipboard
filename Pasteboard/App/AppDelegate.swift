@@ -15,6 +15,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private var expirationTimer: Timer?
     private var applyingLaunchAtLogin = false
+    private let confirmationHUD = ConfirmationHUDController()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let store = ClipboardHistoryStore(limit: settings.historyLimit, imageLimit: settings.imageLimit)
@@ -24,10 +25,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         self.monitor = monitor
         historyStore = store
         self.panelController = panelController
-        let screenshotService = RegionScreenshotService(store: store, settings: settings)
+        let screenshotService = RegionScreenshotService(store: store, settings: settings) { [weak self] message in
+            self?.confirmationHUD.show(message)
+        }
         self.screenshotService = screenshotService
         if settings.monitoringEnabled { monitor.start() }
 
+        shortcutCoordinator.feedback = { [weak self] message in self?.confirmationHUD.show(message) }
         shortcutCoordinator.start(settings: settings) {
             panelController.toggle()
         } screenshotAction: {
@@ -61,6 +65,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         guard alert.runModal() == .alertFirstButtonReturn else { return }
         historyStore.clear()
         storageUsage.refresh()
+        confirmationHUD.show("History cleared")
     }
 
     func confirmClearUnpinnedHistory() {
@@ -76,6 +81,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         guard alert.runModal() == .alertFirstButtonReturn else { return }
         historyStore.clearUnpinned()
         storageUsage.refresh()
+        confirmationHUD.show("Unpinned history cleared")
     }
 
     func openStorageFolder() {
@@ -116,6 +122,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         settings.monitoringEnabled = true
         settings.excludedBundleIdentifiers = []
         storageUsage.refresh()
+        confirmationHUD.show("Settings restored")
     }
 
     func requestHistoryLimit(_ proposedValue: Int) {
@@ -128,6 +135,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         historyStore.updateLimits(historyLimit: value, imageLimit: settings.imageLimit)
         settings.historyLimit = value
         storageUsage.refresh()
+        confirmationHUD.show(removals > 0 ? "\(removals) older items removed" : "History limit updated")
     }
 
     func requestImageLimit(_ proposedValue: Int) {
@@ -140,6 +148,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         historyStore.updateLimits(historyLimit: settings.historyLimit, imageLimit: value)
         settings.imageLimit = value
         storageUsage.refresh()
+        confirmationHUD.show(removals > 0 ? "\(removals) older images removed" : "Image limit updated")
     }
 
     private func configureRuntimeSettings(store: ClipboardHistoryStore, monitor: PasteboardMonitor) {
@@ -147,8 +156,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         settings.launchAtLoginEnabled = SMAppService.mainApp.status == .enabled
         applyingLaunchAtLogin = false
 
-        settings.$monitoringEnabled.dropFirst().sink { enabled in
+        settings.$monitoringEnabled.dropFirst().sink { [weak self] enabled in
             if enabled { monitor.start() } else { monitor.stop() }
+            self?.confirmationHUD.show(enabled ? "History recording resumed" : "History recording paused")
         }.store(in: &cancellables)
         settings.$expiration.dropFirst().sink { option in
             store.cleanup(expirationPolicy: option.policy)

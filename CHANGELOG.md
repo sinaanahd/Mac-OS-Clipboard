@@ -7,6 +7,7 @@
 - Applied monitoring, limits, expiration, panel position, screenshot behavior, automatic paste, and launch-at-login preferences at runtime.
 - Added asynchronous local storage reporting, safe clear-unpinned/all actions, Finder access, application exclusions, and coordinated settings reset.
 - Coalesced atomic history writes off the main thread, confirmed target focus before one automatic paste event, and downsampled thumbnails asynchronously.
+- Refined the native macOS 26 functional surface and added short, accessibility-aware interaction animations and confirmation feedback.
 - Kept empty and no-result history states anchored below search instead of vertically centering the panel.
 - Copied successful app-initiated screenshots to the macOS pasteboard for immediate Command-V in version 1.1.2.
 - Added the native in-field clear button to history search for version 1.1.1.

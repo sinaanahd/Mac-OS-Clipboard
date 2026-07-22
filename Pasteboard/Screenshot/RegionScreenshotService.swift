@@ -6,11 +6,14 @@ import Foundation
 final class RegionScreenshotService {
     private let store: ClipboardHistoryStore
     private let settings: AppSettings
+    private let onCompletion: (String) -> Void
     private var activeProcess: Process?
 
-    init(store: ClipboardHistoryStore, settings: AppSettings) {
+    init(store: ClipboardHistoryStore, settings: AppSettings,
+         onCompletion: @escaping (String) -> Void = { _ in }) {
         self.store = store
         self.settings = settings
+        self.onCompletion = onCompletion
     }
 
     func captureRegion() {
@@ -64,10 +67,13 @@ final class RegionScreenshotService {
         case .historyAndClipboard:
             store.capture(imagePNGData: data, preferredFilename: filename)
             PasteboardImageWriter.writePNG(data)
+            onCompletion("Screenshot saved and copied")
         case .historyOnly:
             store.capture(imagePNGData: data, preferredFilename: filename)
+            onCompletion("Screenshot added to history")
         case .clipboardOnly:
             PasteboardImageWriter.writePNG(data)
+            onCompletion("Screenshot copied")
         }
     }
 

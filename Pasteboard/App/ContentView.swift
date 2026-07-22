@@ -6,6 +6,7 @@ struct ContentView: View {
     let thumbnailService: ThumbnailService
     var onRestore: () -> Void = {}
     @State private var query = ""
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var filteredEntries: [ClipboardEntry] {
         query.isEmpty ? store.entries : store.entries.filter {
@@ -15,29 +16,28 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: VisualConfiguration.searchFieldSpacing) {
-            HStack(alignment: .top, spacing: VisualConfiguration.headerSpacing) {
-                Image(nsImage: NSApplication.shared.applicationIconImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: VisualConfiguration.headerIconSize,
-                           height: VisualConfiguration.headerIconSize)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(AppConfiguration.productName)
-                        .font(.headline)
-                    Text("Clipboard History")
-                        .font(.caption)
+            VStack(spacing: VisualConfiguration.searchFieldSpacing) {
+                HStack(alignment: .top, spacing: VisualConfiguration.headerSpacing) {
+                    Image(nsImage: NSApplication.shared.applicationIconImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: VisualConfiguration.headerIconSize,
+                               height: VisualConfiguration.headerIconSize)
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(AppConfiguration.productName).font(.headline)
+                        Text("Clipboard History").font(.caption).foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Text("Version \(AppConfiguration.marketingVersion)")
+                        .font(.caption2)
                         .foregroundStyle(.secondary)
+                        .accessibilityLabel("Pasteboard version \(AppConfiguration.marketingVersion)")
                 }
-                Spacer()
-                Text("Version \(AppConfiguration.marketingVersion)")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .accessibilityLabel("Pasteboard version \(AppConfiguration.marketingVersion)")
+                HistorySearchField(text: $query, prompt: "Search clipboard history")
+                    .accessibilityLabel("Search clipboard history")
             }
-
-            HistorySearchField(text: $query, prompt: "Search clipboard history")
-                .accessibilityLabel("Search clipboard history")
+            .pasteboardFunctionalSurface()
             if filteredEntries.isEmpty {
                 VStack(spacing: VisualConfiguration.rowSpacing) {
                     Image(systemName: "clipboard")
@@ -68,7 +68,9 @@ struct ContentView: View {
                                 .accessibilityLabel("Restore \(entry.preview) to the clipboard")
 
                                 Button {
-                                    store.togglePin(id: entry.id)
+                                    withAnimation(interactionAnimation) {
+                                        store.togglePin(id: entry.id)
+                                    }
                                 } label: {
                                     Image(systemName: entry.isPinned ? "pin.fill" : "pin")
                                         .foregroundStyle(entry.isPinned ? Color.accentColor : Color.secondary)
@@ -81,11 +83,12 @@ struct ContentView: View {
                                 .accessibilityLabel(entry.isPinned ? "Unpin item" : "Pin item")
                             }
                             .id(entry.id)
+                            .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
                         }
                         .onDelete { offsets in
                             let ids = offsets.map { filteredEntries[$0].id }
                             let sourceOffsets = IndexSet(store.entries.indices.filter { ids.contains(store.entries[$0].id) })
-                            store.delete(at: sourceOffsets)
+                            withAnimation(interactionAnimation) { store.delete(at: sourceOffsets) }
                         }
                     }
                     .onChange(of: filteredEntries.first?.id) { _, newestEntryID in
@@ -95,6 +98,7 @@ struct ContentView: View {
                         }
                     }
                 }
+                .animation(interactionAnimation, value: filteredEntries.map(\.id))
             }
         }
         .padding(.horizontal)
@@ -105,6 +109,10 @@ struct ContentView: View {
         .onChange(of: store.entries.first?.id) { _, _ in
             presentation.refresh()
         }
+    }
+
+    private var interactionAnimation: Animation {
+        .easeOut(duration: reduceMotion ? 0.12 : VisualConfiguration.quickAnimationDuration)
     }
 
     @ViewBuilder
@@ -129,6 +137,24 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func pasteboardFunctionalSurface() -> some View {
+        if #available(macOS 26.0, *) {
+            self.padding(10)
+                .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        } else {
+            self.padding(10)
+                .background(.ultraThinMaterial,
+                            in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(Color(nsColor: .separatorColor).opacity(0.5), lineWidth: 0.5)
+                }
+        }
     }
 }
 

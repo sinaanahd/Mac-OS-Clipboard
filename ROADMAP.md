@@ -35,8 +35,8 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Settings architecture — Completed
 - [x] Shortcut personalization — Completed
 - [x] History and storage personalization — Completed
-- [ ] macOS 26 visual refinement — Not started
-- [ ] Accessible animations — Not started
+- [x] macOS 26 visual refinement — Completed
+- [x] Accessible animations — Completed
 - [ ] Release stability corrections — In progress
 - [ ] Local DMG packaging — Not started
 - [ ] Optional signed distribution — Not started

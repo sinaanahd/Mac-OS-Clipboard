@@ -33,6 +33,7 @@ final class ShortcutCoordinator: ObservableObject {
 
     @Published private(set) var errors: [ShortcutKind: ShortcutUpdateError] = [:]
     @Published private(set) var activeKinds: Set<ShortcutKind> = []
+    var feedback: ((String) -> Void)?
 
     private let factory: Factory
     private var registrations: [ShortcutKind: AnyObject] = [:]
@@ -64,6 +65,7 @@ final class ShortcutCoordinator: ObservableObject {
             activeKinds.remove(kind)
             errors[kind] = nil
             setEnabled(false, for: kind, settings: settings)
+            feedback?("Shortcut removed")
             return .success(())
         }
         guard candidate.isStructurallyValid else { return fail(.invalid, for: kind) }
@@ -86,6 +88,7 @@ final class ShortcutCoordinator: ObservableObject {
             errors[kind] = nil
             set(candidate, for: kind, settings: settings)
             setEnabled(true, for: kind, settings: settings)
+            feedback?("Shortcut updated")
             return .success(())
         } catch {
             return fail(.unavailable, for: kind)

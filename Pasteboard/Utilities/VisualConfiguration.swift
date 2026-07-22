@@ -12,4 +12,6 @@ enum VisualConfiguration {
     static let searchFieldSpacing: CGFloat = 12
     static let emptyStateTopPadding: CGFloat = 24
     static let quickAnimationDuration: TimeInterval = 0.16
+    static let panelDismissDuration: TimeInterval = 0.12
+    static let confirmationDuration: TimeInterval = 1.4
 }
