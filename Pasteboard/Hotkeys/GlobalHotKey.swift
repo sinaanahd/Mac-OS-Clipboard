@@ -1,7 +1,7 @@
 import Carbon.HIToolbox
 import Foundation
 
-enum GlobalHotKeyError: Error {
+enum GlobalHotKeyError: Error, Equatable {
     case unsupportedKey
     case registrationFailed(OSStatus)
     case handlerInstallationFailed(OSStatus)

@@ -33,7 +33,7 @@ States: Not started, In progress, Blocked, Completed.
   - [ ] Document trusted local installation and Gatekeeper limitations
   - [ ] Add an optional Developer ID and notarization workflow
 - [x] Settings architecture — Completed
-- [ ] Shortcut personalization — In progress
+- [x] Shortcut personalization — Completed
 - [ ] History and storage personalization — Not started
 - [ ] macOS 26 visual refinement — Not started
 - [ ] Accessible animations — Not started

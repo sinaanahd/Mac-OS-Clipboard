@@ -16,6 +16,8 @@ final class AppSettingsTests: XCTestCase {
 
         XCTAssertEqual(settings.historyShortcut, AppConfiguration.defaultHistoryShortcut)
         XCTAssertEqual(settings.screenshotShortcut, AppConfiguration.defaultScreenshotShortcut)
+        XCTAssertTrue(settings.historyShortcutEnabled)
+        XCTAssertTrue(settings.screenshotShortcutEnabled)
         XCTAssertEqual(settings.historyLimit, 200)
         XCTAssertEqual(settings.imageLimit, 50)
         XCTAssertTrue(settings.automaticPasteEnabled)
@@ -25,6 +27,8 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(settings.panelPosition, .nearPointer)
         XCTAssertEqual(settings.screenshotBehavior, .historyAndClipboard)
         XCTAssertTrue(settings.excludedBundleIdentifiers.isEmpty)
+        XCTAssertTrue(settings.historyShortcutEnabled)
+        XCTAssertTrue(settings.screenshotShortcutEnabled)
     }
 
     func testSettingsPersistAndReload() {

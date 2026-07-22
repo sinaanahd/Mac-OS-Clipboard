@@ -3,6 +3,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var settings: AppSettings
+    @ObservedObject var shortcutCoordinator: ShortcutCoordinator
     @AppStorage(AppSettings.selectedPaneDefaultsKey) private var selectedPane = SettingsPane.general.rawValue
 
     var body: some View {
@@ -13,7 +14,7 @@ struct SettingsView: View {
             FeaturesSettingsPane(settings: settings)
                 .tabItem { Label("Features", systemImage: "switch.2") }
                 .tag(SettingsPane.features.rawValue)
-            ShortcutsSettingsPane(settings: settings)
+            ShortcutsSettingsPane(settings: settings, coordinator: shortcutCoordinator)
                 .tabItem { Label("Shortcuts", systemImage: "keyboard") }
                 .tag(SettingsPane.shortcuts.rawValue)
             PrivacyStorageSettingsPane(settings: settings)
@@ -96,16 +97,53 @@ private struct FeaturesSettingsPane: View {
 
 private struct ShortcutsSettingsPane: View {
     @ObservedObject var settings: AppSettings
+    @ObservedObject var coordinator: ShortcutCoordinator
 
     var body: some View {
         Form {
-            LabeledContent("Show clipboard history", value: settings.historyShortcut.displayName)
-            LabeledContent("Capture screen region", value: settings.screenshotShortcut.displayName)
-            Text("The active shortcuts are shown here. Use Reset after customization to restore the defaults.")
+            shortcutRow("Show clipboard history", kind: .history,
+                        shortcut: settings.historyShortcutEnabled ? settings.historyShortcut : nil)
+            shortcutRow("Capture screen region", kind: .screenshot,
+                        shortcut: settings.screenshotShortcutEnabled ? settings.screenshotShortcut : nil)
+            Text("Click a shortcut, then type a new combination. Escape cancels; Delete removes it.")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
         .padding()
+    }
+
+    @ViewBuilder
+    private func shortcutRow(_ title: String, kind: ShortcutKind,
+                             shortcut: KeyboardShortcut?) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(title)
+                Spacer()
+                ShortcutRecorder(shortcut: shortcut) { candidate in
+                    coordinator.update(kind, to: candidate)
+                } onClear: {
+                    coordinator.update(kind, to: nil)
+                } onInvalid: {
+                    coordinator.reportInvalid(kind)
+                }
+                .frame(width: 145)
+                Button("Reset") {
+                    let fallback = kind == .history
+                        ? AppConfiguration.defaultHistoryShortcut
+                        : AppConfiguration.defaultScreenshotShortcut
+                    coordinator.update(kind, to: fallback)
+                }
+            }
+            if let error = coordinator.errors[kind] {
+                Label(error.message, systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .accessibilityLabel("Shortcut error: \(error.message)")
+            } else if shortcut != nil && !coordinator.activeKinds.contains(kind) {
+                Text("This shortcut is saved but currently unavailable.")
+                    .font(.caption).foregroundStyle(.orange)
+            }
+        }
     }
 }
 

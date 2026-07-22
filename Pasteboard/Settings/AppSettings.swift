@@ -100,6 +100,8 @@ final class AppSettings: ObservableObject {
     private enum Key {
         static let historyShortcut = "settings.historyShortcut"
         static let screenshotShortcut = "settings.screenshotShortcut"
+        static let historyShortcutEnabled = "settings.historyShortcutEnabled"
+        static let screenshotShortcutEnabled = "settings.screenshotShortcutEnabled"
         static let historyLimit = "settings.historyLimit"
         static let imageLimit = "settings.imageLimit"
         static let automaticPaste = "settings.automaticPaste"
@@ -116,6 +118,8 @@ final class AppSettings: ObservableObject {
 
     @Published var historyShortcut: KeyboardShortcut { didSet { save(historyShortcut, forKey: Key.historyShortcut) } }
     @Published var screenshotShortcut: KeyboardShortcut { didSet { save(screenshotShortcut, forKey: Key.screenshotShortcut) } }
+    @Published var historyShortcutEnabled: Bool { didSet { defaults.set(historyShortcutEnabled, forKey: Key.historyShortcutEnabled) } }
+    @Published var screenshotShortcutEnabled: Bool { didSet { defaults.set(screenshotShortcutEnabled, forKey: Key.screenshotShortcutEnabled) } }
     @Published var historyLimit: Int {
         didSet {
             let normalized = Self.normalizedHistoryLimit(historyLimit)
@@ -165,6 +169,8 @@ final class AppSettings: ObservableObject {
             from: defaults, key: Key.screenshotShortcut,
             fallback: AppConfiguration.defaultScreenshotShortcut
         )
+        historyShortcutEnabled = defaults.object(forKey: Key.historyShortcutEnabled) as? Bool ?? true
+        screenshotShortcutEnabled = defaults.object(forKey: Key.screenshotShortcutEnabled) as? Bool ?? true
         historyLimit = Self.normalizedHistoryLimit(
             defaults.object(forKey: Key.historyLimit) as? Int ?? AppConfiguration.defaultHistoryLimit
         )
@@ -187,14 +193,22 @@ final class AppSettings: ObservableObject {
         excludedBundleIdentifiers = Set(identifiers.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty })
     }
 
-    func resetHistoryShortcut() { historyShortcut = AppConfiguration.defaultHistoryShortcut }
-    func resetScreenshotShortcut() { screenshotShortcut = AppConfiguration.defaultScreenshotShortcut }
+    func resetHistoryShortcut() {
+        historyShortcut = AppConfiguration.defaultHistoryShortcut
+        historyShortcutEnabled = true
+    }
+    func resetScreenshotShortcut() {
+        screenshotShortcut = AppConfiguration.defaultScreenshotShortcut
+        screenshotShortcutEnabled = true
+    }
     func resetHistoryLimit() { historyLimit = AppConfiguration.defaultHistoryLimit }
     func resetImageLimit() { imageLimit = AppConfiguration.defaultImageLimit }
 
     func resetAll() {
         historyShortcut = AppConfiguration.defaultHistoryShortcut
         screenshotShortcut = AppConfiguration.defaultScreenshotShortcut
+        historyShortcutEnabled = true
+        screenshotShortcutEnabled = true
         historyLimit = AppConfiguration.defaultHistoryLimit
         imageLimit = AppConfiguration.defaultImageLimit
         automaticPasteEnabled = AppConfiguration.defaultAutomaticPasteEnabled

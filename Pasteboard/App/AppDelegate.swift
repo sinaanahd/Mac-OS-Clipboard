@@ -3,11 +3,10 @@ import AppKit
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let settings = AppSettings()
+    let shortcutCoordinator = ShortcutCoordinator()
     private var historyStore: ClipboardHistoryStore?
     private var monitor: PasteboardMonitor?
     private var panelController: HistoryPanelController?
-    private var historyHotKey: GlobalHotKey?
-    private var screenshotHotKey: GlobalHotKey?
     private var screenshotService: RegionScreenshotService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -22,13 +21,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.screenshotService = screenshotService
         if settings.monitoringEnabled { monitor.start() }
 
-        historyHotKey = try? GlobalHotKey(shortcut: settings.historyShortcut) {
+        shortcutCoordinator.start(settings: settings) {
             panelController.toggle()
-        }
-        screenshotHotKey = try? GlobalHotKey(
-            shortcut: settings.screenshotShortcut,
-            identifier: 2
-        ) {
+        } screenshotAction: {
             screenshotService.captureRegion()
         }
     }
