@@ -8,3 +8,4 @@
 - Added local text clipboard monitoring, bounded history, duplicate suppression, search, deletion, restoration, and persistence.
 - Added a menu-bar entry and floating history panel toggled with the native global history shortcut.
 - Added permission-gated automatic paste into the previously active application.
+- Added bounded image clipboard history with local file payloads, thumbnails, restoration, duplicate suppression, and cleanup.

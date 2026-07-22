@@ -30,3 +30,11 @@
 5. Deny or revoke access and verify manual paste continues to work without repeated unsolicited prompts.
 
 Screen Recording flows are not yet implemented or manually testable.
+
+## Image history
+
+1. Copy an image and a macOS screenshot and verify thumbnails appear newest first.
+2. Copy the same image twice and verify no consecutive duplicate is added.
+3. Select an image entry and paste into Preview or Notes.
+4. Delete image entries and verify their owned files disappear from Application Support/Pasteboard/Images.
+5. Exceed the configured image limit and verify older image payloads are removed while text entries remain.

@@ -30,7 +30,16 @@ final class PasteboardMonitor {
     private func poll() {
         guard pasteboard.changeCount != lastChangeCount else { return }
         lastChangeCount = pasteboard.changeCount
-        guard let text = pasteboard.string(forType: .string) else { return }
-        store.capture(text: text)
+        if let pngData = pasteboard.data(forType: .png) ?? convertedPNGData() {
+            store.capture(imagePNGData: pngData)
+        } else if let text = pasteboard.string(forType: .string) {
+            store.capture(text: text)
+        }
+    }
+
+    private func convertedPNGData() -> Data? {
+        guard let tiffData = pasteboard.data(forType: .tiff),
+              let representation = NSBitmapImageRep(data: tiffData) else { return nil }
+        return representation.representation(using: .png, properties: [:])
     }
 }

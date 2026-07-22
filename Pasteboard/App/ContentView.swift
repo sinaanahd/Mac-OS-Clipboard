@@ -7,7 +7,7 @@ struct ContentView: View {
 
     private var filteredEntries: [ClipboardEntry] {
         query.isEmpty ? store.entries : store.entries.filter {
-            $0.text.localizedCaseInsensitiveContains(query)
+            $0.text?.localizedCaseInsensitiveContains(query) == true
         }
     }
 
@@ -30,15 +30,24 @@ struct ContentView: View {
                             store.restore(entry)
                             onRestore()
                         } label: {
-                            VStack(alignment: .leading, spacing: VisualConfiguration.rowSpacing) {
-                                Text(entry.preview).lineLimit(2)
-                                Text(entry.createdAt, style: .relative)
-                                    .font(.caption).foregroundStyle(.secondary)
+                            HStack(spacing: VisualConfiguration.rowSpacing) {
+                                if let url = store.imageURL(for: entry), let image = NSImage(contentsOf: url) {
+                                    Image(nsImage: image)
+                                        .resizable().scaledToFill()
+                                        .frame(width: VisualConfiguration.thumbnailSize.width,
+                                               height: VisualConfiguration.thumbnailSize.height)
+                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                }
+                                VStack(alignment: .leading, spacing: VisualConfiguration.rowSpacing) {
+                                    Text(entry.preview).lineLimit(2)
+                                    Text(entry.createdAt, style: .relative)
+                                        .font(.caption).foregroundStyle(.secondary)
+                                }
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("Copy \(entry.preview) back to the clipboard")
+                        .accessibilityLabel("Restore \(entry.preview) to the clipboard")
                     }
                     .onDelete { offsets in
                         let ids = offsets.map { filteredEntries[$0].id }
