@@ -28,7 +28,7 @@ Provide a compact branded header with minimal top inset above the search field, 
 
 ## Persistence
 
-Persist metadata in a local database under Application Support. Store image payloads as files outside the metadata database. Recover safely from missing files and interrupted writes. Apply limits and expiration during cleanup.
+Persist metadata as coalesced, atomically replaced structured JSON under Application Support. Store image payloads as separate files outside metadata. Recover safely from missing files and interrupted writes, flush pending state at normal termination, and apply user limits and expiration during cleanup.
 
 ## Privacy
 

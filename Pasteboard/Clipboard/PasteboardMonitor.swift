@@ -14,8 +14,6 @@ final class PasteboardMonitor {
         self.store = store
         self.settings = settings
         lastChangeCount = pasteboard.changeCount
-        if let identifier = NSWorkspace.shared.frontmostApplication?.bundleIdentifier,
-           settings.excludedBundleIdentifiers.contains(identifier) { return }
     }
 
     func start() {
@@ -34,6 +32,11 @@ final class PasteboardMonitor {
     private func poll() {
         guard pasteboard.changeCount != lastChangeCount else { return }
         lastChangeCount = pasteboard.changeCount
+        guard PasteboardCapturePolicy.permitsCapture(
+            monitoringEnabled: settings.monitoringEnabled,
+            frontmostBundleIdentifier: NSWorkspace.shared.frontmostApplication?.bundleIdentifier,
+            excludedBundleIdentifiers: settings.excludedBundleIdentifiers
+        ) else { return }
         guard PasteboardPrivacyFilter.shouldCapture(types: pasteboard.types ?? []) else { return }
         let fileURLs = readFileURLs()
         if !fileURLs.isEmpty {

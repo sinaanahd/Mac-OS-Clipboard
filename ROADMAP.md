@@ -15,32 +15,32 @@ States: Not started, In progress, Blocked, Completed.
 - [x] File history — Completed
 - [x] Region screenshot capture — Completed
 - [x] Privacy and cleanup — Completed
-- [ ] Polish and testing — In progress
+- [x] Polish and testing — Completed
   - [x] Add a branded history header and keep newly captured entries visible
   - [x] Tighten panel header spacing and replace continuous relative-time updates
   - [x] Add persistent pinning for individual history entries
   - [x] Adopt Option-V history access and a delay-tolerant native screenshot workflow
   - [x] Add a native clear button to history search
   - [x] Anchor empty states at the top and make captured screenshots immediately pasteable
-- [ ] Packaging and distribution — In progress
+- [x] Packaging and distribution — Completed
   - [x] Establish version 1.0.0 and display the bundle version in the history panel
   - [x] Advance the substantial interaction update to version 1.1.0
   - [x] Release the search clear-button refinement as version 1.1.1
   - [x] Release empty-state and screenshot-paste fixes as version 1.1.2
-  - [ ] Build an unsigned local Release application
-  - [ ] Package `Pasteboard.app` and an Applications link in a compressed DMG
-  - [ ] Generate and verify the DMG SHA-256 checksum
-  - [ ] Document trusted local installation and Gatekeeper limitations
-  - [ ] Add an optional Developer ID and notarization workflow
+  - [x] Build an unsigned universal local Release application
+  - [x] Package `Pasteboard.app` and an Applications link in a compressed DMG
+  - [x] Generate and verify the DMG SHA-256 checksum
+  - [x] Document trusted local installation and Gatekeeper limitations
+  - [x] Add an optional Developer ID and notarization workflow
 - [x] Settings architecture — Completed
 - [x] Shortcut personalization — Completed
 - [x] History and storage personalization — Completed
 - [x] macOS 26 visual refinement — Completed
 - [x] Accessible animations — Completed
-- [ ] Release stability corrections — In progress
-- [ ] Local DMG packaging — Not started
-- [ ] Optional signed distribution — Not started
-- [ ] Release validation — Not started
+- [x] Release stability corrections — Completed
+- [x] Local DMG packaging — Completed
+- [x] Optional signed distribution implementation — Completed (credentialed run not attempted)
+- [ ] Release validation — In progress (automated checks complete; cross-version and permission UI checks remain manual)
 
 ## Pasteboard 1.2.0 baseline
 
@@ -48,4 +48,8 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Xcode project regenerated with XcodeGen 2.46.0
 - [x] Existing 1.1.2 Debug build succeeded on Apple Silicon
 - [x] Existing 1.1.2 automated suite passed: 27 tests, 0 failures
+- [x] Pasteboard 1.2.0 clean Debug build succeeded on Apple Silicon
+- [x] Pasteboard 1.2.0 automated suite passed: 53 tests, 0 failures
+- [x] Unsigned Release DMG built and verified with version 1.2.0, build 5, arm64 and x86_64 slices
+- [x] DMG checksum verified and mounted contents limited to `Pasteboard.app` and the Applications link
 - [ ] Existing manual polish checklist completed on macOS 14, 15, and 26 where available

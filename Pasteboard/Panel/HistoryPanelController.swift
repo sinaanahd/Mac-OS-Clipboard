@@ -131,48 +131,25 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         }
     }
 
-    private func positionNearPointer() {
-        let pointer = NSEvent.mouseLocation
-        let screen = NSScreen.screens.first { NSMouseInRect(pointer, $0.frame, false) } ?? NSScreen.main
-        guard let visibleFrame = screen?.visibleFrame else { return }
-        let x = min(max(pointer.x - panel.frame.width / 2, visibleFrame.minX),
-                    visibleFrame.maxX - panel.frame.width)
-        let y = min(max(pointer.y - panel.frame.height, visibleFrame.minY),
-                    visibleFrame.maxY - panel.frame.height)
-        panel.setFrameOrigin(NSPoint(x: x, y: y))
-    }
-
     func windowDidMove(_ notification: Notification) {
         guard settings.panelPosition == .rememberLastPosition else { return }
         settings.lastPanelOrigin = PersistedPanelOrigin(panel.frame.origin)
     }
 
     private func positionPanel() {
-        switch settings.panelPosition {
-        case .nearPointer:
-            positionNearPointer()
-        case .activeScreenCenter:
-            guard let frame = activeVisibleFrame() else { return }
-            panel.setFrameOrigin(constrainedOrigin(
-                NSPoint(x: frame.midX - panel.frame.width / 2,
-                        y: frame.midY - panel.frame.height / 2), in: frame
-            ))
-        case .rememberLastPosition:
-            guard let frame = activeVisibleFrame() else { return }
-            let origin = settings.lastPanelOrigin?.point
-                ?? NSPoint(x: frame.midX - panel.frame.width / 2,
-                           y: frame.midY - panel.frame.height / 2)
-            panel.setFrameOrigin(constrainedOrigin(origin, in: frame))
-        }
+        let pointer = NSEvent.mouseLocation
+        guard let frame = activeVisibleFrame() else { return }
+        panel.setFrameOrigin(PanelPlacement.origin(
+            preference: settings.panelPosition,
+            pointer: pointer,
+            panelSize: panel.frame.size,
+            visibleFrame: frame,
+            rememberedOrigin: settings.lastPanelOrigin?.point
+        ))
     }
 
     private func activeVisibleFrame() -> NSRect? {
         let pointer = NSEvent.mouseLocation
         return (NSScreen.screens.first { NSMouseInRect(pointer, $0.frame, false) } ?? NSScreen.main)?.visibleFrame
-    }
-
-    private func constrainedOrigin(_ origin: NSPoint, in frame: NSRect) -> NSPoint {
-        NSPoint(x: min(max(origin.x, frame.minX), frame.maxX - panel.frame.width),
-                y: min(max(origin.y, frame.minY), frame.maxY - panel.frame.height))
     }
 }

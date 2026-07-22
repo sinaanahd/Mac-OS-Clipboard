@@ -8,7 +8,7 @@ The supplied PasteBoard clipboard-and-history artwork is the approved applicatio
 
 ## Requirements
 
-- macOS 14 or later on Apple Silicon
+- macOS 14 or later; Apple Silicon is supported and local Release packages are universal (`arm64` and `x86_64`)
 - Xcode 26 or later
 - XcodeGen 2.46 or later
 
@@ -20,4 +20,18 @@ xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -configuration Debug
 xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -destination "platform=macOS" test
 ```
 
-The app monitors text, image, and Finder file selections locally, keeps bounded persistent history, and presents searchable entries with native previews in a floating panel. It skips pasteboard items marked concealed, transient, or auto-generated. Use ⌥V to show history and ⌥⇧4 to open macOS's built-in interactive region selector. Pasteboard waits for the native capture to finish saving, imports it, and places it on the macOS pasteboard for immediate Command-V. Selecting a history entry restores it to the pasteboard and, with user-granted Accessibility access, pastes it into the previously active app. The menu-bar Clear History action removes local metadata and Pasteboard-owned image copies after confirmation without deleting referenced user files.
+The app monitors text, image, and Finder file selections locally, keeps bounded persistent history, and presents searchable entries with native previews in a floating panel. It skips concealed, transient, auto-generated, and user-excluded application content. Use ⌥V to show history and ⌥⇧4 to open macOS's built-in interactive region selector.
+
+Pasteboard 1.2 adds native settings for both global shortcuts, unpinned history and image limits, expiration, automatic paste, monitoring, launch at login, panel placement, screenshot completion, exclusions, storage inspection, and cleanup. Defaults remain 200 unpinned entries and 50 unpinned images; pins do not count toward either limit. Clipboard metadata is written as coalesced atomic JSON and image payloads remain separate local files.
+
+On macOS 26, functional header/search surfaces adopt restrained system Liquid Glass. macOS 14 and 15 use native material fallbacks. Short animations respect Reduce Motion, while system materials adapt to Reduced Transparency and Increased Contrast.
+
+## Local distribution
+
+Build the credential-free local DMG with:
+
+```bash
+./scripts/build-local-dmg.sh
+```
+
+Output is written to ignored `dist/`. This build is not Developer ID signed or notarized; see [DISTRIBUTION.md](DISTRIBUTION.md) for checksum verification, the legitimate Gatekeeper flow, permissions, removal, and the separate optional notarization workflow.

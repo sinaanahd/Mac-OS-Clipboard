@@ -28,10 +28,60 @@
 10. Relaunch Pasteboard and verify pinned entries remain pinned and ordered newest-first within the pinned section.
 11. Unpin an entry and verify it returns to chronological position among regular history.
 12. Exceed history and image limits and run expiration cleanup; verify pinned entries remain until explicitly deleted or cleared.
-13. Verify `Version 1.1.2` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
+13. Verify `Version 1.2.0` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
 14. Enter a search query, click the native clear button inside the field, and verify the complete history immediately returns.
 15. Clear history or search for a missing value and verify the empty state stays directly below search instead of centering the entire panel content.
 
+## Pasteboard 1.2 settings and release checklist
+
+Prefer a clean or secondary macOS account. Do not mark an OS-specific item complete unless tested on that OS.
+
+### Settings and personalization
+
+1. Change every setting, relaunch, and verify it persists; then use Reset All Settings and verify defaults.
+2. Verify malformed and out-of-range custom limits are rejected or safely normalized.
+3. Enter history values above 1,000 and image values above 500; verify the performance warning appears and accepted values remain usable.
+4. Reduce each limit below the current count; verify the confirmation gives the exact removal count, oldest unpinned entries disappear, pins survive, owned PNGs are removed, and Finder originals remain.
+5. Increase a limit and verify removed entries are not restored.
+6. Exercise each expiration option and verify pins remain.
+7. Toggle launch at login and verify System Settings/`SMAppService` state, including denial or approval-required feedback.
+8. Disable automatic paste; select an item and verify it is copied, the panel closes, and no Accessibility prompt or synthetic Command-V occurs.
+9. Pause monitoring from Settings and the menu; verify existing history and history access remain, no new entries appear, and resuming works.
+10. Test near-pointer, active-screen center, and remembered panel position on multiple displays; verify the panel stays within the visible frame.
+
+### Shortcuts
+
+1. Verify defaults ⌥V and ⌥⇧4 invoke only their intended action.
+2. Record letter, number, punctuation, arrow, and practical function-key combinations; verify symbol formatting and immediate operation without restart.
+3. Press Escape while recording and verify no change; press Delete and verify removal; Reset restores each default.
+4. Try a modifier-only, bare, unsupported, duplicate, and known system-reserved combination; verify inline error and the previous shortcut remains active.
+5. Relaunch and verify custom shortcuts persist and distinct hotkey routing remains correct.
+
+### Screenshots and privacy
+
+1. Test “history and clipboard,” “history only,” and “clipboard only”; verify exactly the selected destinations and matching confirmation wording.
+2. Cancel region selection and verify history and the general pasteboard do not change.
+3. Exclude a running app, copy text/image/file content while it is frontmost, and verify Pasteboard does not record it; remove the exclusion and verify capture resumes.
+4. Verify concealed, transient, and auto-generated pasteboard types remain skipped.
+5. Compare displayed metadata, image, and total storage with files under Application Support; verify calculation does not stall Settings.
+6. Clear unpinned history and verify pins remain. Clear all and verify pins and owned payloads are removed only after confirmation.
+
+### Design, animation, and accessibility
+
+1. On macOS 26, verify glass is limited to functional header/search and temporary feedback surfaces; content rows, text, and thumbnails remain legible.
+2. On macOS 14 or 15, verify fallback materials render and no unavailable-API crash occurs.
+3. Verify panel opening/closing, insertion, pinning, deletion, and search transitions are short and do not delay actions.
+4. Enable Reduce Motion and verify positional movement becomes fades. Enable Reduced Transparency and Increased Contrast and verify grouping and controls remain readable.
+5. Check keyboard-only Settings and history navigation, VoiceOver labels, focus rings, large text tolerance, and that color is not the sole status signal.
+
+### DMG
+
+1. From a clean checkout, run `./scripts/build-local-dmg.sh`.
+2. Run `hdiutil verify`, recompute SHA-256, and check the generated checksum file.
+3. Mount the DMG; verify it contains only `Pasteboard.app` and `Applications -> /Applications`, with no clipboard history or credentials.
+4. Drag to Applications, launch, and verify the documented Gatekeeper Open Anyway flow for the unsigned build without disabling security.
+5. Grant only needed permissions, test history and screenshots, eject/remount, and repeat launch.
+6. Run the notarized workflow only when valid Developer ID and notary credentials exist; verify signing, stapling, and Gatekeeper results separately.
 ## Automatic paste
 
 1. Without Accessibility permission, select an entry and verify it is copied but not pasted.

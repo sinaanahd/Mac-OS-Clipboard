@@ -18,10 +18,8 @@ Decision: commit `project.yml` and generate the Xcode project with XcodeGen. Con
 ## 2026-07-22 — macOS 14 minimum
 Decision: support macOS 14+. Context: modern SwiftUI APIs with a reasonable compatibility window. Alternative: older macOS. Consequence: earlier releases are unsupported.
 
-## 2026-07-22 — SQLite metadata
-Decision: use SQLite through native system libraries. Context: bounded searchable local history needs transactional persistence. Alternatives: flat JSON, Core Data. Reason: explicit schema and predictable cleanup. Consequence: migrations must be maintained.
-
-The text-only milestone uses an atomic JSON file as a temporary, dependency-free store. It will migrate to the decided SQLite metadata store before mixed text, image, and file history is introduced.
+## 2026-07-22 — SQLite metadata (superseded 2026-07-23)
+Decision: SQLite was initially planned but is not the implemented storage mechanism. Context: the bounded local model remains small and does not need a database migration for 1.2. Alternatives: SQLite and Core Data. Reason for superseding: coalesced atomic JSON is simpler, preserves existing history, and meets current reliability needs. Consequences: documentation describes structured metadata rather than a database; a future database migration requires new evidence and an explicit migration plan.
 
 ## 2026-07-22 — Carbon hotkeys
 Decision: use the system Carbon hotkey registration API behind a narrow adapter. Context: reliable global shortcuts without event taps. Alternatives: NSEvent monitors or a third-party package. Consequence: small legacy C API boundary, no runtime dependency.
@@ -97,3 +95,31 @@ Alternatives considered: storing preferences inside clipboard-history metadata, 
 Reason: `UserDefaults` is the native lightweight preference store, while a single observable model provides validation, dependency injection, resets, and upgrade-safe defaults.
 
 Consequences: only configuration values and bundle identifiers enter `UserDefaults`; clipboard contents, history metadata, screenshots, and image payloads remain in Application Support.
+
+## 2026-07-23 — Pinned entries excluded from limits
+
+Decision: both configured counts apply only to unpinned entries. Context: pins promise retention. Alternatives considered: count pins, separate favorites, or silently prune them. Reason: user intent must survive automatic cleanup. Consequences: total entries and storage can exceed configured limits; clear-all remains an explicit destructive action.
+
+## 2026-07-23 — High custom limits with warnings
+
+Decision: accept history values through 100,000 and image values through 10,000, while warning above 1,000 and 500 respectively. Context: power users need flexibility. Alternatives considered: hard recommendation caps or unlimited values. Reason: bounded flexibility is safer and less arbitrary. Consequences: performance above recommendations is not guaranteed, and reductions confirm exact removals.
+
+## 2026-07-23 — Progressive macOS 26 enhancement
+
+Decision: use availability-checked macOS 26 APIs and preserve macOS 14 material fallbacks. Context: the app should feel current without raising its minimum deployment target. Alternatives considered: macOS 26-only deployment or a fully custom appearance. Reason: progressive native controls preserve compatibility and accessibility. Consequences: visual details differ by OS while behavior remains consistent.
+
+## 2026-07-23 — Liquid Glass only for functional surfaces
+
+Decision: apply glass to the header/search and transient confirmation HUD, not content rows. Context: repeated glass reduces hierarchy and readability. Alternatives considered: glass on every row or no new-system treatment. Reason: restrained functional grouping follows platform guidance. Consequences: clipboard content remains a high-contrast layer.
+
+## 2026-07-23 — System accessibility preferences control effects
+
+Decision: follow Reduce Motion, Reduced Transparency, and Increased Contrast rather than duplicating those settings. Context: system preferences are authoritative. Alternatives considered: app-specific accessibility toggles. Reason: native controls and materials already adapt consistently. Consequences: movement becomes short fades under Reduce Motion and no functionality depends on transparency.
+
+## 2026-07-23 — Local DMG is the required distribution
+
+Decision: make a credential-free unsigned DMG the required private distribution artifact. Context: Apple Developer Program access is not assumed. Alternatives considered: App Store-only delivery or requiring Developer ID. Reason: a local package is reproducible without paid services. Consequences: recipients may need the documented Open Anyway flow and must verify sender/checksum.
+
+## 2026-07-23 — Developer ID distribution is optional
+
+Decision: isolate signing and notarization in a credential-gated script using hardened runtime and `notarytool`. Context: credentials may not exist and must never enter source control. Alternatives considered: mixing signing into the local build. Reason: missing credentials must not break development or local release. Consequences: notarization status is reported honestly and the local DMG remains available.

@@ -8,6 +8,8 @@
 - Added asynchronous local storage reporting, safe clear-unpinned/all actions, Finder access, application exclusions, and coordinated settings reset.
 - Coalesced atomic history writes off the main thread, confirmed target focus before one automatic paste event, and downsampled thumbnails asynchronously.
 - Refined the native macOS 26 functional surface and added short, accessibility-aware interaction animations and confirmation feedback.
+- Added credential-free local DMG packaging, an isolated optional notarization workflow, and accurate release documentation.
+- Verified a clean universal Release build, mounted DMG contents, SHA-256 integrity, and 53 passing automated tests for 1.2.0 build 5.
 - Kept empty and no-result history states anchored below search instead of vertically centering the panel.
 - Copied successful app-initiated screenshots to the macOS pasteboard for immediate Command-V in version 1.1.2.
 - Added the native in-field clear button to history search for version 1.1.1.

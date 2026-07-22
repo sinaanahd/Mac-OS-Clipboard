@@ -63,18 +63,14 @@ final class RegionScreenshotService {
             activeProcess = nil
         }
         guard let data else { return }
-        switch settings.screenshotBehavior {
-        case .historyAndClipboard:
+        let plan = ScreenshotCompletionPlan(behavior: settings.screenshotBehavior)
+        if plan.addsToHistory {
             store.capture(imagePNGData: data, preferredFilename: filename)
-            PasteboardImageWriter.writePNG(data)
-            onCompletion("Screenshot saved and copied")
-        case .historyOnly:
-            store.capture(imagePNGData: data, preferredFilename: filename)
-            onCompletion("Screenshot added to history")
-        case .clipboardOnly:
-            PasteboardImageWriter.writePNG(data)
-            onCompletion("Screenshot copied")
         }
+        if plan.copiesToClipboard {
+            PasteboardImageWriter.writePNG(data)
+        }
+        onCompletion(plan.confirmationMessage)
     }
 
     private func explainAndRequestPermission() {
