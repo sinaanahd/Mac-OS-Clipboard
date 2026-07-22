@@ -16,4 +16,4 @@ xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -configuration Debug
 xcodebuild -project Pasteboard.xcodeproj -scheme Pasteboard -destination "platform=macOS" test
 ```
 
-The foundation currently displays an empty state. Clipboard monitoring, persistence, global shortcuts, paste automation, and screenshots are roadmap work and are not claimed as implemented.
+The app monitors plain-text clipboard changes locally, keeps a bounded persistent history, supports search and deletion, and restores selected entries to the system pasteboard. Global shortcuts, automatic paste, images, files, and screenshots remain roadmap work.

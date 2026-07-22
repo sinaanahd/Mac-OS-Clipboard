@@ -8,10 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		506ABEED26121E3A943C14C8 /* PasteboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09747F649F378ED710DF8D8 /* PasteboardApp.swift */; };
+		525D6A0791A11EE26342FDC7 /* PasteboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C8767E235CD24B14CE468F /* PasteboardMonitor.swift */; };
 		7C79677691C530A341F3B32A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F5627639B12B5B6C3C3F4 /* SettingsView.swift */; };
 		8FF0E361C6EA5D4139BA42A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319C06AA1818EAC09CE6E9F3 /* ContentView.swift */; };
 		AA2184D55EFCFB1BF219BE46 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DFF09588FD1B246EF36A4 /* AppConfiguration.swift */; };
 		B4E93093E9C3ECAD55EC05BD /* VisualConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55648176C0F8D7DAE359CCA /* VisualConfiguration.swift */; };
+		C9DE7310A30F83AFCAACD25D /* ClipboardHistoryPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B409D0D66CD22EC6F8AA26 /* ClipboardHistoryPersistence.swift */; };
+		D4714C0E63E623AF31EF8D5E /* ClipboardEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FA3486C42E4544F23679F6 /* ClipboardEntry.swift */; };
+		E1438A03F8FA4FA2A0D0A3F3 /* ClipboardHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCDBCD4F68E49A9C17E1DD7 /* ClipboardHistoryStoreTests.swift */; };
+		E8D58CA584EE60F18015E8C6 /* ClipboardHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D57E547D16589D5149AED5 /* ClipboardHistoryStore.swift */; };
 		F8DF3DDB5B0A0933D8C2AD8E /* AppConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1362244C75E701E5C4B68F4 /* AppConfigurationTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,8 +31,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		23D57E547D16589D5149AED5 /* ClipboardHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryStore.swift; sourceTree = "<group>"; };
+		24C8767E235CD24B14CE468F /* PasteboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardMonitor.swift; sourceTree = "<group>"; };
 		319C06AA1818EAC09CE6E9F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		9DCDBCD4F68E49A9C17E1DD7 /* ClipboardHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryStoreTests.swift; sourceTree = "<group>"; };
 		A09747F649F378ED710DF8D8 /* PasteboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardApp.swift; sourceTree = "<group>"; };
+		A9FA3486C42E4544F23679F6 /* ClipboardEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardEntry.swift; sourceTree = "<group>"; };
+		B1B409D0D66CD22EC6F8AA26 /* ClipboardHistoryPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryPersistence.swift; sourceTree = "<group>"; };
 		CF0DFF09588FD1B246EF36A4 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		D88661797C72D7E1F5ED2CF9 /* PasteboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PasteboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D96D350AE89623D58D14C000 /* Pasteboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pasteboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,7 +51,10 @@
 			isa = PBXGroup;
 			children = (
 				ABCD2D09DB6D077572C07977 /* App */,
+				85FC254212DED90F79EF68C1 /* Clipboard */,
+				8F1D7DC6725DA9715FCDC5EF /* Models */,
 				95212FAFF00A8F4C0EF2CF3E /* Settings */,
+				CD828C81E9AF3DE229B44352 /* Storage */,
 				D4D6C4A6943997EA702988B2 /* Utilities */,
 			);
 			path = Pasteboard;
@@ -51,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				E1362244C75E701E5C4B68F4 /* AppConfigurationTests.swift */,
+				9DCDBCD4F68E49A9C17E1DD7 /* ClipboardHistoryStoreTests.swift */,
 			);
 			path = PasteboardTests;
 			sourceTree = "<group>";
@@ -62,6 +76,23 @@
 				5A2C6ACC54AA1005109D27AC /* PasteboardTests */,
 				D4A6BFA110C39C606F1EEF48 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		85FC254212DED90F79EF68C1 /* Clipboard */ = {
+			isa = PBXGroup;
+			children = (
+				23D57E547D16589D5149AED5 /* ClipboardHistoryStore.swift */,
+				24C8767E235CD24B14CE468F /* PasteboardMonitor.swift */,
+			);
+			path = Clipboard;
+			sourceTree = "<group>";
+		};
+		8F1D7DC6725DA9715FCDC5EF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A9FA3486C42E4544F23679F6 /* ClipboardEntry.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		95212FAFF00A8F4C0EF2CF3E /* Settings */ = {
@@ -79,6 +110,14 @@
 				A09747F649F378ED710DF8D8 /* PasteboardApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		CD828C81E9AF3DE229B44352 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				B1B409D0D66CD22EC6F8AA26 /* ClipboardHistoryPersistence.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		D4A6BFA110C39C606F1EEF48 /* Products */ = {
@@ -180,8 +219,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA2184D55EFCFB1BF219BE46 /* AppConfiguration.swift in Sources */,
+				D4714C0E63E623AF31EF8D5E /* ClipboardEntry.swift in Sources */,
+				C9DE7310A30F83AFCAACD25D /* ClipboardHistoryPersistence.swift in Sources */,
+				E8D58CA584EE60F18015E8C6 /* ClipboardHistoryStore.swift in Sources */,
 				8FF0E361C6EA5D4139BA42A9 /* ContentView.swift in Sources */,
 				506ABEED26121E3A943C14C8 /* PasteboardApp.swift in Sources */,
+				525D6A0791A11EE26342FDC7 /* PasteboardMonitor.swift in Sources */,
 				7C79677691C530A341F3B32A /* SettingsView.swift in Sources */,
 				B4E93093E9C3ECAD55EC05BD /* VisualConfiguration.swift in Sources */,
 			);
@@ -192,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8DF3DDB5B0A0933D8C2AD8E /* AppConfigurationTests.swift in Sources */,
+				E1438A03F8FA4FA2A0D0A3F3 /* ClipboardHistoryStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

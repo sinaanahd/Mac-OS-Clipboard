@@ -7,4 +7,11 @@
 3. Open Settings and verify configured shortcuts and history limit are displayed.
 4. Verify VoiceOver announces the empty state meaningfully.
 
-Clipboard monitoring, global shortcuts, Accessibility-driven paste, and Screen Recording flows are not yet implemented or manually testable.
+## Text history
+
+1. Copy several text values and verify newest-first appearance within one second.
+2. Copy the same value twice and verify no consecutive duplicate appears.
+3. Search case-insensitively, delete an item, and relaunch to verify persistence.
+4. Select an item and paste elsewhere to verify it was restored to the system pasteboard.
+
+Global shortcuts, Accessibility-driven paste, and Screen Recording flows are not yet implemented or manually testable.

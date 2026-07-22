@@ -21,5 +21,7 @@ Decision: support macOS 14+. Context: modern SwiftUI APIs with a reasonable comp
 ## 2026-07-22 — SQLite metadata
 Decision: use SQLite through native system libraries. Context: bounded searchable local history needs transactional persistence. Alternatives: flat JSON, Core Data. Reason: explicit schema and predictable cleanup. Consequence: migrations must be maintained.
 
+The text-only milestone uses an atomic JSON file as a temporary, dependency-free store. It will migrate to the decided SQLite metadata store before mixed text, image, and file history is introduced.
+
 ## 2026-07-22 — Carbon hotkeys
 Decision: use the system Carbon hotkey registration API behind a narrow adapter. Context: reliable global shortcuts without event taps. Alternatives: NSEvent monitors or a third-party package. Consequence: small legacy C API boundary, no runtime dependency.

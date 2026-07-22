@@ -3,7 +3,7 @@
 States: Not started, In progress, Blocked, Completed.
 
 - [x] Project foundation — Completed
-- [ ] Text clipboard history — Not started
+- [x] Text clipboard history — Completed
 - [ ] Floating history panel — Not started
 - [ ] Automatic paste — Not started
 - [ ] Image and screenshot history — Not started

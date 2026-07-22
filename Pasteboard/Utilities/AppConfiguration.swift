@@ -31,6 +31,7 @@ enum AppConfiguration {
     static let clipboardPollingInterval: TimeInterval = 0.5
     static let applicationSupportDirectoryName = "Pasteboard"
     static let databaseFilename = "clipboard-history.sqlite"
+    static let interimTextHistoryFilename = "clipboard-history.json"
     static let screenshotFilenameFormat = "Pasteboard-%Y%m%d-%H%M%S.png"
     static let defaultExpirationPolicy: ExpirationPolicy = .never
     static let panelSize = NSSize(width: 420, height: 560)
