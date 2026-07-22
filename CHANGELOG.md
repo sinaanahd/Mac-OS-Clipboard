@@ -12,3 +12,4 @@
 - Added Finder file-selection history with native icons, filename search, deduplication, and file URL restoration.
 - Added native interactive region screenshots with a global shortcut, permission explanation, local import, and temporary-file cleanup.
 - Fixed global hotkey routing so the history shortcut cannot trigger region capture.
+- Fixed history panel ordering so the global shortcut brings it above other apps and full-screen windows.

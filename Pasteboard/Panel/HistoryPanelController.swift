@@ -27,10 +27,10 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         panel.titleVisibility = .hidden
         panel.titlebarAppearsTransparent = true
         panel.isFloatingPanel = true
-        panel.level = .floating
+        panel.level = .popUpMenu
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
         panel.isReleasedWhenClosed = false
-        panel.hidesOnDeactivate = true
+        panel.hidesOnDeactivate = false
         panel.backgroundColor = .windowBackgroundColor
         panel.delegate = self
         panel.contentViewController = NSHostingController(
@@ -51,7 +51,8 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         }
         positionNearPointer()
         NSApplication.shared.activate(ignoringOtherApps: true)
-        panel.makeKeyAndOrderFront(nil)
+        panel.orderFrontRegardless()
+        panel.makeKey()
     }
 
     func hide() {
