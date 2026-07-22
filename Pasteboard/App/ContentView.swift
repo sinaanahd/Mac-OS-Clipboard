@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var store: ClipboardHistoryStore
+    @ObservedObject var presentation: HistoryPanelPresentation
     var onRestore: () -> Void = {}
     @State private var query = ""
 
@@ -63,7 +64,10 @@ struct ContentView: View {
                                     }
                                     VStack(alignment: .leading, spacing: VisualConfiguration.rowSpacing) {
                                         Text(entry.preview).lineLimit(2)
-                                        Text(entry.createdAt, style: .relative)
+                                        Text(HistoryRelativeTimeFormatter.string(
+                                            from: entry.createdAt,
+                                            relativeTo: presentation.referenceDate
+                                        ))
                                             .font(.caption).foregroundStyle(.secondary)
                                     }
                                 }
@@ -88,6 +92,12 @@ struct ContentView: View {
                 }
             }
         }
-        .padding()
+        .padding(.horizontal)
+        .padding(.bottom)
+        .padding(.top, VisualConfiguration.panelTopPadding)
+        .ignoresSafeArea(.container, edges: .top)
+        .onChange(of: store.entries.first?.id) { _, _ in
+            presentation.refresh()
+        }
     }
 }

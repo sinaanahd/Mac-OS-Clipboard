@@ -10,11 +10,13 @@ private final class HistoryPanel: NSPanel {
 final class HistoryPanelController: NSObject, NSWindowDelegate {
     private let panel: HistoryPanel
     private let automaticPaste: AutomaticPasteService
+    private let presentation: HistoryPanelPresentation
     private var previousApplication: NSRunningApplication?
 
     init(store: ClipboardHistoryStore,
          automaticPaste: AutomaticPasteService = AutomaticPasteService()) {
         self.automaticPaste = automaticPaste
+        presentation = HistoryPanelPresentation()
         panel = HistoryPanel(
             contentRect: NSRect(origin: .zero, size: AppConfiguration.panelSize),
             styleMask: [.titled, .nonactivatingPanel, .fullSizeContentView],
@@ -34,7 +36,9 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
         panel.backgroundColor = .windowBackgroundColor
         panel.delegate = self
         panel.contentViewController = NSHostingController(
-            rootView: ContentView(store: store) { [weak self] in self?.completeSelection() }
+            rootView: ContentView(store: store, presentation: presentation) { [weak self] in
+                self?.completeSelection()
+            }
                 .frame(width: AppConfiguration.panelSize.width,
                        height: AppConfiguration.panelSize.height)
         )
@@ -45,6 +49,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
     }
 
     func show() {
+        presentation.refresh()
         let currentApplication = NSWorkspace.shared.frontmostApplication
         if currentApplication?.bundleIdentifier != Bundle.main.bundleIdentifier {
             previousApplication = currentApplication

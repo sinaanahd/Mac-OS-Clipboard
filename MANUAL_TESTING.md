@@ -22,6 +22,8 @@
 4. Verify the menu-bar clipboard item can show the panel and quit the app.
 5. Verify the Pasteboard icon, product name, and Clipboard History label remain fixed above search while the list scrolls.
 6. Scroll down, copy a new matching item, and verify the list returns to the new first row without placing it behind search.
+7. Verify only a minimal inset remains above the Pasteboard icon and name.
+8. Leave the panel open and verify relative ages remain unchanged; close and reopen it and verify they recalculate.
 
 ## Automatic paste
 
