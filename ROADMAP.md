@@ -27,3 +27,25 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Advance the substantial interaction update to version 1.1.0
   - [x] Release the search clear-button refinement as version 1.1.1
   - [x] Release empty-state and screenshot-paste fixes as version 1.1.2
+  - [ ] Build an unsigned local Release application
+  - [ ] Package `Pasteboard.app` and an Applications link in a compressed DMG
+  - [ ] Generate and verify the DMG SHA-256 checksum
+  - [ ] Document trusted local installation and Gatekeeper limitations
+  - [ ] Add an optional Developer ID and notarization workflow
+- [ ] Settings architecture — In progress
+- [ ] Shortcut personalization — Not started
+- [ ] History and storage personalization — Not started
+- [ ] macOS 26 visual refinement — Not started
+- [ ] Accessible animations — Not started
+- [ ] Release stability corrections — Not started
+- [ ] Local DMG packaging — Not started
+- [ ] Optional signed distribution — Not started
+- [ ] Release validation — Not started
+
+## Pasteboard 1.2.0 baseline
+
+- [x] Repository and required documentation audited on 2026-07-23
+- [x] Xcode project regenerated with XcodeGen 2.46.0
+- [x] Existing 1.1.2 Debug build succeeded on Apple Silicon
+- [x] Existing 1.1.2 automated suite passed: 27 tests, 0 failures
+- [ ] Existing manual polish checklist completed on macOS 14, 15, and 26 where available
