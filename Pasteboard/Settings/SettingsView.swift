@@ -18,7 +18,8 @@ struct SettingsView: View {
             ShortcutsSettingsPane(settings: settings, coordinator: shortcutCoordinator)
                 .tabItem { Label("Shortcuts", systemImage: "keyboard") }
                 .tag(SettingsPane.shortcuts.rawValue)
-            PrivacyStorageSettingsPane(settings: settings)
+            PrivacyStorageSettingsPane(settings: settings, runtime: runtime,
+                                       storageUsage: runtime.storageUsage)
                 .tabItem { Label("Privacy & Storage", systemImage: "hand.raised") }
                 .tag(SettingsPane.privacyStorage.rawValue)
             AboutSettingsPane()
@@ -202,17 +203,121 @@ private struct ShortcutsSettingsPane: View {
 
 private struct PrivacyStorageSettingsPane: View {
     @ObservedObject var settings: AppSettings
+    @ObservedObject var runtime: AppDelegate
+    @ObservedObject var storageUsage: StorageUsageService
+    @State private var runningApplications: [RunningApplicationChoice] = []
+    @State private var selectedBundleIdentifier = ""
 
     var body: some View {
         Form {
-            Toggle("Record clipboard history", isOn: $settings.monitoringEnabled)
-            LabeledContent("Excluded applications", value: "\(settings.excludedBundleIdentifiers.count)")
-            Text("Clipboard data and preferences remain local to this Mac.")
-                .font(.caption).foregroundStyle(.secondary)
-            Button("Reset All Settings") { settings.resetAll() }
+            Section("Recording") {
+                Toggle("Record clipboard history", isOn: $settings.monitoringEnabled)
+                Text(settings.monitoringEnabled ? "Clipboard history recording is active."
+                                                : "Recording is paused; existing history is preserved.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            Section("Storage") {
+                LabeledContent("Metadata", value: storageUsage.usage.formatted(storageUsage.usage.metadataBytes))
+                LabeledContent("Image payloads", value: storageUsage.usage.formatted(storageUsage.usage.imageBytes))
+                LabeledContent("Total", value: storageUsage.usage.formatted(storageUsage.usage.totalBytes))
+                if storageUsage.isCalculating { ProgressView().controlSize(.small) }
+                HStack {
+                    Button("Refresh Usage") { storageUsage.refresh() }
+                    Button("Open Storage Folder") { runtime.openStorageFolder() }
+                }
+                HStack {
+                    Button("Clear Unpinned History…") { runtime.confirmClearUnpinnedHistory() }
+                    Button("Clear All History…", role: .destructive) { runtime.confirmClearHistory() }
+                }
+            }
+            Section("Excluded Applications") {
+                HStack {
+                    Picker("Running application", selection: $selectedBundleIdentifier) {
+                        Text("Choose an application").tag("")
+                        ForEach(runningApplications) { app in
+                            Text(app.name).tag(app.bundleIdentifier)
+                        }
+                    }
+                    Button("Add") {
+                        guard !selectedBundleIdentifier.isEmpty else { return }
+                        settings.excludedBundleIdentifiers.insert(selectedBundleIdentifier)
+                        selectedBundleIdentifier = ""
+                    }
+                    .disabled(selectedBundleIdentifier.isEmpty)
+                }
+                ForEach(settings.excludedBundleIdentifiers.sorted(), id: \.self) { identifier in
+                    ExcludedApplicationRow(bundleIdentifier: identifier) {
+                        settings.excludedBundleIdentifiers.remove(identifier)
+                    }
+                }
+                if settings.excludedBundleIdentifiers.isEmpty {
+                    Text("No applications are excluded.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+            }
+            Section {
+                Text("Clipboard data and preferences remain local to this Mac. No analytics or clipboard content is transmitted.")
+                    .font(.caption).foregroundStyle(.secondary)
+                Button("Reset All Settings…") { runtime.resetAllSettings(using: runtime.shortcutCoordinator) }
+            }
         }
         .formStyle(.grouped)
         .padding()
+        .onAppear {
+            reloadRunningApplications()
+            storageUsage.refresh()
+        }
+    }
+
+    private func reloadRunningApplications() {
+        runningApplications = NSWorkspace.shared.runningApplications.compactMap { app in
+            guard app.activationPolicy == .regular,
+                  let identifier = app.bundleIdentifier,
+                  identifier != Bundle.main.bundleIdentifier else { return nil }
+            return RunningApplicationChoice(bundleIdentifier: identifier,
+                                            name: app.localizedName ?? identifier)
+        }.reduce(into: [String: RunningApplicationChoice]()) { result, app in
+            result[app.bundleIdentifier] = app
+        }
+            .values.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+}
+
+private struct RunningApplicationChoice: Identifiable {
+    let bundleIdentifier: String
+    let name: String
+    var id: String { bundleIdentifier }
+}
+
+private struct ExcludedApplicationRow: View {
+    let bundleIdentifier: String
+    let remove: () -> Void
+
+    var body: some View {
+        HStack {
+            Image(nsImage: icon).resizable().frame(width: 24, height: 24)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading) {
+                Text(name)
+                Text(bundleIdentifier).font(.caption).foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button("Remove", action: remove).buttonStyle(.borderless)
+                .accessibilityLabel("Remove \(name) from excluded applications")
+        }
+    }
+
+    private var applicationURL: URL? {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
+    }
+
+    private var name: String {
+        applicationURL?.deletingPathExtension().lastPathComponent ?? bundleIdentifier
+    }
+
+    private var icon: NSImage {
+        applicationURL.map { NSWorkspace.shared.icon(forFile: $0.path) }
+            ?? NSImage(systemSymbolName: "app", accessibilityDescription: nil)!
     }
 }
 
