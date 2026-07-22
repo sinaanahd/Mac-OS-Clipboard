@@ -35,8 +35,8 @@ struct ContentView: View {
                     .accessibilityLabel("Pasteboard version \(AppConfiguration.marketingVersion)")
             }
 
-            TextField("Search clipboard history", text: $query)
-                .textFieldStyle(.roundedBorder)
+            HistorySearchField(text: $query, prompt: "Search clipboard history")
+                .accessibilityLabel("Search clipboard history")
             if filteredEntries.isEmpty {
                 ContentUnavailableView(
                     query.isEmpty ? "Clipboard history is empty" : "No matching items",
@@ -124,5 +124,42 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+    }
+}
+
+private struct HistorySearchField: NSViewRepresentable {
+    @Binding var text: String
+    let prompt: String
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text)
+    }
+
+    func makeNSView(context: Context) -> NSSearchField {
+        let searchField = NSSearchField()
+        searchField.placeholderString = prompt
+        searchField.sendsSearchStringImmediately = true
+        searchField.delegate = context.coordinator
+        return searchField
+    }
+
+    func updateNSView(_ searchField: NSSearchField, context: Context) {
+        context.coordinator.text = $text
+        if searchField.stringValue != text {
+            searchField.stringValue = text
+        }
+    }
+
+    final class Coordinator: NSObject, NSSearchFieldDelegate {
+        var text: Binding<String>
+
+        init(text: Binding<String>) {
+            self.text = text
+        }
+
+        func controlTextDidChange(_ notification: Notification) {
+            guard let searchField = notification.object as? NSSearchField else { return }
+            text.wrappedValue = searchField.stringValue
+        }
     }
 }

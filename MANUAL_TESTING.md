@@ -28,7 +28,8 @@
 10. Relaunch Pasteboard and verify pinned entries remain pinned and ordered newest-first within the pinned section.
 11. Unpin an entry and verify it returns to chronological position among regular history.
 12. Exceed history and image limits and run expiration cleanup; verify pinned entries remain until explicitly deleted or cleared.
-13. Verify `Version 1.1.0` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
+13. Verify `Version 1.1.1` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
+14. Enter a search query, click the native clear button inside the field, and verify the complete history immediately returns.
 
 ## Automatic paste
 

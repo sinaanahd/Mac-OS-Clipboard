@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added the native in-field clear button to history search for version 1.1.1.
 - Changed history to Option-V and region capture to Option-Shift-4 for version 1.1.0.
 - Hardened built-in macOS region capture by waiting for a stable PNG before importing it.
 - Established version 1.0.0 and added the bundle version to the history-panel header.

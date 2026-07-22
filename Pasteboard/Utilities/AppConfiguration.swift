@@ -42,7 +42,7 @@ enum ExpirationPolicy: Equatable, Sendable {
 enum AppConfiguration {
     static let productName = "Pasteboard"
     static let bundleIdentifier = "com.sinaanahd.Pasteboard"
-    static let developmentVersionFallback = "1.1.0"
+    static let developmentVersionFallback = "1.1.1"
     static var marketingVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
             ?? developmentVersionFallback

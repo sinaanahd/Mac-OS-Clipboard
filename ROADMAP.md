@@ -20,6 +20,8 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Tighten panel header spacing and replace continuous relative-time updates
   - [x] Add persistent pinning for individual history entries
   - [x] Adopt Option-V history access and a delay-tolerant native screenshot workflow
+  - [x] Add a native clear button to history search
 - [ ] Packaging and distribution — In progress
   - [x] Establish version 1.0.0 and display the bundle version in the history panel
   - [x] Advance the substantial interaction update to version 1.1.0
+  - [x] Release the search clear-button refinement as version 1.1.1

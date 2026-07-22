@@ -24,7 +24,7 @@ Invoke the built-in macOS interactive region-selection workflow, wait for its ou
 
 ## Search and navigation
 
-Provide a compact branded header with minimal top inset above the search field, incremental text search, keyboard navigation, selection, dismissal, deletion, and clear empty states. The newest matching entry must remain visible when history updates, even when the list was previously scrolled. Relative entry ages are snapshots recalculated when history opens or a new item arrives, not continuously refreshed. Search should cover safe textual metadata without OCR in the initial release.
+Provide a compact branded header with minimal top inset above the search field, incremental text search with a native in-field clear button, keyboard navigation, selection, dismissal, deletion, and clear empty states. The newest matching entry must remain visible when history updates, even when the list was previously scrolled. Relative entry ages are snapshots recalculated when history opens or a new item arrives, not continuously refreshed. Search should cover safe textual metadata without OCR in the initial release.
 
 ## Persistence
 
