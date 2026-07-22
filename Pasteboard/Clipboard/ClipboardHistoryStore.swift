@@ -41,14 +41,32 @@ final class ClipboardHistoryStore: ObservableObject {
         return true
     }
 
+    @discardableResult
+    func capture(fileURLs: [URL], at date: Date = .now) -> Bool {
+        let normalized = fileURLs.filter(\.isFileURL).map { $0.standardizedFileURL }
+        guard !normalized.isEmpty else { return false }
+        let hash = ImageContentHash.make(for: Data(normalized.map(\.path).joined(separator: "\u{0}").utf8))
+        guard entries.first?.contentHash != hash else { return false }
+        entries.insert(ClipboardEntry(fileURLs: normalized, contentHash: hash, createdAt: date), at: 0)
+        pruneAndPersist()
+        return true
+    }
+
     func restore(_ entry: ClipboardEntry, to pasteboard: NSPasteboard = .general) {
         pasteboard.clearContents()
         if let text = entry.text {
             pasteboard.setString(text, forType: .string)
+        } else if let paths = entry.filePaths {
+            let URLs = paths.map { NSURL(fileURLWithPath: $0) }
+            pasteboard.writeObjects(URLs)
         } else if let filename = entry.imageFilename,
                   let data = try? imageStore.data(filename: filename) {
             pasteboard.setData(data, forType: .png)
         }
+    }
+
+    func fileURL(for entry: ClipboardEntry) -> URL? {
+        entry.filePaths?.first.map { URL(fileURLWithPath: $0) }
     }
 
     func imageURL(for entry: ClipboardEntry) -> URL? {

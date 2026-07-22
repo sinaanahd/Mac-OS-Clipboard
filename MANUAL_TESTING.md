@@ -38,3 +38,10 @@ Screen Recording flows are not yet implemented or manually testable.
 3. Select an image entry and paste into Preview or Notes.
 4. Delete image entries and verify their owned files disappear from Application Support/Pasteboard/Images.
 5. Exceed the configured image limit and verify older image payloads are removed while text entries remain.
+
+## File history
+
+1. Copy one file and then multiple files in Finder; verify each selection becomes one history entry.
+2. Verify file entries show native icons and searchable filenames rather than image-preview clipboard data.
+3. Restore a file entry and paste it into another Finder folder or an application accepting files.
+4. Move or delete an original file and verify Pasteboard remains stable and does not delete or recreate user files.

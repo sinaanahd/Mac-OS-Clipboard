@@ -47,4 +47,13 @@ final class ClipboardHistoryStoreTests: XCTestCase {
         XCTAssertEqual(store.entries.filter { $0.kind == .image }.count, 1)
         XCTAssertEqual(images.values.count, 1)
     }
+
+    func testFileSelectionsAreNormalizedAndDeduplicated() {
+        let store = ClipboardHistoryStore(persistence: MemoryPersistence(), imageStore: MemoryImageStore())
+        let URL = URL(fileURLWithPath: "/tmp/folder/../document.txt")
+        XCTAssertTrue(store.capture(fileURLs: [URL]))
+        XCTAssertFalse(store.capture(fileURLs: [URL.standardizedFileURL]))
+        XCTAssertEqual(store.entries.first?.kind, .file)
+        XCTAssertEqual(store.entries.first?.filePaths, ["/tmp/document.txt"])
+    }
 }

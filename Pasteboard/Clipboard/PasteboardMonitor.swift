@@ -30,11 +30,22 @@ final class PasteboardMonitor {
     private func poll() {
         guard pasteboard.changeCount != lastChangeCount else { return }
         lastChangeCount = pasteboard.changeCount
-        if let pngData = pasteboard.data(forType: .png) ?? convertedPNGData() {
+        let fileURLs = readFileURLs()
+        if !fileURLs.isEmpty {
+            store.capture(fileURLs: fileURLs)
+        } else if let pngData = pasteboard.data(forType: .png) ?? convertedPNGData() {
             store.capture(imagePNGData: pngData)
         } else if let text = pasteboard.string(forType: .string) {
             store.capture(text: text)
         }
+    }
+
+    private func readFileURLs() -> [URL] {
+        let objects = pasteboard.readObjects(
+            forClasses: [NSURL.self],
+            options: [.urlReadingFileURLsOnly: true]
+        ) ?? []
+        return objects.compactMap { ($0 as? NSURL)?.absoluteURL }
     }
 
     private func convertedPNGData() -> Data? {

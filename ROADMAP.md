@@ -7,7 +7,7 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Floating history panel — Completed
 - [x] Automatic paste — Completed
 - [x] Image and screenshot history — Completed
-- [ ] File history — Not started
+- [x] File history — Completed
 - [ ] Region screenshot capture — Not started
 - [ ] Privacy and cleanup — Not started
 - [ ] Polish and testing — Not started

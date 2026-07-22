@@ -7,7 +7,7 @@ struct ContentView: View {
 
     private var filteredEntries: [ClipboardEntry] {
         query.isEmpty ? store.entries : store.entries.filter {
-            $0.text?.localizedCaseInsensitiveContains(query) == true
+            $0.preview.localizedCaseInsensitiveContains(query)
         }
     }
 
@@ -37,6 +37,11 @@ struct ContentView: View {
                                         .frame(width: VisualConfiguration.thumbnailSize.width,
                                                height: VisualConfiguration.thumbnailSize.height)
                                         .clipShape(RoundedRectangle(cornerRadius: 6))
+                                } else if let fileURL = store.fileURL(for: entry) {
+                                    Image(nsImage: NSWorkspace.shared.icon(forFile: fileURL.path))
+                                        .resizable().scaledToFit()
+                                        .frame(width: VisualConfiguration.thumbnailSize.width,
+                                               height: VisualConfiguration.thumbnailSize.height)
                                 }
                                 VStack(alignment: .leading, spacing: VisualConfiguration.rowSpacing) {
                                     Text(entry.preview).lineLimit(2)
