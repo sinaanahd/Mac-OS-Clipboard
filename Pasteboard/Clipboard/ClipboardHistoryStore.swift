@@ -29,12 +29,12 @@ final class ClipboardHistoryStore: ObservableObject {
     }
 
     @discardableResult
-    func capture(imagePNGData: Data, at date: Date = .now) -> Bool {
+    func capture(imagePNGData: Data, preferredFilename: String? = nil, at date: Date = .now) -> Bool {
         guard !imagePNGData.isEmpty else { return false }
         let hash = ImageContentHash.make(for: imagePNGData)
         guard entries.first?.contentHash != hash else { return false }
         let id = UUID()
-        let filename = id.uuidString + ".png"
+        let filename = preferredFilename ?? (id.uuidString + ".png")
         guard (try? imageStore.save(imagePNGData, filename: filename)) != nil else { return false }
         entries.insert(ClipboardEntry(id: id, imageFilename: filename, contentHash: hash, createdAt: date), at: 0)
         pruneAndPersist()

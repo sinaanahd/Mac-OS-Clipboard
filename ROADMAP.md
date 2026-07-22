@@ -8,7 +8,7 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Automatic paste — Completed
 - [x] Image and screenshot history — Completed
 - [x] File history — Completed
-- [ ] Region screenshot capture — Not started
+- [x] Region screenshot capture — Completed
 - [ ] Privacy and cleanup — Not started
 - [ ] Polish and testing — Not started
 - [ ] Packaging and distribution — Not started

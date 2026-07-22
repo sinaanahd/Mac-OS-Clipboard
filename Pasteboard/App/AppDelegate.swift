@@ -5,6 +5,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var monitor: PasteboardMonitor?
     private var panelController: HistoryPanelController?
     private var historyHotKey: GlobalHotKey?
+    private var screenshotHotKey: GlobalHotKey?
+    private var screenshotService: RegionScreenshotService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let store = ClipboardHistoryStore()
@@ -13,10 +15,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.monitor = monitor
         self.panelController = panelController
+        let screenshotService = RegionScreenshotService(store: store)
+        self.screenshotService = screenshotService
         monitor.start()
 
         historyHotKey = try? GlobalHotKey(shortcut: AppConfiguration.defaultHistoryShortcut) {
             panelController.toggle()
+        }
+        screenshotHotKey = try? GlobalHotKey(
+            shortcut: AppConfiguration.defaultScreenshotShortcut,
+            identifier: 2
+        ) {
+            screenshotService.captureRegion()
         }
     }
 
@@ -26,5 +36,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func showHistory() {
         panelController?.show()
+    }
+
+    func captureRegion() {
+        screenshotService?.captureRegion()
     }
 }

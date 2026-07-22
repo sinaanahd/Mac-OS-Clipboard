@@ -43,7 +43,7 @@ enum AppConfiguration {
     static let productName = "Pasteboard"
     static let bundleIdentifier = "com.sinaanahd.Pasteboard"
     static let defaultHistoryShortcut = KeyboardShortcut(key: "v", modifiers: [.command, .shift])
-    static let defaultScreenshotShortcut = KeyboardShortcut(key: "5", modifiers: [.command, .shift])
+    static let defaultScreenshotShortcut = KeyboardShortcut(key: "5", modifiers: [.control, .command, .shift])
     static let defaultHistoryLimit = 200
     static let defaultImageLimit = 50
     static let clipboardPollingInterval: TimeInterval = 0.5
@@ -53,7 +53,8 @@ enum AppConfiguration {
     static let databaseFilename = "clipboard-history.sqlite"
     static let interimTextHistoryFilename = "clipboard-history.json"
     static let imagePayloadDirectoryName = "Images"
-    static let screenshotFilenameFormat = "Pasteboard-%Y%m%d-%H%M%S.png"
+    static let screenshotFilenamePrefix = "Pasteboard"
+    static let screenshotFilenameDateFormat = "yyyyMMdd-HHmmss"
     static let defaultExpirationPolicy: ExpirationPolicy = .never
     static let panelSize = NSSize(width: 420, height: 560)
 }

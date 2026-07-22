@@ -10,3 +10,4 @@
 - Added permission-gated automatic paste into the previously active application.
 - Added bounded image clipboard history with local file payloads, thumbnails, restoration, duplicate suppression, and cleanup.
 - Added Finder file-selection history with native icons, filename search, deduplication, and file URL restoration.
+- Added native interactive region screenshots with a global shortcut, permission explanation, local import, and temporary-file cleanup.

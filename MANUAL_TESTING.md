@@ -29,7 +29,13 @@
 4. Verify the editor reactivates and receives exactly one paste operation.
 5. Deny or revoke access and verify manual paste continues to work without repeated unsolicited prompts.
 
-Screen Recording flows are not yet implemented or manually testable.
+## Region screenshots
+
+1. Without Screen Recording access, press Control-Shift-Command-5 and verify Pasteboard explains why access is needed before macOS prompts.
+2. Grant access, invoke the shortcut again, drag a region, and verify one image entry appears.
+3. Press Escape during selection and verify no history entry or temporary file remains.
+4. Capture on each connected display and verify correct pixels and native scaling.
+5. Restore the captured entry and paste it into Preview or Notes.
 
 ## Image history
 

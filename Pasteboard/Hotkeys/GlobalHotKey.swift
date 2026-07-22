@@ -12,7 +12,8 @@ final class GlobalHotKey: @unchecked Sendable {
     private var eventHandlerRef: EventHandlerRef?
     private let action: @MainActor @Sendable () -> Void
 
-    init(shortcut: KeyboardShortcut, action: @escaping @MainActor @Sendable () -> Void) throws {
+    init(shortcut: KeyboardShortcut, identifier: UInt32 = 1,
+         action: @escaping @MainActor @Sendable () -> Void) throws {
         guard let keyCode = shortcut.carbonKeyCode else { throw GlobalHotKeyError.unsupportedKey }
         self.action = action
 
@@ -28,7 +29,7 @@ final class GlobalHotKey: @unchecked Sendable {
             throw GlobalHotKeyError.handlerInstallationFailed(handlerStatus)
         }
 
-        let identifier = EventHotKeyID(signature: OSType(0x50535442), id: 1)
+        let identifier = EventHotKeyID(signature: OSType(0x50535442), id: identifier)
         let registrationStatus = RegisterEventHotKey(keyCode, shortcut.carbonModifiers,
                                                      identifier, GetApplicationEventTarget(),
                                                      0, &hotKeyRef)
