@@ -91,13 +91,15 @@ enum ExpirationPolicy: Equatable, Sendable {
 enum AppConfiguration {
     static let productName = "Pasteboard"
     static let bundleIdentifier = "com.sinaanahd.Pasteboard"
-    static let developmentVersionFallback = "1.2.0"
+    static let authorName = "Sina Anahid"
+    static let copyrightNotice = "Copyright © 2026 \(authorName)"
+    static let developmentVersionFallback = "1.2.2"
     static var marketingVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
             ?? developmentVersionFallback
     }
     static var buildNumber: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "5"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "7"
     }
     static var applicationSupportURL: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]

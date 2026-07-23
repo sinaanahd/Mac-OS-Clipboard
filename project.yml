@@ -17,13 +17,13 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sinaanahd.Pasteboard
         PRODUCT_NAME: Pasteboard
-        MARKETING_VERSION: 1.2.1
-        CURRENT_PROJECT_VERSION: 6
+        MARKETING_VERSION: 1.2.2
+        CURRENT_PROJECT_VERSION: 7
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleShortVersionString: "$(MARKETING_VERSION)"
         INFOPLIST_KEY_CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
-        INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 Sina Nahd"
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 Sina Anahid"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGNING_ALLOWED: NO
     scheme:

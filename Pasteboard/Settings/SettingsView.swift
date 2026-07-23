@@ -336,7 +336,7 @@ private struct AboutSettingsPane: View {
                 .font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
             Link("github.com/sinaanahd/Mac-OS-Clipboard",
                  destination: URL(string: "https://github.com/sinaanahd/Mac-OS-Clipboard")!)
-            Text("Copyright © 2026 Sina Nahd").font(.caption).foregroundStyle(.secondary)
+            Text(AppConfiguration.copyrightNotice).font(.caption).foregroundStyle(.secondary)
         }
         .padding(28)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

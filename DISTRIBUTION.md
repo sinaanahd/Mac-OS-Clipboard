@@ -13,16 +13,16 @@ Run:
 The script regenerates the Xcode project, performs a clean unsigned Release build, and creates:
 
 ```text
-dist/Pasteboard-1.2.1-macOS.dmg
-dist/Pasteboard-1.2.1-macOS.dmg.sha256
+dist/Pasteboard-1.2.2-macOS.dmg
+dist/Pasteboard-1.2.2-macOS.dmg.sha256
 ```
 
 The version in the filename is read from the built application. The image contains `Pasteboard.app` and an `Applications` symlink. Verify it with:
 
 ```bash
-hdiutil verify "dist/Pasteboard-1.2.1-macOS.dmg"
-shasum -a 256 "dist/Pasteboard-1.2.1-macOS.dmg"
-shasum -a 256 -c "dist/Pasteboard-1.2.1-macOS.dmg.sha256"
+hdiutil verify "dist/Pasteboard-1.2.2-macOS.dmg"
+shasum -a 256 "dist/Pasteboard-1.2.2-macOS.dmg"
+shasum -a 256 -c "dist/Pasteboard-1.2.2-macOS.dmg.sha256"
 ```
 
 This local build is not Developer ID signed or notarized. Gatekeeper may therefore warn or block it even when it came from a trusted sender. Do not disable Gatekeeper or remove quarantine automatically. For a trusted private build:

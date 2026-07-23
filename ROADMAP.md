@@ -29,6 +29,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Release the search clear-button refinement as version 1.1.1
   - [x] Release empty-state and screenshot-paste fixes as version 1.1.2
   - [x] Release the Settings-and-panel key-window fix as version 1.2.1
+  - [x] Correct the displayed copyright name in version 1.2.2
   - [x] Build an unsigned universal local Release application
   - [x] Package `Pasteboard.app` and an Applications link in a compressed DMG
   - [x] Generate and verify the DMG SHA-256 checksum
