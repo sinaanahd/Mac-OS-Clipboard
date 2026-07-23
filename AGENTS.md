@@ -10,7 +10,7 @@ All clipboard data stays on-device. Never log complete clipboard contents. Never
 
 Preferences use typed `UserDefaults`; clipboard metadata uses coalesced atomic JSON and image payloads use separate files in Application Support. Do not describe SQLite as implemented. Pinned entries are exempt from automatic limits and expiration. Keep macOS 26 visual APIs availability-guarded, preserve macOS 14 fallbacks, and respect system Reduce Motion, Reduced Transparency, and Increased Contrast.
 
-The credential-free package command is `./scripts/build-local-dmg.sh`. Optional notarization uses `./scripts/build-notarized-dmg.sh` only with secure local environment/keychain configuration. Never commit `dist/`, built apps, DMGs, checksums, Developer ID material, Team credentials, or notary profiles.
+The credential-free package command is `./scripts/build-local-dmg.sh`. Optional notarization uses `./scripts/build-notarized-dmg.sh` only with secure local environment/keychain configuration. Commit checksum-verified, versioned release DMGs and their matching `.sha256` files under `dist/` so older releases remain available. Never commit unpackaged built apps, temporary build output, unversioned artifacts, Developer ID material, Team credentials, notary profiles, or any other signing secrets.
 
 Use conventional commits on `main` during bootstrap. Inspect diffs, run `git diff --cached --check`, build, and test before every commit. Never force-push or rewrite shared history without explicit authorization.
 

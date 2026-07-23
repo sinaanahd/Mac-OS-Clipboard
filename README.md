@@ -38,4 +38,4 @@ Build the credential-free local DMG with:
 ./scripts/build-local-dmg.sh
 ```
 
-Output is written to ignored `dist/`. This build is not Developer ID signed or notarized; see [DISTRIBUTION.md](DISTRIBUTION.md) for checksum verification, the legitimate Gatekeeper flow, permissions, removal, and the separate optional notarization workflow.
+Versioned DMGs and their matching checksums are retained in the tracked [release archive](dist/README.md), allowing users to download an earlier build if a newer release regresses. Verify the checksum before installation. These local builds are not Developer ID signed or notarized; see [DISTRIBUTION.md](DISTRIBUTION.md) for the legitimate Gatekeeper flow, permissions, removal, archive policy, and the separate optional notarization workflow.

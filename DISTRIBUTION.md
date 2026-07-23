@@ -13,17 +13,30 @@ Run:
 The script regenerates the Xcode project, performs a clean unsigned Release build, and creates:
 
 ```text
-dist/Pasteboard-1.2.2-macOS.dmg
-dist/Pasteboard-1.2.2-macOS.dmg.sha256
+dist/Pasteboard-1.2.3-macOS.dmg
+dist/Pasteboard-1.2.3-macOS.dmg.sha256
 ```
 
 The version in the filename is read from the built application. The image contains `Pasteboard.app` and an `Applications` symlink. Verify it with:
 
 ```bash
-hdiutil verify "dist/Pasteboard-1.2.2-macOS.dmg"
-shasum -a 256 "dist/Pasteboard-1.2.2-macOS.dmg"
-shasum -a 256 -c "dist/Pasteboard-1.2.2-macOS.dmg.sha256"
+hdiutil verify "dist/Pasteboard-1.2.3-macOS.dmg"
+shasum -a 256 "dist/Pasteboard-1.2.3-macOS.dmg"
+shasum -a 256 -c "dist/Pasteboard-1.2.3-macOS.dmg.sha256"
 ```
+
+## Version archive
+
+Checksum-verified, versioned DMGs and their matching `.sha256` files are committed under `dist/`. Keep older releases available so users can roll back if a newer version regresses. The archive index is [dist/README.md](dist/README.md).
+
+Before committing an artifact:
+
+1. Build it with the documented packaging script.
+2. Confirm the filename version matches the bundle metadata.
+3. Run `hdiutil verify` and `shasum -a 256 -c`.
+4. Add the DMG, checksum, and archive-index entry together.
+
+Do not place unpackaged `.app` bundles, temporary build output, credentials, certificates, provisioning profiles, or unversioned artifacts in `dist/`. GitHub is a convenience archive, not a substitute for Developer ID signing or notarization. Older versions may contain bugs fixed by later releases.
 
 This local build is not Developer ID signed or notarized. Gatekeeper may therefore warn or block it even when it came from a trusted sender. Do not disable Gatekeeper or remove quarantine automatically. For a trusted private build:
 

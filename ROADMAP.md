@@ -35,6 +35,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Build an unsigned universal local Release application
   - [x] Package `Pasteboard.app` and an Applications link in a compressed DMG
   - [x] Generate and verify the DMG SHA-256 checksum
+  - [x] Publish checksum-verified versioned DMGs in a tracked rollback archive
   - [x] Document trusted local installation and Gatekeeper limitations
   - [x] Add an optional Developer ID and notarization workflow
 - [x] Settings architecture — Completed

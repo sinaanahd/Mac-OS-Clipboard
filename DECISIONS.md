@@ -123,3 +123,7 @@ Decision: make a credential-free unsigned DMG the required private distribution 
 ## 2026-07-23 — Developer ID distribution is optional
 
 Decision: isolate signing and notarization in a credential-gated script using hardened runtime and `notarytool`. Context: credentials may not exist and must never enter source control. Alternatives considered: mixing signing into the local build. Reason: missing credentials must not break development or local release. Consequences: notarization status is reported honestly and the local DMG remains available.
+
+## 2026-07-23 — Versioned DMGs are retained in Git
+
+Decision: commit checksum-verified, versioned DMGs and matching checksum files under `dist/`. Context: repository visitors need access to earlier working versions when a newer release has a regression. Alternatives considered: ignoring all build artifacts, keeping only the latest DMG, or using GitHub Releases exclusively. Reason: the existing archive is small and direct repository visibility makes rollback straightforward. Consequences: repository size grows with every retained release, each artifact must be verified before commit, unsigned status must remain explicit, and temporary builds, unpackaged apps, credentials, certificates, and signing material remain prohibited.
