@@ -1,0 +1,70 @@
+name: macOS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS 14 / Xcode 16.2
+            runner: macos-14
+            developer_dir: /Applications/Xcode_16.2.app/Contents/Developer
+          - name: macOS 15 / Xcode 26.3
+            runner: macos-15
+            developer_dir: /Applications/Xcode_26.3.app/Contents/Developer
+          - name: macOS 26 / Xcode 26.5
+            runner: macos-26
+            developer_dir: /Applications/Xcode_26.5.app/Contents/Developer
+    env:
+      DEVELOPER_DIR: ${{ matrix.developer_dir }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Report toolchain
+        run: |
+          uname -m
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate
+
+      - name: Build
+        run: >-
+          xcodebuild
+          -project Pasteboard.xcodeproj
+          -scheme Pasteboard
+          -configuration Debug
+          -destination "platform=macOS"
+          CODE_SIGNING_ALLOWED=NO
+          clean build
+
+      - name: Test
+        run: >-
+          xcodebuild
+          -project Pasteboard.xcodeproj
+          -scheme Pasteboard
+          -destination "platform=macOS"
+          CODE_SIGNING_ALLOWED=NO
+          test

@@ -143,18 +143,26 @@ struct ContentView: View {
 private extension View {
     @ViewBuilder
     func pasteboardFunctionalSurface() -> some View {
+#if compiler(>=6.2)
         if #available(macOS 26.0, *) {
             self.padding(10)
                 .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         } else {
-            self.padding(10)
-                .background(.ultraThinMaterial,
-                            in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Color(nsColor: .separatorColor).opacity(0.5), lineWidth: 0.5)
-                }
+            pasteboardFallbackSurface()
         }
+#else
+        pasteboardFallbackSurface()
+#endif
+    }
+
+    private func pasteboardFallbackSurface() -> some View {
+        self.padding(10)
+            .background(.ultraThinMaterial,
+                        in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Color(nsColor: .separatorColor).opacity(0.5), lineWidth: 0.5)
+            }
     }
 }
 

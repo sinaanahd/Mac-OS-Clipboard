@@ -38,6 +38,8 @@
 
 Prefer a clean or secondary macOS account. Do not mark an OS-specific item complete unless tested on that OS.
 
+The GitHub Actions matrix checks compilation and unit tests on macOS 14, 15, and 26. It does not replace the permission, Gatekeeper, accessibility, visual, multi-display, or end-to-end interaction checks below.
+
 ### Settings and personalization
 
 1. Change every setting, relaunch, and verify it persists; then use Reset All Settings and verify defaults.

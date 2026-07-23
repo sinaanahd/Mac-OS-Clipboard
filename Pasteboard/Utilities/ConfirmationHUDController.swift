@@ -69,11 +69,19 @@ private struct ConfirmationHUDView: View {
 private extension View {
     @ViewBuilder
     func confirmationSurface() -> some View {
+#if compiler(>=6.2)
         if #available(macOS 26.0, *) {
             glassEffect(.regular, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         } else {
-            background(.regularMaterial,
-                       in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            confirmationFallbackSurface()
         }
+#else
+        confirmationFallbackSurface()
+#endif
+    }
+
+    private func confirmationFallbackSurface() -> some View {
+        background(.regularMaterial,
+                   in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 }

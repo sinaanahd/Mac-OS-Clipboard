@@ -43,7 +43,11 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Release stability corrections — Completed
 - [x] Local DMG packaging — Completed
 - [x] Optional signed distribution implementation — Completed (credentialed run not attempted)
-- [ ] Release validation — In progress (automated checks complete; cross-version and permission UI checks remain manual)
+- [ ] Release validation — In progress (cross-version automation added; permission and visual UI checks remain manual)
+  - [x] Add macOS 14, 15, and 26 GitHub Actions build/test coverage
+  - [x] Keep macOS 26 visual symbols compiler-guarded for Xcode 16 fallback builds
+  - [x] Validate the Settings and history-panel key-window interaction on macOS 26
+  - [ ] Complete permission, Gatekeeper, accessibility, and visual checks on each available OS
 
 ## Pasteboard 1.2.0 baseline
 
@@ -55,4 +59,5 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Pasteboard 1.2.0 automated suite passed: 53 tests, 0 failures
 - [x] Unsigned Release DMG built and verified with version 1.2.0, build 5, arm64 and x86_64 slices
 - [x] DMG checksum verified and mounted contents limited to `Pasteboard.app` and the Applications link
+- [x] Cross-version CI configured for macOS 14/Xcode 16.2, macOS 15/Xcode 26.3, and macOS 26/Xcode 26.5
 - [ ] Existing manual polish checklist completed on macOS 14, 15, and 26 where available
