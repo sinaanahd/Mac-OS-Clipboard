@@ -1,0 +1,48 @@
+# Release validation
+
+This document records evidence for the current Pasteboard release candidate. Automated checks do not replace permission, Gatekeeper, accessibility, appearance, multi-display, or end-to-end interaction checks.
+
+## Release candidate
+
+| Item | Result |
+| --- | --- |
+| Version | 1.2.2 (build 7) |
+| Minimum deployment target | macOS 14.0 |
+| Local validation host | macOS 26.5.2 (25F84), Apple Silicon |
+| Local toolchain | Xcode 26.6 (17F113), Swift 6.3.3 |
+| Local Release bundle metadata | Verified as 1.2.2 (build 7) |
+| Unsigned DMG | `Pasteboard-1.2.2-macOS.dmg` |
+| DMG SHA-256 | `7fdc9d6702148b12d453ca17517fa8a167f8f7ed697d80c9f5a772287f5ed159` |
+
+## Automated matrix
+
+GitHub Actions run [29997570395](https://github.com/sinaanahd/Mac-OS-Clipboard/actions/runs/29997570395) completed successfully on 2026-07-23.
+
+| Runner | Xcode | Generate | Build | Tests |
+| --- | --- | --- | --- | --- |
+| macOS 14 | 16.2 | Passed | Passed | Passed |
+| macOS 15 | 26.3 | Passed | Passed | Passed |
+| macOS 26 | 26.5 | Passed | Passed | Passed |
+
+The local macOS 26 suite also passed 53 tests with no failures. Compiler guards ensure Xcode 16 builds only the native material fallback and does not parse macOS 26 Liquid Glass symbols.
+
+## Manual evidence
+
+| Area | macOS 14 | macOS 15 | macOS 26 |
+| --- | --- | --- | --- |
+| Settings/history key-window interaction | Not run | Not run | Passed |
+| History panel, search, pins, and keyboard navigation | Not run | Not run | Pending |
+| About/version/copyright presentation | Not run | Not run | Pending |
+| Accessibility permission denial/grant/revocation | Not run | Not run | Pending |
+| Screen Recording denial/grant/cancel/capture | Not run | Not run | Pending |
+| Reduce Motion, Reduced Transparency, Increased Contrast, and VoiceOver | Not run | Not run | Pending |
+| Light/dark appearance and multi-display placement | Not run | Not run | Pending |
+| Unsigned DMG Gatekeeper flow from a clean account | Not run | Not run | Pending |
+
+“Not run” means that no machine or virtual machine for that OS has completed the manual checklist. It must not be interpreted as a failure or a pass.
+
+## Release boundary
+
+Version 1.2.2 is buildable, tested, packaged, and verified as an unsigned local release. Public distribution remains blocked on the manual rows above and, for a frictionless public install, a Developer ID Application certificate plus notarization credentials. Testing an unsigned build must use the documented Finder **Open** or System Settings **Open Anyway** flow; never disable Gatekeeper.
+
+Record completed manual checks here with the date, OS build, machine architecture, tester, and concise evidence. Keep the detailed procedures in `MANUAL_TESTING.md`.

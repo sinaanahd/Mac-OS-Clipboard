@@ -24,6 +24,8 @@ The app monitors text, image, and Finder file selections locally, keeps bounded 
 
 GitHub Actions regenerates, builds, and tests the project on macOS 14 with Xcode 16.2, macOS 15 with Xcode 26.3, and macOS 26 with Xcode 26.5. CI validates compilation and automated behavior; permission prompts, Gatekeeper, appearance, and interaction quality still require the manual checklist.
 
+The current release-candidate evidence and remaining OS-specific checks are tracked in [RELEASE_VALIDATION.md](RELEASE_VALIDATION.md).
+
 Pasteboard 1.2 adds native settings for both global shortcuts, unpinned history and image limits, expiration, automatic paste, monitoring, launch at login, panel placement, screenshot completion, exclusions, storage inspection, and cleanup. Defaults remain 200 unpinned entries and 50 unpinned images; pins do not count toward either limit. Clipboard metadata is written as coalesced atomic JSON and image payloads remain separate local files.
 
 On macOS 26, functional header/search surfaces adopt restrained system Liquid Glass. macOS 14 and 15 use native material fallbacks. Short animations respect Reduce Motion, while system materials adapt to Reduced Transparency and Increased Contrast.

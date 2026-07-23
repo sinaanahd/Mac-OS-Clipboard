@@ -1,5 +1,7 @@
 # Manual testing
 
+Record release-specific results in `RELEASE_VALIDATION.md`. For each completed manual group, include the date, exact macOS build, architecture, tester, and concise evidence. Leave unavailable operating systems as “Not run”; do not infer a manual pass from CI.
+
 ## Foundation
 
 1. Generate and build using the README commands.

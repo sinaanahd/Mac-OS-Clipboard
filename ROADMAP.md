@@ -47,7 +47,11 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Add macOS 14, 15, and 26 GitHub Actions build/test coverage
   - [x] Keep macOS 26 visual symbols compiler-guarded for Xcode 16 fallback builds
   - [x] Validate the Settings and history-panel key-window interaction on macOS 26
-  - [ ] Complete permission, Gatekeeper, accessibility, and visual checks on each available OS
+  - [x] Record the release candidate, toolchain, artifact checksum, CI run, and manual validation matrix
+  - [ ] Complete history, About, keyboard, accessibility, appearance, and multi-display checks on macOS 26
+  - [ ] Complete Accessibility and Screen Recording denial, grant, and revocation checks on macOS 26
+  - [ ] Complete the unsigned DMG Gatekeeper flow from a clean macOS 26 account
+  - [ ] Complete the manual fallback-material and interaction checklist on macOS 14 and 15
 
 ## Pasteboard 1.2.0 baseline
 
@@ -60,4 +64,5 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Unsigned Release DMG built and verified with version 1.2.0, build 5, arm64 and x86_64 slices
 - [x] DMG checksum verified and mounted contents limited to `Pasteboard.app` and the Applications link
 - [x] Cross-version CI configured for macOS 14/Xcode 16.2, macOS 15/Xcode 26.3, and macOS 26/Xcode 26.5
+- [x] Release-validation evidence recorded for version 1.2.2 (build 7)
 - [ ] Existing manual polish checklist completed on macOS 14, 15, and 26 where available
