@@ -11,6 +11,7 @@ This document records evidence for the current Pasteboard release candidate. Aut
 | Local validation host | macOS 26.5.2 (25F84), Apple Silicon |
 | Local toolchain | Xcode 26.6 (17F113), Swift 6.3.3 |
 | Local Release bundle metadata | Verified as 1.2.2 (build 7) |
+| Connected displays | One, 3440×1440 |
 | Unsigned DMG | `Pasteboard-1.2.2-macOS.dmg` |
 | DMG SHA-256 | `7fdc9d6702148b12d453ca17517fa8a167f8f7ed697d80c9f5a772287f5ed159` |
 
@@ -40,6 +41,18 @@ The local macOS 26 suite also passed 53 tests with no failures. Compiler guards 
 | Unsigned DMG Gatekeeper flow from a clean account | Not run | Not run | Pending |
 
 “Not run” means that no machine or virtual machine for that OS has completed the manual checklist. It must not be interpreted as a failure or a pass.
+
+## macOS 26 host preflight
+
+Read-only inspection on 2026-07-23 established the current test host baseline without changing permissions or security settings.
+
+| Check | Observed state | Coverage |
+| --- | --- | --- |
+| Accessibility permission | Pasteboard enabled | Current granted state verified; denial and revocation remain pending |
+| Screen & System Audio Recording permission | Pasteboard enabled | Current granted state verified; denial, prompt, and revocation remain pending |
+| Reduce Motion | Off | Normal-motion baseline available; reduced-motion UI pass remains pending |
+| Gatekeeper policy | App Store & Known Developers | Security remains enabled; clean-account unsigned-DMG flow remains pending |
+| Displays | One connected display | Single-display placement is available; multi-display placement is unavailable on this host |
 
 ## Release boundary
 

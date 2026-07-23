@@ -48,6 +48,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Keep macOS 26 visual symbols compiler-guarded for Xcode 16 fallback builds
   - [x] Validate the Settings and history-panel key-window interaction on macOS 26
   - [x] Record the release candidate, toolchain, artifact checksum, CI run, and manual validation matrix
+  - [x] Inspect the macOS 26 host permission, motion, Gatekeeper, and display baseline without changing system security
   - [ ] Complete history, About, keyboard, accessibility, appearance, and multi-display checks on macOS 26
   - [ ] Complete Accessibility and Screen Recording denial, grant, and revocation checks on macOS 26
   - [ ] Complete the unsigned DMG Gatekeeper flow from a clean macOS 26 account
