@@ -68,5 +68,5 @@ States: Not started, In progress, Blocked, Completed.
 - [x] Unsigned Release DMG built and verified with version 1.2.0, build 5, arm64 and x86_64 slices
 - [x] DMG checksum verified and mounted contents limited to `Pasteboard.app` and the Applications link
 - [x] Cross-version CI configured for macOS 14/Xcode 16.2, macOS 15/Xcode 26.3, and macOS 26/Xcode 26.5
-- [x] Release-validation evidence recorded for version 1.2.2 (build 7)
+- [x] Release-validation evidence recorded for version 1.2.3 (build 8)
 - [ ] Existing manual polish checklist completed on macOS 14, 15, and 26 where available

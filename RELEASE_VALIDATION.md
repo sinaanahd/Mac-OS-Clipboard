@@ -17,7 +17,7 @@ This document records evidence for the current Pasteboard release candidate. Aut
 
 ## Automated matrix
 
-GitHub Actions run [29997570395](https://github.com/sinaanahd/Mac-OS-Clipboard/actions/runs/29997570395) completed successfully on 2026-07-23.
+GitHub Actions run [29999773120](https://github.com/sinaanahd/Mac-OS-Clipboard/actions/runs/29999773120) completed successfully for commit `ec9ce9595c96b342ca5fba36b21d61fbb6fce6d3` on 2026-07-23.
 
 | Runner | Xcode | Generate | Build | Tests |
 | --- | --- | --- | --- | --- |
