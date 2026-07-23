@@ -6,6 +6,7 @@ struct ContentView: View {
     let thumbnailService: ThumbnailService
     var onRestore: () -> Void = {}
     @State private var query = ""
+    @State private var keyboardSelection: ClipboardEntry.ID?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var filteredEntries: [ClipboardEntry] {
@@ -55,7 +56,7 @@ struct ContentView: View {
                 .accessibilityIdentifier("clipboard-empty-state")
             } else {
                 ScrollViewReader { proxy in
-                    List {
+                    List(selection: $keyboardSelection) {
                         ForEach(filteredEntries) { entry in
                             HStack(spacing: VisualConfiguration.rowSpacing) {
                                 Button {
@@ -83,6 +84,7 @@ struct ContentView: View {
                                 .accessibilityLabel(entry.isPinned ? "Unpin item" : "Pin item")
                             }
                             .id(entry.id)
+                            .tag(entry.id)
                             .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
                         }
                         .onDelete { offsets in
@@ -91,6 +93,20 @@ struct ContentView: View {
                             withAnimation(interactionAnimation) { store.delete(at: sourceOffsets) }
                         }
                     }
+                    .onMoveCommand(perform: moveKeyboardSelection)
+                    .onKeyPress(.return) {
+                        restoreKeyboardSelection() ? .handled : .ignored
+                    }
+                    .onKeyPress(.space) {
+                        toggleKeyboardSelectionPin() ? .handled : .ignored
+                    }
+                    .onKeyPress(.delete) {
+                        deleteKeyboardSelection() ? .handled : .ignored
+                    }
+                    .accessibilityHint(
+                        "Use the arrow keys to select an item, Return to restore it, "
+                        + "Space to pin or unpin it, and Delete to remove it."
+                    )
                     .onChange(of: filteredEntries.first?.id) { _, newestEntryID in
                         guard let newestEntryID else { return }
                         DispatchQueue.main.async {
@@ -99,6 +115,11 @@ struct ContentView: View {
                     }
                 }
                 .animation(interactionAnimation, value: filteredEntries.map(\.id))
+                .onChange(of: filteredEntries.map(\.id)) { _, visibleIDs in
+                    if let keyboardSelection, !visibleIDs.contains(keyboardSelection) {
+                        self.keyboardSelection = nil
+                    }
+                }
             }
         }
         .padding(.horizontal)
@@ -113,6 +134,68 @@ struct ContentView: View {
 
     private var interactionAnimation: Animation {
         .easeOut(duration: reduceMotion ? 0.12 : VisualConfiguration.quickAnimationDuration)
+    }
+
+    private func moveKeyboardSelection(_ direction: MoveCommandDirection) {
+        let navigationDirection: HistoryNavigationDirection
+        switch direction {
+        case .up:
+            navigationDirection = .previous
+        case .down:
+            navigationDirection = .next
+        default:
+            return
+        }
+        keyboardSelection = HistoryKeyboardNavigation.movedSelection(
+            current: keyboardSelection,
+            ids: filteredEntries.map(\.id),
+            direction: navigationDirection
+        )
+    }
+
+    private func restoreKeyboardSelection() -> Bool {
+        guard let entry = filteredEntries.first(where: { $0.id == keyboardSelection }) else {
+            return false
+        }
+        store.restore(entry)
+        onRestore()
+        return true
+    }
+
+    private func toggleKeyboardSelectionPin() -> Bool {
+        guard let keyboardSelection,
+              filteredEntries.contains(where: { $0.id == keyboardSelection }) else {
+            return false
+        }
+        withAnimation(interactionAnimation) {
+            store.togglePin(id: keyboardSelection)
+        }
+        return true
+    }
+
+    private func deleteKeyboardSelection() -> Bool {
+        guard let keyboardSelection,
+              let sourceIndex = store.entries.firstIndex(where: { $0.id == keyboardSelection }),
+              let visibleIndex = filteredEntries.firstIndex(where: { $0.id == keyboardSelection })
+        else {
+            return false
+        }
+
+        let visibleIDs = filteredEntries.map(\.id)
+        let nextSelection: ClipboardEntry.ID?
+        if visibleIDs.indices.contains(visibleIndex + 1) {
+            nextSelection = visibleIDs[visibleIndex + 1]
+        } else if visibleIndex > visibleIDs.startIndex {
+            nextSelection = visibleIDs[visibleIndex - 1]
+        } else {
+            nextSelection = nil
+        }
+
+        withAnimation(interactionAnimation) {
+            store.delete(at: IndexSet(integer: sourceIndex))
+        }
+        self.keyboardSelection = nextSelection
+        return true
     }
 
     @ViewBuilder

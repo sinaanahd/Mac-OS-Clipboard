@@ -23,6 +23,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Add a native clear button to history search
   - [x] Anchor empty states at the top and make captured screenshots immediately pasteable
   - [x] Prevent re-entrant panel dismissal when Settings becomes the key window
+  - [x] Add explicit keyboard-only selection and actions for history rows
 - [x] Packaging and distribution — Completed
   - [x] Establish version 1.0.0 and display the bundle version in the history panel
   - [x] Advance the substantial interaction update to version 1.1.0
@@ -30,6 +31,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Release empty-state and screenshot-paste fixes as version 1.1.2
   - [x] Release the Settings-and-panel key-window fix as version 1.2.1
   - [x] Correct the displayed copyright name in version 1.2.2
+  - [x] Release keyboard-only history navigation as version 1.2.3
   - [x] Build an unsigned universal local Release application
   - [x] Package `Pasteboard.app` and an Applications link in a compressed DMG
   - [x] Generate and verify the DMG SHA-256 checksum
@@ -49,6 +51,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Validate the Settings and history-panel key-window interaction on macOS 26
   - [x] Record the release candidate, toolchain, artifact checksum, CI run, and manual validation matrix
   - [x] Inspect the macOS 26 host permission, motion, Gatekeeper, and display baseline without changing system security
+  - [x] Validate the dark-mode panel header, search, native clear button, anchored empty state, accessibility labels, and About metadata on macOS 26
   - [ ] Complete history, About, keyboard, accessibility, appearance, and multi-display checks on macOS 26
   - [ ] Complete Accessibility and Screen Recording denial, grant, and revocation checks on macOS 26
   - [ ] Complete the unsigned DMG Gatekeeper flow from a clean macOS 26 account

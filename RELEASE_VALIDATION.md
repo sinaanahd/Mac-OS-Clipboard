@@ -6,14 +6,14 @@ This document records evidence for the current Pasteboard release candidate. Aut
 
 | Item | Result |
 | --- | --- |
-| Version | 1.2.2 (build 7) |
+| Version | 1.2.3 (build 8) |
 | Minimum deployment target | macOS 14.0 |
 | Local validation host | macOS 26.5.2 (25F84), Apple Silicon |
 | Local toolchain | Xcode 26.6 (17F113), Swift 6.3.3 |
-| Local Release bundle metadata | Verified as 1.2.2 (build 7) |
+| Local Release bundle metadata | Verified as 1.2.3 (build 8), universal `x86_64 arm64` |
 | Connected displays | One, 3440×1440 |
-| Unsigned DMG | `Pasteboard-1.2.2-macOS.dmg` |
-| DMG SHA-256 | `7fdc9d6702148b12d453ca17517fa8a167f8f7ed697d80c9f5a772287f5ed159` |
+| Unsigned DMG | `Pasteboard-1.2.3-macOS.dmg` |
+| DMG SHA-256 | `7a01a4f7ccac1b0ef490569274488c8580de497b040de22cb54c896036624cf2` |
 
 ## Automated matrix
 
@@ -25,15 +25,15 @@ GitHub Actions run [29997570395](https://github.com/sinaanahd/Mac-OS-Clipboard/a
 | macOS 15 | 26.3 | Passed | Passed | Passed |
 | macOS 26 | 26.5 | Passed | Passed | Passed |
 
-The local macOS 26 suite also passed 53 tests with no failures. Compiler guards ensure Xcode 16 builds only the native material fallback and does not parse macOS 26 Liquid Glass symbols.
+The local macOS 26 suite also passed 56 tests with no failures. Compiler guards ensure Xcode 16 builds only the native material fallback and does not parse macOS 26 Liquid Glass symbols.
 
 ## Manual evidence
 
 | Area | macOS 14 | macOS 15 | macOS 26 |
 | --- | --- | --- | --- |
 | Settings/history key-window interaction | Not run | Not run | Passed |
-| History panel, search, pins, and keyboard navigation | Not run | Not run | Pending |
-| About/version/copyright presentation | Not run | Not run | Pending |
+| History panel, search, pins, and keyboard navigation | Not run | Not run | Partial: layout/search passed; keyboard selection logic is unit-tested; exact Release interaction pending |
+| About/version/copyright presentation | Not run | Not run | Passed for 1.2.2; 1.2.3 bundle metadata verified |
 | Accessibility permission denial/grant/revocation | Not run | Not run | Pending |
 | Screen Recording denial/grant/cancel/capture | Not run | Not run | Pending |
 | Reduce Motion, Reduced Transparency, Increased Contrast, and VoiceOver | Not run | Not run | Pending |
@@ -56,6 +56,6 @@ Read-only inspection on 2026-07-23 established the current test host baseline wi
 
 ## Release boundary
 
-Version 1.2.2 is buildable, tested, packaged, and verified as an unsigned local release. Public distribution remains blocked on the manual rows above and, for a frictionless public install, a Developer ID Application certificate plus notarization credentials. Testing an unsigned build must use the documented Finder **Open** or System Settings **Open Anyway** flow; never disable Gatekeeper.
+Version 1.2.3 is buildable, tested, packaged, and verified as an unsigned universal local release. Public distribution remains blocked on the manual rows above and, for a frictionless public install, a Developer ID Application certificate plus notarization credentials. Testing an unsigned build must use the documented Finder **Open** or System Settings **Open Anyway** flow; never disable Gatekeeper.
 
 Record completed manual checks here with the date, OS build, machine architecture, tester, and concise evidence. Keep the detailed procedures in `MANUAL_TESTING.md`.

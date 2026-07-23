@@ -30,7 +30,7 @@ Record release-specific results in `RELEASE_VALIDATION.md`. For each completed m
 10. Relaunch Pasteboard and verify pinned entries remain pinned and ordered newest-first within the pinned section.
 11. Unpin an entry and verify it returns to chronological position among regular history.
 12. Exceed history and image limits and run expiration cleanup; verify pinned entries remain until explicitly deleted or cleared.
-13. Verify `Version 1.2.2` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
+13. Verify `Version 1.2.3` appears at the top-right of the header and matches About Pasteboard and the built app's bundle metadata.
 14. Enter a search query, click the native clear button inside the field, and verify the complete history immediately returns.
 15. Clear history or search for a missing value and verify the empty state stays directly below search instead of centering the entire panel content.
 16. Keep Settings open, show clipboard history, then focus Settings; verify the panel dismisses cleanly without a re-entrant `resignKey` error.
@@ -79,6 +79,7 @@ The GitHub Actions matrix checks compilation and unit tests on macOS 14, 15, and
 3. Verify panel opening/closing, insertion, pinning, deletion, and search transitions are short and do not delay actions.
 4. Enable Reduce Motion and verify positional movement becomes fades. Enable Reduced Transparency and Increased Contrast and verify grouping and controls remain readable.
 5. Check keyboard-only Settings and history navigation, VoiceOver labels, focus rings, large text tolerance, and that color is not the sole status signal.
+6. Focus the history list and verify Up/Down changes the selected row, Return restores it, Space toggles its pin, and Delete removes it without requiring a pointer.
 
 ### DMG
 

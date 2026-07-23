@@ -93,13 +93,13 @@ enum AppConfiguration {
     static let bundleIdentifier = "com.sinaanahd.Pasteboard"
     static let authorName = "Sina Anahid"
     static let copyrightNotice = "Copyright © 2026 \(authorName)"
-    static let developmentVersionFallback = "1.2.2"
+    static let developmentVersionFallback = "1.2.3"
     static var marketingVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
             ?? developmentVersionFallback
     }
     static var buildNumber: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "7"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "8"
     }
     static var applicationSupportURL: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
