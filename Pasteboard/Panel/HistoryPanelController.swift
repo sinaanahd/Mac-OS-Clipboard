@@ -3,13 +3,27 @@ import QuartzCore
 import SwiftUI
 
 private final class HistoryPanel: NSPanel {
+    var returnKeyHandler: (() -> Bool)?
+
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
+
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        let isUnmodifiedReturn = event.type == .keyDown
+            && (event.keyCode == 36 || event.keyCode == 76)
+            && modifiers.isEmpty
+        if isUnmodifiedReturn, returnKeyHandler?() == true {
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
 }
 
 @MainActor
 final class HistoryPanelController: NSObject, NSWindowDelegate {
     private let panel: HistoryPanel
+    private let store: ClipboardHistoryStore
     private let automaticPaste: AutomaticPasteService
     private let presentation: HistoryPanelPresentation
     private let settings: AppSettings
@@ -20,6 +34,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
     init(store: ClipboardHistoryStore,
          settings: AppSettings,
          automaticPaste: AutomaticPasteService = AutomaticPasteService()) {
+        self.store = store
         self.automaticPaste = automaticPaste
         self.settings = settings
         presentation = HistoryPanelPresentation()
@@ -49,6 +64,9 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
                 .frame(width: AppConfiguration.panelSize.width,
                        height: AppConfiguration.panelSize.height)
         )
+        panel.returnKeyHandler = { [weak self] in
+            self?.restoreKeyboardSelection() ?? false
+        }
     }
 
     func toggle() {
@@ -56,6 +74,7 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
     }
 
     func show() {
+        presentation.resetKeyboardState()
         presentation.refresh()
         let currentApplication = NSWorkspace.shared.frontmostApplication
         if currentApplication?.bundleIdentifier != Bundle.main.bundleIdentifier {
@@ -119,6 +138,17 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
                     == previousApplication.processIdentifier
             }
         }
+    }
+
+    private func restoreKeyboardSelection() -> Bool {
+        guard presentation.isListFocused,
+              let selectedID = presentation.keyboardSelection,
+              let entry = store.entries.first(where: { $0.id == selectedID }) else {
+            return false
+        }
+        store.restore(entry)
+        completeSelection()
+        return true
     }
 
     private func explainAccessibilityPermission() {

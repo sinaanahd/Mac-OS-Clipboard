@@ -45,7 +45,10 @@ ditto "$APP_PATH" "$STAGING_DIR/Pasteboard.app"
 ln -s /Applications "$STAGING_DIR/Applications"
 hdiutil create -volname "Pasteboard $VERSION" -srcfolder "$STAGING_DIR" \
     -format UDZO -ov "$DMG_PATH"
-shasum -a 256 "$DMG_PATH" > "$CHECKSUM_PATH"
+(
+    cd "$DIST_DIR"
+    shasum -a 256 "$(basename "$DMG_PATH")" > "$(basename "$CHECKSUM_PATH")"
+)
 
 echo "Local unsigned DMG: $DMG_PATH"
 echo "SHA-256 checksum: $CHECKSUM_PATH"

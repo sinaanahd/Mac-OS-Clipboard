@@ -7,7 +7,7 @@ final class AppConfigurationTests: XCTestCase {
         XCTAssertEqual(AppConfiguration.bundleIdentifier, "com.sinaanahd.Pasteboard")
         XCTAssertEqual(AppConfiguration.authorName, "Sina Anahid")
         XCTAssertEqual(AppConfiguration.copyrightNotice, "Copyright © 2026 Sina Anahid")
-        XCTAssertEqual(AppConfiguration.developmentVersionFallback, "1.2.3")
+        XCTAssertEqual(AppConfiguration.developmentVersionFallback, "1.2.4")
         XCTAssertEqual(AppConfiguration.developmentVersionFallback.split(separator: ".").count, 3)
         XCTAssertGreaterThan(AppConfiguration.defaultHistoryLimit, 0)
         XCTAssertGreaterThan(AppConfiguration.clipboardPollingInterval, 0)

@@ -24,6 +24,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Anchor empty states at the top and make captured screenshots immediately pasteable
   - [x] Prevent re-entrant panel dismissal when Settings becomes the key window
   - [x] Add explicit keyboard-only selection and actions for history rows
+  - [x] Route Return through the native panel and clear stale selection on reopen
 - [x] Packaging and distribution — Completed
   - [x] Establish version 1.0.0 and display the bundle version in the history panel
   - [x] Advance the substantial interaction update to version 1.1.0
@@ -32,6 +33,7 @@ States: Not started, In progress, Blocked, Completed.
   - [x] Release the Settings-and-panel key-window fix as version 1.2.1
   - [x] Correct the displayed copyright name in version 1.2.2
   - [x] Release keyboard-only history navigation as version 1.2.3
+  - [x] Release the keyboard Return restoration fix as version 1.2.4
   - [x] Build an unsigned universal local Release application
   - [x] Package `Pasteboard.app` and an Applications link in a compressed DMG
   - [x] Generate and verify the DMG SHA-256 checksum

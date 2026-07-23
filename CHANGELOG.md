@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fixed keyboard Return so a focused history selection is restored and automatically pasted; reopening history now clears stale keyboard selection in version 1.2.4 build 9.
 - Added explicit keyboard-only history selection: Up/Down navigate, Return restores, Space toggles pinning, and Delete removes the selected entry in version 1.2.3 build 8.
 - Corrected the About pane and bundle copyright name to Sina Anahid; released as version 1.2.2 build 7.
 - Fixed a re-entrant panel key-window transition when Settings and clipboard history were open together; released as version 1.2.1 build 6.

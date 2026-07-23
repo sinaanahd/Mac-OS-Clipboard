@@ -6,7 +6,7 @@ struct ContentView: View {
     let thumbnailService: ThumbnailService
     var onRestore: () -> Void = {}
     @State private var query = ""
-    @State private var keyboardSelection: ClipboardEntry.ID?
+    @FocusState private var isListFocused: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var filteredEntries: [ClipboardEntry] {
@@ -56,7 +56,7 @@ struct ContentView: View {
                 .accessibilityIdentifier("clipboard-empty-state")
             } else {
                 ScrollViewReader { proxy in
-                    List(selection: $keyboardSelection) {
+                    List(selection: $presentation.keyboardSelection) {
                         ForEach(filteredEntries) { entry in
                             HStack(spacing: VisualConfiguration.rowSpacing) {
                                 Button {
@@ -93,10 +93,11 @@ struct ContentView: View {
                             withAnimation(interactionAnimation) { store.delete(at: sourceOffsets) }
                         }
                     }
-                    .onMoveCommand(perform: moveKeyboardSelection)
-                    .onKeyPress(.return) {
-                        restoreKeyboardSelection() ? .handled : .ignored
+                    .focused($isListFocused)
+                    .onChange(of: isListFocused) { _, focused in
+                        presentation.setListFocused(focused)
                     }
+                    .onMoveCommand(perform: moveKeyboardSelection)
                     .onKeyPress(.space) {
                         toggleKeyboardSelectionPin() ? .handled : .ignored
                     }
@@ -116,8 +117,9 @@ struct ContentView: View {
                 }
                 .animation(interactionAnimation, value: filteredEntries.map(\.id))
                 .onChange(of: filteredEntries.map(\.id)) { _, visibleIDs in
-                    if let keyboardSelection, !visibleIDs.contains(keyboardSelection) {
-                        self.keyboardSelection = nil
+                    if let selection = presentation.keyboardSelection,
+                       !visibleIDs.contains(selection) {
+                        presentation.keyboardSelection = nil
                     }
                 }
             }
@@ -146,24 +148,15 @@ struct ContentView: View {
         default:
             return
         }
-        keyboardSelection = HistoryKeyboardNavigation.movedSelection(
-            current: keyboardSelection,
+        presentation.keyboardSelection = HistoryKeyboardNavigation.movedSelection(
+            current: presentation.keyboardSelection,
             ids: filteredEntries.map(\.id),
             direction: navigationDirection
         )
     }
 
-    private func restoreKeyboardSelection() -> Bool {
-        guard let entry = filteredEntries.first(where: { $0.id == keyboardSelection }) else {
-            return false
-        }
-        store.restore(entry)
-        onRestore()
-        return true
-    }
-
     private func toggleKeyboardSelectionPin() -> Bool {
-        guard let keyboardSelection,
+        guard let keyboardSelection = presentation.keyboardSelection,
               filteredEntries.contains(where: { $0.id == keyboardSelection }) else {
             return false
         }
@@ -174,7 +167,7 @@ struct ContentView: View {
     }
 
     private func deleteKeyboardSelection() -> Bool {
-        guard let keyboardSelection,
+        guard let keyboardSelection = presentation.keyboardSelection,
               let sourceIndex = store.entries.firstIndex(where: { $0.id == keyboardSelection }),
               let visibleIndex = filteredEntries.firstIndex(where: { $0.id == keyboardSelection })
         else {
@@ -194,7 +187,7 @@ struct ContentView: View {
         withAnimation(interactionAnimation) {
             store.delete(at: IndexSet(integer: sourceIndex))
         }
-        self.keyboardSelection = nextSelection
+        presentation.keyboardSelection = nextSelection
         return true
     }
 
